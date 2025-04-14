@@ -20,4 +20,4 @@ var testTwo = new TestTwo();
 // testet på å sortere transactin på beløp både innkommende beløp og utkommende
 var testThree = new TestThree(); 
 
-await testOne.Run(config);
+await testTwo.Run(config);
