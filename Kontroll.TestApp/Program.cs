@@ -17,7 +17,10 @@ var testOne = new TestOne();
 // testet om jeg får tilbake riktig transaction ved å sende en get forespørsel basert på transactionId
 var testTwo = new TestTwo(); 
 
-// testet på å sortere transactin på beløp både innkommende beløp og utkommende
+// testet på å sortere transactin på dato og en tet hvor jeg sorterer på beløp både innkommende beløp og utkommende
 var testThree = new TestThree(); 
 
-await testTwo.Run(config);
+
+var testFoure = new TestFoure();
+
+await testFoure.Run(config);

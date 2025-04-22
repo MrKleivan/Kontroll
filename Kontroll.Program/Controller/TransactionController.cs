@@ -55,7 +55,7 @@ public class TransactionController : ControllerBase
     {
         var exists = await IsTransactionInDatabase(transaction);
 
-        if (!exists)
+        if (exists)
         {
             return await _db.DeleteTransactionFromDatabase(transaction.TransactionId);
         }
