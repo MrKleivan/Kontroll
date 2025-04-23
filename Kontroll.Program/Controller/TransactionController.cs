@@ -25,7 +25,7 @@ public class TransactionController : ControllerBase
     {
         if (sortRequest.Request == "Date")
         {
-            return await _db.GetMultipleTransactionsSortedByDate(sortRequest);
+            return await _db.GetTransactionsSortedByDate(sortRequest);
         }
         else if (sortRequest.Request == "Description")
         {
@@ -33,7 +33,7 @@ public class TransactionController : ControllerBase
         }
         else if (sortRequest.Request == "Amount")
         {
-            return await _db.GetMultipleTransactionsSortedByAmount(sortRequest);
+            return await _db.GetTransactionsSortedByAmount(sortRequest);
         }
 
         return null;

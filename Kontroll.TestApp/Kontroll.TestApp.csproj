@@ -11,4 +11,8 @@
       <ProjectReference Include="..\Kontroll.Program\Kontroll.Program.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DescriptionTests\" />
+    </ItemGroup>
+
 </Project>
