@@ -10,10 +10,12 @@ namespace Kontroll.Controller;
 public class TransactionController : ControllerBase
 {
     private readonly TransactionDB _db;
+    private DescriptionController _descriptionController;
 
     public TransactionController(IConfiguration config)
     {
         _db = new TransactionDB(config);
+        _descriptionController = new DescriptionController(config);
     }
 
     public async Task<TransactionOb> GetSingleTransactionByTransactionId(TransactionOb transaction)
@@ -35,16 +37,24 @@ public class TransactionController : ControllerBase
         {
             return await _db.GetTransactionsSortedByAmount(sortRequest);
         }
-
-        return null;
+        else return null;
     }
 
     public async Task<IActionResult> AddTransaction([FromBody] TransactionPostRequest transaction)
     {
-        var exists = await IsTransactionInDatabase(transaction);
+        TransactionPostRequest hei = transaction;
+        var exists = await TransactionExists(transaction);
         if (!exists || transaction.ForceAdd)
         {
-            var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
+            var existingDescription = await _descriptionController.DescriptionExists(await ConvertTransactionObject(transaction));
+            
+            if (existingDescription)
+            {
+                DescriptionOb descriptionOb = await _descriptionController.GetDescriptionByStandarDescription(transaction);
+                hei.Description = descriptionOb.UsersDescription;
+            }
+            
+            var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(hei));
             return added ? Ok("Transaction added") : StatusCode(500, "Failed to add transaction");
         }
         return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
@@ -53,7 +63,7 @@ public class TransactionController : ControllerBase
 
     public async Task<bool> DeleteTransaction([FromBody] TransactionOb transaction)
     {
-        var exists = await IsTransactionInDatabase(transaction);
+        var exists = await TransactionExists(transaction);
 
         if (exists)
         {
@@ -63,9 +73,9 @@ public class TransactionController : ControllerBase
         return false;
     }
 
-    public async Task<bool?> UpdateTransactionInDatabase([FromBody] TransactionOb transaction)
+    public async Task<bool?> UpdateTransaction([FromBody] TransactionOb transaction)
     {
-        var exists = await IsTransactionInDatabase(transaction);
+        var exists = await TransactionExists(transaction);
 
         if (!exists)
         {
@@ -103,10 +113,10 @@ public class TransactionController : ControllerBase
         return transactions;
     }
 
-    private async Task<bool> IsTransactionInDatabase(dynamic transaction)
+    private async Task<bool> TransactionExists(dynamic transaction)
     {
         TransactionOb transactionOb = await ConvertTransactionObject(transaction);
-        return await _db.TransactionExists(transactionOb);
+        return await _db.TransactionExistsInDatabase(transactionOb);
     }
 
     private async Task<TransactionOb> ConvertTransactionObject(dynamic transaction)

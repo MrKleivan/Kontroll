@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kontroll.TestApp;
 
-public class TestOne
+public class TransactionTestOne
 {
-    public async Task Run(IConfigurationRoot config)
+    public async void Run(IConfigurationRoot config)
     {
         string transactionId = Guid.NewGuid().ToString();
         string filePath = "test.csv";

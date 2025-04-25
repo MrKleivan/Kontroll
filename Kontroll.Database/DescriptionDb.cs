@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -8,63 +9,55 @@ namespace Kontroll.Model;
 public class DescriptionDb
 {
     private readonly string? _connectionString;
-
+    private SqlReaderHelperDb _sqlReaderHelper = new SqlReaderHelperDb();
     public DescriptionDb(IConfiguration config)
     {
         _connectionString = config.GetConnectionString("DefaultConnection")
-                            ?? throw new Exception("ConnectionString not found");;
+                            ?? throw new Exception("ConnectionString not found");
     }
 
-    public async Task<DescriptionOb> GetDescriptionFromDatabase(string description)
+    public async Task<int> DescriptionExistsInDatabase(TransactionOb transactionOb)
     {
-        var query = $"SELECT * FROM Description WHERE DescriptionId = {description}";
+        var query = "SELECT COUNT(*) FROM DescriptionTb WHERE StandarDescription = @Description";
         
-        using SqlConnection connection = new SqlConnection(_connectionString);
-        
-        await connection.OpenAsync();
-        using SqlCommand sql = new SqlCommand(query, connection);
-        sql.Parameters.Add(new SqlParameter("@Description", description));
-        using SqlDataReader reader = await sql.ExecuteReaderAsync();
-
-        if (await reader.ReadAsync())
-        {
-            return new DescriptionOb
-            {
-                UserId = reader.GetString(reader.GetOrdinal("UserId")),
-                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                StandarDescription = reader.GetString(reader.GetOrdinal("StandarDescription")),
-                UsersDescription = reader.GetString(reader.GetOrdinal("UsersDescription")),
-            };
-        }
-        return null;
+        int count = await _sqlReaderHelper.ExecuteScalarAsync<int>(_connectionString, query, transactionOb);
+        Console.WriteLine(count);
+        return count;
     }
 
+    public async Task<DescriptionOb> GetDescription(TransactionPostRequest transaction)
+    {
+        var query = "SELECT * FROM DescriptionTb WHERE UserId = @UserId";
+        List<DescriptionOb> descriptionObList = await _sqlReaderHelper.ExecuteReaderAndMapAsync<DescriptionOb>(_connectionString, query, transaction);
+        DescriptionOb descriptionOb = descriptionObList.Find(d => d.StandarDescription == transaction.Description);
+        return descriptionOb;
+    }
+    public async Task<List<DescriptionOb>> GetAllDescriptionFromDatabaseByUserId(DescriptionOb descriptionOb)
+    {
+        var query = "SELECT * FROM DescriptionTb WHERE UserId = @UserId";
+        
+        return await _sqlReaderHelper.ExecuteReaderAndMapAsync<DescriptionOb>(_connectionString, query, descriptionOb);
+    }
+
+    public async Task<bool> AddDescriptionToDatabase(DescriptionOb descriptionOb)
+    {
+        var query = "INSERT INTO DescriptionTb (UserId, StandarDescription, UsersDescription) VALUES (@UserId, @StandarDescription, @UsersDescription)";
+        
+        return await _sqlReaderHelper.ExecuteNonQueryAsync(_connectionString, query, descriptionOb) > 0;
+    }
+    
     public async Task<bool> UpdateDescriptionInDatabase(DescriptionOb descriptionOb)
     {
-        var query = "UPDATE Description SET UserDescription = @UserDescription WHERE DescriptionId = @Id";
+        var query = "UPDATE DescriptionTb SET UserDescription = @UserDescription WHERE DescriptionId = @Id";
         
-        using SqlConnection connection = new SqlConnection(_connectionString);
-        
-        await connection.OpenAsync();
-        
-        using SqlCommand sql = new SqlCommand(query, connection);
-        sql.Parameters.Add(new SqlParameter("@UserDescription", descriptionOb.UsersDescription));
-        sql.Parameters.Add(new SqlParameter("@Id", descriptionOb.Id));
-
-        return await sql.ExecuteNonQueryAsync() > 0;
+        return await _sqlReaderHelper.ExecuteNonQueryAsync(_connectionString, query, descriptionOb) > 0;
     }
 
-    public async Task<bool> DeleteDescriptionFromDatabase(int id)
+    public async Task<bool> DeleteDescriptionFromDatabase(DescriptionOb descriptionOb)
     {
-        var query = "DELETE FROM Description WHERE Id = @Id";
+        var query = "DELETE FROM DescriptionTb WHERE Id = @Id";
         
-        using SqlConnection connection = new SqlConnection(_connectionString);
+        return await _sqlReaderHelper.ExecuteNonQueryAsync(_connectionString, query, descriptionOb) > 0;
         
-        await connection.OpenAsync();
-        
-        using SqlCommand sql = new SqlCommand(query, connection);
-        sql.Parameters.Add(new SqlParameter("@Id", id));
-        
-        return await sql.ExecuteNonQueryAsync() > 0;
     }
 }

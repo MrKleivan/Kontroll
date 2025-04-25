@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kontroll.TestApp;
 
-public class TestFive
+public class TransactionTestFive
 {
     public async Task Run(IConfigurationRoot config)
     {

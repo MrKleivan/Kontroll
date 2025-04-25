@@ -1,3 +1,4 @@
+using System.Transactions;
 using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
 using Kontroll.Model;
@@ -9,14 +10,28 @@ public class DescriptionController : ControllerBase
 {
    
     // private readonly ILogger<DescriptionTranslateController> _logger;
-    private readonly DescriptionDb _descriptionDb;
+    private readonly DescriptionDb _db;
 
-    public async Task<DescriptionOb> GetDescriptionFromDataBase(string description) =>
-        await _descriptionDb.GetDescriptionFromDatabase(description);
+    public DescriptionController(IConfiguration config)
+    {
+        _db = new DescriptionDb(config);
+    }
 
-    public async Task<bool> UpdateDescriptionInDatabase(DescriptionOb descriptionOb) =>
-        await _descriptionDb.UpdateDescriptionInDatabase(descriptionOb);
+    public async Task<DescriptionOb> GetDescriptionByStandarDescription(TransactionPostRequest transaction) =>
+        await _db.GetDescription(transaction);
+    
+    public async Task<List<DescriptionOb>> GetDescriptionByUserId([FromBody]DescriptionOb descriptionOb) =>
+        await _db.GetAllDescriptionFromDatabaseByUserId(descriptionOb);
 
-    public async Task<bool> DeleteDescriptionFromDatabase(int descriptionId) =>
-        await _descriptionDb.DeleteDescriptionFromDatabase(descriptionId);
+    public async Task<bool> AddDescription(DescriptionOb descriptionOb) => 
+        await _db.AddDescriptionToDatabase(descriptionOb);
+
+    public async Task<bool> DescriptionExists(TransactionOb transactionOb) =>
+        await _db.DescriptionExistsInDatabase(transactionOb) > 0;
+    
+    public async Task<bool> UpdateDescription(DescriptionOb descriptionOb) =>
+        await _db.UpdateDescriptionInDatabase(descriptionOb);
+
+    public async Task<bool> DeleteDescriptionFromDatabase(DescriptionOb descriptionOb) =>
+        await _db.DeleteDescriptionFromDatabase(descriptionOb);
 }

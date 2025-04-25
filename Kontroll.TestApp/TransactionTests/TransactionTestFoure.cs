@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kontroll.TestApp;
 
-public class TestFoure
+public class TransactionTestFoure
 {
     public async Task Run(IConfigurationRoot config)
     {
@@ -30,7 +30,7 @@ public class TestFoure
 
         transaction.Outcome = transactionBefore.Outcome + 1;
         Console.WriteLine((double)transactionBefore.Outcome);
-        await app.UpdateTransactionInDatabase(transaction);
+        await app.UpdateTransaction(transaction);
         var transactionNow = await app.GetSingleTransactionByTransactionId(transaction);
 
         Console.WriteLine((double)transactionNow.Outcome);

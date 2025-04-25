@@ -1,9 +1,9 @@
 namespace Kontroll.Database.Model.TransactionModels;
 
-public class FixedExpenses
+public class FixedExpenseOb
 {
-    public Guid FixedExpenseId  { get; set; }
-    public Guid UserId { get; set; }
+    public string FixedExpenseId  { get; set; }
+    public string UserId { get; set; }
     public string Claimant { get; set; }
     public string Description { get; set; }
     public decimal MonthlyAmount { get; set; }
@@ -14,4 +14,5 @@ public class FixedExpenses
     public string PaymentMethod { get; set; }
     public string StandarAccountNumberForePayment { get; set; }
     public string AccountNumberUsedForePayment { get; set; }
+    public string TransactionId { get; set; }
 }

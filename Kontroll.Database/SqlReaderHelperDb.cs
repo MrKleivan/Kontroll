@@ -7,6 +7,7 @@ namespace Kontroll.Database;
 public class SqlReaderHelperDb
 {
     private SqlParameterHelperDb _sqlParamHelperDb = new SqlParameterHelperDb();
+    
     public T MapReaderToObject<T>(SqlDataReader reader) where T : new()
     {
         var obj = new T();
@@ -42,7 +43,6 @@ public class SqlReaderHelperDb
                 Console.WriteLine($"⚠️ Feil ved mapping av {property.Name}: {ex.Message}");
             }
         }
-        
         return obj;
     }
 
@@ -115,7 +115,6 @@ public class SqlReaderHelperDb
             var item = MapReaderToObject<T>(reader);
             results.Add(item);
         }
-        
         return results;
     }
 }

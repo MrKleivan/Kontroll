@@ -91,7 +91,7 @@ public class TransactionDB
     }
     
     
-    public async Task<bool> TransactionExists(TransactionOb transaction)
+    public async Task<bool> TransactionExistsInDatabase(TransactionOb transaction)
     {
         SortRequest sortRequest = null;
         var query = @"SELECT COUNT(*) FROM TransactionTb WHERE Date = @Date AND AccountNumber = @AccountNumber AND Description = @Description AND Income = @Income AND Outcome = @Outcome";
