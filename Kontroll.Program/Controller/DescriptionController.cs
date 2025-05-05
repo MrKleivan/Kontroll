@@ -17,8 +17,8 @@ public class DescriptionController : ControllerBase
         _db = new DescriptionDb(config);
     }
 
-    public async Task<DescriptionOb> GetDescriptionByStandarDescription(TransactionPostRequest transaction) =>
-        await _db.GetDescription(transaction);
+    public async Task<DescriptionOb> GetDescriptionByExternalDescription(TransactionPostRequest transaction) =>
+        await _db.GetDescriptionFromDatabase(transaction);
     
     public async Task<List<DescriptionOb>> GetDescriptionByUserId([FromBody]DescriptionOb descriptionOb) =>
         await _db.GetAllDescriptionFromDatabaseByUserId(descriptionOb);

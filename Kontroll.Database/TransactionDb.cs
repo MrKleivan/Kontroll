@@ -9,13 +9,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kontroll.Database;
 
-public class TransactionDB
+public class TransactionDb
 {
     private readonly string? _connectionString;
     private SqlParameterHelperDb _sqlParameterHelperDb = new SqlParameterHelperDb();
     private SqlReaderHelperDb _sqlReaderHelperDb = new SqlReaderHelperDb();
 
-    public TransactionDB(IConfiguration config)
+    public TransactionDb(IConfiguration config)
     {
         _connectionString = config.GetConnectionString("DefaultConnection")
                             ?? throw new Exception("ConnectionString not found");
@@ -24,8 +24,7 @@ public class TransactionDB
     
     public async Task<TransactionOb?> GetTransactionFromDatabaseByTransactionId(TransactionOb transaction)
     {
-        SortRequest sortRequest = null;
-        var query = "SELECT * FROM TransactionTb WHERE TransactionId = @TransactionId";
+        string query = "SELECT * FROM TransactionTb WHERE TransactionId = @TransactionId";
         
         return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<TransactionOb>(_connectionString, query, transaction);
     }
@@ -33,7 +32,6 @@ public class TransactionDB
     public async Task<List<TransactionOb>> GetTransactionsSortedByDate([FromBody] SortRequest sortRequest)
     {
         var query = $"SELECT * FROM TransactionTb WHERE {sortRequest.Request} BETWEEN @StartDate AND @EndDate";
-        Console.WriteLine(sortRequest.StartDate);
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, sortRequest);
     }
     
@@ -61,7 +59,7 @@ public class TransactionDB
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, sortRequest);
     }
     
-    public async Task<List<TransactionOb>> GetTransactionsSortedByDescription([FromBody] SortRequest sortRequest)
+    public async Task<List<TransactionOb>> GetTransactionsSortedByDescription(object sortRequest)
     {
         var query = $"SELECT * FROM TransactionTb WHERE Description = @Description";
         
@@ -70,8 +68,8 @@ public class TransactionDB
 
     public async Task<bool> AddTransactionToDatabase(TransactionOb transaction)
     {
-        var query = "INSERT INTO TransactionTb (TransactionId, UserId, Date, AccountNumber, Description, Income, Outcome, ToAccount, FromAccount, IsFixedPayment, FixedPaymentId)" 
-                    + "VALUES (@TransactionId, @UserId, @Date, @AccountNumber, @Description, @Income, @Outcome, @ToAccount, @FromAccount, @IsFixedPayment ,@FixedPaymentId)";
+        var query = "INSERT INTO TransactionTb (TransactionId, UserId, Date, AccountNumber, ExternalDescription, UserDescription, Income, Outcome, ToAccount, FromAccount, SupplierId, IsFixedPayment, FixedPaymentId)" 
+                    + "VALUES (@TransactionId, @UserId, @Date, @AccountNumber, @ExternalDescription, @UserDescription, @Income, @Outcome, @ToAccount, @FromAccount, @SupplierId ,@IsFixedPayment ,@FixedPaymentId)";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, transaction) > 0;
     }
@@ -86,7 +84,7 @@ public class TransactionDB
 
     public async Task<bool> UpdateTransactionInDatabase(TransactionOb transaction)
     {
-        var query = @"UPDATE TransactionTb SET Date = @Date, AccountNumber = @AccountNumber, Description = @Description, Income = @Income, Outcome = @Outcome, ToAccount = @ToAccount, FromAccount = @FromAccount, IsFixedPayment = @IsFixedPayment, FixedPaymentId = @FixedPaymentId WHERE TransactionId = @TransactionId"; 
+        var query = @"UPDATE TransactionTb SET Date = @Date, AccountNumber = @AccountNumber, ExternalDescription = @ExternalDescription, UserDescription = @UserDescription, Income = @Income, Outcome = @Outcome, ToAccount = @ToAccount, FromAccount = @FromAccount, SupplierId = @SupplierId, IsFixedPayment = @IsFixedPayment, FixedPaymentId = @FixedPaymentId WHERE TransactionId = @TransactionId"; 
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, transaction) > 0;
     }
     
@@ -94,7 +92,7 @@ public class TransactionDB
     public async Task<bool> TransactionExistsInDatabase(TransactionOb transaction)
     {
         SortRequest sortRequest = null;
-        var query = @"SELECT COUNT(*) FROM TransactionTb WHERE Date = @Date AND AccountNumber = @AccountNumber AND Description = @Description AND Income = @Income AND Outcome = @Outcome";
+        var query = @"SELECT COUNT(*) FROM TransactionTb WHERE Date = @Date AND AccountNumber = @AccountNumber AND ExternalDescription = @ExternalDescription AND Income = @Income AND Outcome = @Outcome";
 
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();

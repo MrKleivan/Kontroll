@@ -62,7 +62,7 @@ public class SqlReaderHelperDb
         return (T)Convert.ChangeType(result, typeof(T));
     }
 
-    public async Task<int> ExecuteNonQueryAsync(string connectionstring, string query, object? paramSource = null)
+    public async Task<int> ExecuteNonQueryAsync(string? connectionstring, string query, object? paramSource = null)
     {
         using var connection = new SqlConnection(connectionstring);
         await connection.OpenAsync();
@@ -75,7 +75,7 @@ public class SqlReaderHelperDb
         return await command.ExecuteNonQueryAsync();
     }
 
-    public async Task<T?> ExecuteReaderSingleAsync<T>(string connectionstring, string query, object? paramSource = null) where T : new()
+    public async Task<T?> ExecuteReaderSingleAsync<T>(string? connectionstring, string query, object? paramSource = null) where T : new()
     {
         using var connection = new SqlConnection(connectionstring);
         await connection.OpenAsync();
@@ -94,7 +94,7 @@ public class SqlReaderHelperDb
         return default;
     }
 
-    public async Task<List<T>> ExecuteReaderAndMapAsync<T>(string connectionString, string query, object? paramSource) where T : new()
+    public async Task<List<T>> ExecuteReaderAndMapAsync<T>(string? connectionString, string query, object? paramSource) where T : new()
     {
         var results = new List<T>();
 

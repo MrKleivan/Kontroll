@@ -9,12 +9,12 @@ namespace Kontroll.Controller;
 
 public class TransactionController : ControllerBase
 {
-    private readonly TransactionDB _db;
+    private readonly TransactionDb _db;
     private DescriptionController _descriptionController;
 
     public TransactionController(IConfiguration config)
     {
-        _db = new TransactionDB(config);
+        _db = new TransactionDb(config);
         _descriptionController = new DescriptionController(config);
     }
 
@@ -42,24 +42,43 @@ public class TransactionController : ControllerBase
 
     public async Task<IActionResult> AddTransaction([FromBody] TransactionPostRequest transaction)
     {
-        TransactionPostRequest hei = transaction;
         var exists = await TransactionExists(transaction);
         if (!exists || transaction.ForceAdd)
         {
-            var existingDescription = await _descriptionController.DescriptionExists(await ConvertTransactionObject(transaction));
+            var existingDescription = await CheckIfTransactionHasOtherDescription(transaction);
             
             if (existingDescription)
             {
-                DescriptionOb descriptionOb = await _descriptionController.GetDescriptionByStandarDescription(transaction);
-                hei.Description = descriptionOb.UsersDescription;
+                DescriptionOb descriptionOb = await _descriptionController.GetDescriptionByExternalDescription(transaction);
+                transaction.UserDescription = descriptionOb.UserDescription;
             }
             
-            var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(hei));
+            var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
             return added ? Ok("Transaction added") : StatusCode(500, "Failed to add transaction");
         }
         return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
     }
 
+    public async Task<List<TransactionPostRequest>?> AddUserDescriptionToTransaction(List<TransactionPostRequest> transactions)
+    {
+        List<TransactionPostRequest> transactionsFaildToAdd = new List<TransactionPostRequest>();
+
+        foreach (var transaction in transactions)
+        {
+            var isTransactionUpdated = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
+
+            if (!isTransactionUpdated)
+            {
+                transactionsFaildToAdd.Add(transaction);
+            }
+        }
+        return transactionsFaildToAdd.Count > 0 ? transactionsFaildToAdd : null;
+    }
+    
+    public async Task<bool> CheckIfTransactionHasOtherDescription(TransactionPostRequest transaction)
+    {
+        return await _descriptionController.DescriptionExists(await ConvertTransactionObject(transaction));
+    }
 
     public async Task<bool> DeleteTransaction([FromBody] TransactionOb transaction)
     {
@@ -101,11 +120,15 @@ public class TransactionController : ControllerBase
                 UserId = userId,
                 Date = date,
                 AccountNumber = AccountNumber,
-                Description = obj.Beskrivelse,
+                ExternalDescription = obj.Beskrivelse,
+                UserDescription = null,
                 Income = income,
                 Outcome = outcom,
                 ToAccount = obj.Tilkonto,
                 FromAccount = obj.Frakonto,
+                SupplierId = null,
+                IsFixedPayment = false,
+                FixedPaymentId = null,
                 ForceAdd = false
             };
             transactions.Add(transaction);
@@ -130,11 +153,15 @@ public class TransactionController : ControllerBase
             UserId = transaction.UserId,
             Date = transaction.Date,
             AccountNumber = transaction.AccountNumber,
-            Description = transaction.Description,
+            ExternalDescription = transaction.ExternalDescription,
+            UserDescription = transaction.UserDescription,
             Income = transaction.Income,
             Outcome = transaction.Outcome,
             ToAccount = transaction.ToAccount,
-            FromAccount = transaction.FromAccount
+            FromAccount = transaction.FromAccount,
+            SupplierId = transaction.SupplierId,
+            IsFixedPayment = transaction.IsFixedPayment,
+            FixedPaymentId = transaction.FixedPaymentId,
         };
         return transactionOb;
     }

@@ -4,6 +4,6 @@ public class DescriptionOb
 {
     public string UserId { get; set; }
     public int Id { get; set; }
-    public string StandarDescription { get; set; }
-    public string UsersDescription { get; set; }
+    public string? ExternalDescription { get; set; }
+    public string? UserDescription { get; set; }
 }

@@ -19,7 +19,8 @@ public class TransactionTestFive
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
             Date = new DateOnly(2025,03,24),
             AccountNumber = "255 666",
-            Description = "Banan",
+            ExternalDescription = "Banan",
+            UserDescription = null,
             Income = 20,
             Outcome = 0,
             ToAccount = "100",
@@ -35,7 +36,8 @@ public class TransactionTestFive
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
             Date = new DateOnly(2025,03,24),
             AccountNumber = "255 666",
-            Description = "Banan",
+            ExternalDescription = "Banan",
+            UserDescription = null,
             Income = 20,
             Outcome = 0,
             ToAccount = "100",
@@ -69,6 +71,6 @@ public class TransactionTestFive
         
         TransactionOb findTransaction = await app.GetSingleTransactionByTransactionId(newTransaction);
         
-        Console.WriteLine($"{findTransaction.TransactionId} |  {(double)findTransaction.Income} | {findTransaction.Description}");
+        Console.WriteLine($"{findTransaction.TransactionId} |  {(double)findTransaction.Income} | {(findTransaction.UserDescription != null ? findTransaction.UserDescription : findTransaction.ExternalDescription)}");
     }
 }

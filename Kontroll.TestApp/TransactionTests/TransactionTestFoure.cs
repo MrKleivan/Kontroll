@@ -10,18 +10,19 @@ public class TransactionTestFoure
     {
         TransactionController app = new TransactionController(config);
         
-        // test for å oppdatere en eksisterende transaksjon transactionId: 0fd3a267-e703-49fc-b40a-d01283650460 
+        // test for å oppdatere en eksisterende transaksjon transactionId: 8d3f6698-c9be-4058-8cdd-ceef688d52d2 
         TransactionOb transaction = new TransactionOb
         {
-            TransactionId = "0fd3a267-e703-49fc-b40a-d01283650460",
+            TransactionId = "8d3f6698-c9be-4058-8cdd-ceef688d52d2",
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
-            Date = new DateOnly(2025,01,24),
+            Date = new DateOnly(2025,01,31),
             AccountNumber = "255 666",
-            Description = "Per Ivar Kleivan",
-            Income = 0,
-            Outcome = 76,
-            ToAccount = "26102969730",
-            FromAccount = "26102149598",
+            ExternalDescription = "Overføring fra kredittkort til konto",
+            UserDescription = null,
+            Income = 600,
+            Outcome = 0,
+            ToAccount = "26102149598",
+            FromAccount = "24809453517",
             IsFixedPayment = false,
             FixedPaymentId = null,
         };

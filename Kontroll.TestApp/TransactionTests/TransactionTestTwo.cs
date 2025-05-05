@@ -13,15 +13,16 @@ public class TransactionTestTwo
         
         TransactionOb transactionOb = new TransactionOb
         {
-            TransactionId = "a657e1c5-b886-4409-b4dc-12a1cae200d6",
+            TransactionId = "6eab5e0c-02a6-4d72-b7d5-c3b2a272314c",
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
-            Date = new DateOnly(2025,01,27),
+            Date = new DateOnly(2025,01,08),
             AccountNumber = "255 666",
-            Description = "Overføring fra kredittkort til konto",
-            Income = 1000.00m,
-            Outcome = 0.00m,
-            ToAccount = "26102149598",
-            FromAccount = "24809453517",
+            ExternalDescription = "KIWI 555 AUSTBY TINN AUSTBYG TINN AUSTBYGD",
+            UserDescription = "Matvarer",
+            Income = 0m,
+            Outcome = -38.40m,
+            ToAccount = "",
+            FromAccount = "26102149598",
             IsFixedPayment = false,
             FixedPaymentId = null,
         };
@@ -30,7 +31,7 @@ public class TransactionTestTwo
 
         if (transaction != null)
         {
-            Console.WriteLine($"✅ Fant transaksjon: {transaction.TransactionId} - {transaction.Description} ({transaction.Date})");
+            Console.WriteLine($"✅ Fant transaksjon: {transaction.TransactionId} - {(transaction.UserDescription != null ? transaction.UserDescription : transaction.ExternalDescription)} ({transaction.Date})");
         }
         else
         {

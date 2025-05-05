@@ -10,6 +10,7 @@ public class DescriptionDb
 {
     private readonly string? _connectionString;
     private SqlReaderHelperDb _sqlReaderHelper = new SqlReaderHelperDb();
+    
     public DescriptionDb(IConfiguration config)
     {
         _connectionString = config.GetConnectionString("DefaultConnection")
@@ -18,20 +19,20 @@ public class DescriptionDb
 
     public async Task<int> DescriptionExistsInDatabase(TransactionOb transactionOb)
     {
-        var query = "SELECT COUNT(*) FROM DescriptionTb WHERE StandarDescription = @Description";
+        var query = "SELECT COUNT(*) FROM DescriptionTb WHERE ExternalDescription = @ExternalDescription";
         
         int count = await _sqlReaderHelper.ExecuteScalarAsync<int>(_connectionString, query, transactionOb);
-        Console.WriteLine(count);
         return count;
     }
 
-    public async Task<DescriptionOb> GetDescription(TransactionPostRequest transaction)
+    public async Task<DescriptionOb> GetDescriptionFromDatabase(TransactionPostRequest transaction)
     {
         var query = "SELECT * FROM DescriptionTb WHERE UserId = @UserId";
         List<DescriptionOb> descriptionObList = await _sqlReaderHelper.ExecuteReaderAndMapAsync<DescriptionOb>(_connectionString, query, transaction);
-        DescriptionOb descriptionOb = descriptionObList.Find(d => d.StandarDescription == transaction.Description);
+        DescriptionOb descriptionOb = descriptionObList.Find(d => d.ExternalDescription == transaction.ExternalDescription);
         return descriptionOb;
     }
+    
     public async Task<List<DescriptionOb>> GetAllDescriptionFromDatabaseByUserId(DescriptionOb descriptionOb)
     {
         var query = "SELECT * FROM DescriptionTb WHERE UserId = @UserId";
@@ -41,7 +42,7 @@ public class DescriptionDb
 
     public async Task<bool> AddDescriptionToDatabase(DescriptionOb descriptionOb)
     {
-        var query = "INSERT INTO DescriptionTb (UserId, StandarDescription, UsersDescription) VALUES (@UserId, @StandarDescription, @UsersDescription)";
+        var query = "INSERT INTO DescriptionTb (UserId, ExternalDescription, UserDescription) VALUES (@UserId, @ExternalDescription, @UserDescription)";
         
         return await _sqlReaderHelper.ExecuteNonQueryAsync(_connectionString, query, descriptionOb) > 0;
     }
@@ -58,6 +59,5 @@ public class DescriptionDb
         var query = "DELETE FROM DescriptionTb WHERE Id = @Id";
         
         return await _sqlReaderHelper.ExecuteNonQueryAsync(_connectionString, query, descriptionOb) > 0;
-        
     }
 }

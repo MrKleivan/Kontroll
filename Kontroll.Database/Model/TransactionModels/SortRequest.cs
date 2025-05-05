@@ -5,7 +5,8 @@ public class SortRequest
     public string UserId { get; set; }
     public string TransactionId { get; set; }
     public string Request { get; set; }
-    public string Description { get; set; }
+    public string ExternalDescription { get; set; }
+    public string UserDescription { get; set; }
     public string AccountNumber { get; set; }
     public decimal MinAmount { get; set; }
     public decimal MaxAmount { get; set; }

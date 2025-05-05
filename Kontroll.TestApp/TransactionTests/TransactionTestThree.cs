@@ -18,7 +18,8 @@ public class TransactionTestThree
             UserId = null,
             TransactionId = null,
             Request = "Date",
-            Description = null,
+            ExternalDescription = null,
+            UserDescription = null,
             AccountNumber = null,
             MinAmount = 0m,
             MaxAmount = 0m,
@@ -31,7 +32,7 @@ public class TransactionTestThree
         Console.WriteLine("------------Test1 sortering på Dato-------------");
         foreach (var transaction in transactionObOne)
         {
-            Console.WriteLine($"{transaction.TransactionId} | {transaction.UserId} | {transaction.Date} | {transaction.Description}  | {transaction.AccountNumber} | {(double)transaction.Income} | {(double)transaction.Outcome}");
+            Console.WriteLine($"{transaction.TransactionId} | {transaction.UserId} | {transaction.Date} | {(transaction.UserDescription != null ? transaction.UserDescription : transaction.ExternalDescription)}  | {transaction.AccountNumber} | {(double)transaction.Income} | {(double)transaction.Outcome}");
         }
         
         // Test 2
@@ -41,7 +42,8 @@ public class TransactionTestThree
             UserId = null,
             TransactionId = null,
             Request = "Amount",
-            Description = null,
+            ExternalDescription = null,
+            UserDescription = null,
             AccountNumber = null,
             MinAmount = 100m,
             MaxAmount = 2000m,
@@ -55,7 +57,7 @@ public class TransactionTestThree
         Console.WriteLine("------------Test2 sortering på Beløp-------------");
         foreach (var transaction in transactionObTwo)
         {
-            Console.WriteLine($"{transaction.TransactionId} | {transaction.UserId} | {transaction.Date} | {transaction.Description}  | {transaction.AccountNumber} | {(double)transaction.Income} | {(double)transaction.Outcome}");
+            Console.WriteLine($"{transaction.TransactionId} | {transaction.UserId} | {transaction.Date} | {(transaction.UserDescription != null ? transaction.UserDescription : transaction.ExternalDescription)}  | {transaction.AccountNumber} | {(double)transaction.Income} | {(double)transaction.Outcome}");
         }
     }
 }

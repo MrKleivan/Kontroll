@@ -15,8 +15,8 @@ public class DescriptionTestOne
         DescriptionOb DescriptionOb = new DescriptionOb
         {
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
-            StandarDescription = "KIWI 555 AUSTBY TINN AUSTBYG TINN AUSTBYGD",
-            UsersDescription = "Matvarer",
+            ExternalDescription = "KIWI 555 AUSTBY TINN AUSTBYG TINN AUSTBYGD",
+            UserDescription = "Matvarer",
         };
         
         await app.AddDescription(DescriptionOb);
@@ -25,7 +25,7 @@ public class DescriptionTestOne
 
         foreach (var d in des)
         {
-            Console.WriteLine(d.UserId + " : " + d.Id +":" + d.StandarDescription + " : " + d.UsersDescription);
+            Console.WriteLine(d.UserId + " : " + d.Id +":" + d.ExternalDescription + " : " + d.UserDescription);
         }
     }
 }
