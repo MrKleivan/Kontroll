@@ -23,8 +23,8 @@ public class TransactionTestFoure
             Outcome = 0,
             ToAccount = "26102149598",
             FromAccount = "24809453517",
-            IsFixedPayment = false,
-            FixedPaymentId = null,
+            IsFixedExpense = false,
+            FixedExpenseId = null,
         };
         
         var transactionBefore = await app.GetSingleTransactionByTransactionId(transaction);

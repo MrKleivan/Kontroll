@@ -2,6 +2,7 @@
 using Kontroll.Database;
 using Kontroll.TestApp;
 using Kontroll.TestApp.DescriptionTests;
+using Kontroll.TestApp.FixedExpenseTests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -45,4 +46,6 @@ var DescriptionTestTwo = new DescriptionTestTwo();
 
 var DescriptionTestThree = new DescriptionTestThree();
 
-await TransactionTestThree.Run(config);
+var FixedExpenseTestOne = new FixedExpenseTestOne();
+
+await TransactionTestOne.Run(config);

@@ -11,11 +11,13 @@ public class TransactionController : ControllerBase
 {
     private readonly TransactionDb _db;
     private DescriptionController _descriptionController;
+    private FixedExpenseController _fixedExpenseController;
 
     public TransactionController(IConfiguration config)
     {
         _db = new TransactionDb(config);
         _descriptionController = new DescriptionController(config);
+        _fixedExpenseController = new FixedExpenseController(config);
     }
 
     public async Task<TransactionOb> GetSingleTransactionByTransactionId(TransactionOb transaction)
@@ -45,18 +47,33 @@ public class TransactionController : ControllerBase
         var exists = await TransactionExists(transaction);
         if (!exists || transaction.ForceAdd)
         {
-            var existingDescription = await CheckIfTransactionHasOtherDescription(transaction);
-            
-            if (existingDescription)
-            {
-                DescriptionOb descriptionOb = await _descriptionController.GetDescriptionByExternalDescription(transaction);
-                transaction.UserDescription = descriptionOb.UserDescription;
-            }
+            await FixTransaction(transaction);
             
             var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
             return added ? Ok("Transaction added") : StatusCode(500, "Failed to add transaction");
         }
         return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
+    }
+
+    private async Task FixTransaction(TransactionPostRequest transaction)
+    {
+            var existingDescription = await CheckIfTransactionHasOtherDescription(transaction);
+            
+            if (existingDescription)
+            {
+                DescriptionOb descriptionOb = await _descriptionController.GetDescriptionByExternalDescription(transaction);
+                if (descriptionOb != null)
+                {
+                    transaction.UserDescription = descriptionOb.UserDescription;
+                }
+            }
+
+            bool isFixedExpense = await _fixedExpenseController.CheckIfIsFixedExpense(await ConvertTransactionObject(transaction));
+
+            if (isFixedExpense)
+            {
+                transaction.IsFixedExpense = true;
+            }
     }
 
     public async Task<List<TransactionPostRequest>?> AddUserDescriptionToTransaction(List<TransactionPostRequest> transactions)
@@ -127,9 +144,13 @@ public class TransactionController : ControllerBase
                 ToAccount = obj.Tilkonto,
                 FromAccount = obj.Frakonto,
                 SupplierId = null,
-                IsFixedPayment = false,
-                FixedPaymentId = null,
-                ForceAdd = false
+                IsFixedExpense = false,
+                FixedExpenseId = null,
+                HasReceipt = false,
+                ReceiptId = null,
+                HasInvoice = false, 
+                InvoiceId = null,
+                ForceAdd = false,
             };
             transactions.Add(transaction);
         }
@@ -160,8 +181,12 @@ public class TransactionController : ControllerBase
             ToAccount = transaction.ToAccount,
             FromAccount = transaction.FromAccount,
             SupplierId = transaction.SupplierId,
-            IsFixedPayment = transaction.IsFixedPayment,
-            FixedPaymentId = transaction.FixedPaymentId,
+            IsFixedExpense = transaction.IsFixedExpense,
+            FixedExpenseId = transaction.FixedExpenseId,
+            HasReceipt = transaction.HasReceipt,
+            ReceiptId = transaction.ReceiptId,
+            HasInvoice = transaction.HasInvoice,
+            InvoiceId = transaction.InvoiceId, 
         };
         return transactionOb;
     }

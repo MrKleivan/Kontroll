@@ -23,8 +23,8 @@ public class TransactionTestTwo
             Outcome = -38.40m,
             ToAccount = "",
             FromAccount = "26102149598",
-            IsFixedPayment = false,
-            FixedPaymentId = null,
+            IsFixedExpense = false,
+            FixedExpenseId = null,
         };
         
         var transaction = await app.GetSingleTransactionByTransactionId(transactionOb);

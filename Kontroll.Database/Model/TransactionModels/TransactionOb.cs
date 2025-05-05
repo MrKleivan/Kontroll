@@ -2,8 +2,8 @@ namespace Kontroll.Database.Model.TransactionModels;
 
 public class TransactionOb
 {
-    public string? TransactionId { get; set; }
     public string? UserId { get; set; }
+    public string? TransactionId { get; set; }
     public DateOnly Date { get; set; }
     public string? AccountNumber { get; set; }
     public string? ExternalDescription  { get; set; }
@@ -12,7 +12,11 @@ public class TransactionOb
     public decimal Outcome { get; set; }
     public string? ToAccount { get; set; }
     public string? FromAccount { get; set; }
-    public bool IsFixedPayment { get; set; } = false;
-    public string? FixedPaymentId { get; set; }
     public string? SupplierId { get; set; }
+    public bool IsFixedExpense { get; set; } = false;
+    public string? FixedExpenseId { get; set; }
+    public bool HasReceipt {get; set; } = false;
+    public string? ReceiptId { get; set; }
+    public bool HasInvoice { get; set; } = false;
+    public string? InvoiceId { get; set; }
 }

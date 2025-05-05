@@ -25,8 +25,8 @@ public class TransactionTestFive
             Outcome = 0,
             ToAccount = "100",
             FromAccount = "200",
-            IsFixedPayment = false,
-            FixedPaymentId = null,
+            IsFixedExpense = false,
+            FixedExpenseId = null,
             ForceAdd = false,
         };
         
@@ -42,8 +42,8 @@ public class TransactionTestFive
             Outcome = 0,
             ToAccount = "100",
             FromAccount = "200",
-            IsFixedPayment = false,
-            FixedPaymentId = null,
+            IsFixedExpense = false,
+            FixedExpenseId = null,
         };
 
         var response = await app.AddTransaction(transaction);

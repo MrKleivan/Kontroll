@@ -14,10 +14,11 @@ public class FixedExpenseController : ControllerBase
         _db = new FixedExpenseDb(config);
     }
 
-    public async Task<bool> CheckIfIsFixedExpense(TransactionPostRequest transaction)
+    public async Task<bool> CheckIfIsFixedExpense(TransactionOb transactionOb)
     {
+        bool isFixedExpense = await _db.IsFixedExpense(transactionOb);
         
-        return false;
+        return isFixedExpense;
     }
 
     public async Task<bool> CheckIfFixedExpenseExists(FixedExpenseOb fixedExpenseOb)
@@ -27,9 +28,9 @@ public class FixedExpenseController : ControllerBase
         return fixedExpenseExists;
     }
 
-    public async Task<List<FixedExpenseOb>> GetFixedExpensesByUserId(TransactionPostRequest transaction)
+    public async Task<List<FixedExpenseOb>> GetFixedExpensesByUserId(FixedExpenseOb fixedExpenseOb)
     {
-        return await _db.GetAllFixedExpensesFromDatabaseByUserId(transaction);
+        return await _db.GetAllFixedExpensesFromDatabaseByUserId(fixedExpenseOb);
     }
 
     public async Task<bool> AddFixedExpense(FixedExpenseOb fixedExpenseOb)

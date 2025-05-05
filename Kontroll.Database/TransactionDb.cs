@@ -68,8 +68,8 @@ public class TransactionDb
 
     public async Task<bool> AddTransactionToDatabase(TransactionOb transaction)
     {
-        var query = "INSERT INTO TransactionTb (TransactionId, UserId, Date, AccountNumber, ExternalDescription, UserDescription, Income, Outcome, ToAccount, FromAccount, SupplierId, IsFixedPayment, FixedPaymentId)" 
-                    + "VALUES (@TransactionId, @UserId, @Date, @AccountNumber, @ExternalDescription, @UserDescription, @Income, @Outcome, @ToAccount, @FromAccount, @SupplierId ,@IsFixedPayment ,@FixedPaymentId)";
+        var query = "INSERT INTO TransactionTb (TransactionId, UserId, Date, AccountNumber, ExternalDescription, UserDescription, Income, Outcome, ToAccount, FromAccount, SupplierId, IsFixedExpense, FixedExpenseId, HasReceipt, ReceiptId, HasInvoice, InvoiceId)" 
+                    + "VALUES (@TransactionId, @UserId, @Date, @AccountNumber, @ExternalDescription, @UserDescription, @Income, @Outcome, @ToAccount, @FromAccount, @SupplierId ,@IsFixedExpense ,@FixedExpenseId, @HasReceipt, @ReceiptId, @HasInvoice, @InvoiceId)";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, transaction) > 0;
     }
@@ -84,7 +84,7 @@ public class TransactionDb
 
     public async Task<bool> UpdateTransactionInDatabase(TransactionOb transaction)
     {
-        var query = @"UPDATE TransactionTb SET Date = @Date, AccountNumber = @AccountNumber, ExternalDescription = @ExternalDescription, UserDescription = @UserDescription, Income = @Income, Outcome = @Outcome, ToAccount = @ToAccount, FromAccount = @FromAccount, SupplierId = @SupplierId, IsFixedPayment = @IsFixedPayment, FixedPaymentId = @FixedPaymentId WHERE TransactionId = @TransactionId"; 
+        var query = @"UPDATE TransactionTb SET Date = @Date, AccountNumber = @AccountNumber, ExternalDescription = @ExternalDescription, UserDescription = @UserDescription, Income = @Income, Outcome = @Outcome, ToAccount = @ToAccount, FromAccount = @FromAccount, SupplierId = @SupplierId, IsFixedExpense = @IsFixedExpense, FixedExpenseId = @FixedExpenseId, HasReceipt = @HasReceipt, ReceiptId = @ReceiptId, HasInvoice = @HasInvoice, InvoiceId = @InvoiceId WHERE TransactionId = @TransactionId"; 
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, transaction) > 0;
     }
     

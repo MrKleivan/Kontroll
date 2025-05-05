@@ -12,7 +12,7 @@ public class TransactionTestOne
     {
         var userId = "1e21c816-5591-40ca-b418-fd4c7c8ef188";
         string transactionId = Guid.NewGuid().ToString();
-        string filePath = "test.csv";
+        string filePath = "test2.csv";
         string accountNumber = "255 666";
         TransactionController app = new TransactionController(config);
         List<TransactionPostRequest> trasnactions = await app.ConvertExelToObjectList(filePath, userId, accountNumber);

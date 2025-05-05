@@ -22,8 +22,8 @@ public class DescriptionTestTwo
             Outcome = 0,
             ToAccount = "100",
             FromAccount = "200",
-            IsFixedPayment = false,
-            FixedPaymentId = null,
+            IsFixedExpense = false,
+            FixedExpenseId = null,
             ForceAdd = false,
         };
         
@@ -43,8 +43,8 @@ public class DescriptionTestTwo
             Outcome = 0,
             ToAccount = "100",
             FromAccount = "200",
-            IsFixedPayment = false,
-            FixedPaymentId = null,
+            IsFixedExpense = false,
+            FixedExpenseId = null,
         };
 
         TransactionOb trans = await app.GetSingleTransactionByTransactionId(newTransaction);

@@ -3,6 +3,7 @@ namespace Kontroll.Database.Model.TransactionModels;
 public class InvoiceOb
 {
     public string? UserId { get; set; }
+    public string? InvoiceId { get; set; }
     public string? FixedExpenseId { get; set; }
     public string? SupplierId { get; set; }
     public string? Description { get; set; }
