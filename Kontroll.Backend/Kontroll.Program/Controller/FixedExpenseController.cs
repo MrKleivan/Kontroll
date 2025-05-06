@@ -33,6 +33,16 @@ public class FixedExpenseController : ControllerBase
         return await _db.GetAllFixedExpensesFromDatabaseByUserId(fixedExpenseOb);
     }
 
+    public async Task<FixedExpenseOb?> GetFixedExpenseByFixedExpenseId(FixedExpenseOb fixedExpenseOb)
+    {
+        return await _db.GetFixedExpenseFromDatabaseByFixedExpenseId(fixedExpenseOb);
+    }
+
+    public async Task<FixedExpenseOb?> GetFixedExpenseByDescriptionAndSupplierBankAccount(TransactionOb transactionOb)
+    {
+        return await _db.GetFixedExpenseFromDatabaseByDescriptionAndSupplierBankAccount(transactionOb);
+    }
+
     public async Task<bool> AddFixedExpense(FixedExpenseOb fixedExpenseOb)
     {
         var fixedExpenseExists = await CheckIfFixedExpenseExists(fixedExpenseOb);

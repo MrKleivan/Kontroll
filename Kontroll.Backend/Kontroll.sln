@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontroll.Program", "Kontroll.Program\Kontroll.Program.csproj", "{DE013DFA-BA08-4F07-AF9A-5F21FEBD4A0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontroller.API", "Kontroller.API\Kontroller.API.csproj", "{9DF762BE-2B76-4AC4-9682-7F568C74A152}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontroll.API", "Kontroll.API\Kontroll.API.csproj", "{9DF762BE-2B76-4AC4-9682-7F568C74A152}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontroll.Database", "Kontroll.Database\Kontroll.Database.csproj", "{64A55024-B815-47AA-9E12-D8AFE4ED8435}"
 EndProject

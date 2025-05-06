@@ -24,6 +24,16 @@ public class TransactionController : ControllerBase
     {
         return await _db.GetTransactionFromDatabaseByTransactionId(transaction);
     }
+
+    public async Task<List<TransactionOb>> GetAllTransactionsByFixedExpenseId(FixedExpenseOb fixedExpenseOb, int Year)
+    {
+        object queryObj = new 
+        {
+            FixedExpenseId = fixedExpenseOb.FixedExpenseId,
+            Year = Year
+        };
+        return await _db.GetAllTransactionsFromDatabaseByFixedExpenseId(queryObj);
+    }
     
     public async Task<List<TransactionOb>> GetUserTransactionsByCriteria([FromBody] SortRequest sortRequest)
     {
@@ -72,7 +82,10 @@ public class TransactionController : ControllerBase
 
             if (isFixedExpense)
             {
+                FixedExpenseOb? fixedExpenseOb = await _fixedExpenseController.GetFixedExpenseByDescriptionAndSupplierBankAccount(await ConvertTransactionObject(transaction));
+                
                 transaction.IsFixedExpense = true;
+                transaction.FixedExpenseId = fixedExpenseOb.FixedExpenseId;
             }
     }
 

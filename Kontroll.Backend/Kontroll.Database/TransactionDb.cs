@@ -102,6 +102,12 @@ public class TransactionDb
 
         var result = (int)await sql.ExecuteScalarAsync();
         return result > 0;
-    } 
-    
+    }
+
+    public async Task<List<TransactionOb>> GetAllTransactionsFromDatabaseByFixedExpenseId(object queryObj)
+    {
+        var query = @"SELECT * FROM TransactionTb WHERE FixedExpenseId = @FixedExpenseId AND YEAR([Date]) = @Year";
+        
+        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, queryObj);
+    }
 }

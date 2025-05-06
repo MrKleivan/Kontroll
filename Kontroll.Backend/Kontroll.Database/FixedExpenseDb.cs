@@ -1,4 +1,5 @@
 using Kontroll.Database.Model.TransactionModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 
 namespace Kontroll.Database;
@@ -21,11 +22,11 @@ public class FixedExpenseDb
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<FixedExpenseOb>(_connectionString, query, obj);
     }
     
-    public async Task<List<FixedExpenseOb>> GetAllFixedExpensesFromDatabaseByFixedExpenseId(FixedExpenseOb fixedExpenseOb)
+    public async Task<FixedExpenseOb?> GetFixedExpenseFromDatabaseByFixedExpenseId(FixedExpenseOb fixedExpenseOb)
     {
         var query = "SELECT * FROM FixedExpenseTb WHERE FixedExpenseId = @FixedExpenseId";
 
-        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<FixedExpenseOb>(_connectionString, query, fixedExpenseOb);
+        return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<FixedExpenseOb>(_connectionString, query, fixedExpenseOb);
     }
 
     public async Task<bool> AddFixedExpenseToDatabase(FixedExpenseOb fixedExpenseOb)
@@ -38,19 +39,28 @@ public class FixedExpenseDb
 
     public async Task<bool> UpdateFixedExpenseInDatabase(FixedExpenseOb fixedExpenseOb)
     {
-        throw new NotImplementedException();
+        var query = "UPDATE FixedExpenseTb SET UserId = @UserId, FixedExpenseId = @FixedExpenseId, SupplierId = @SupplierId, SupplierBankAccount = @SupplierBankAccount, Description = @Description, PaymentMethod = @PaymentMethod, MonthlyAmount = @MonthlyAmount, MonthlyDeadlineDay = @MonthlyDeadlineDay, HasPayments = @HasPayments, IsFullyPaid = @IsFullyPaid, SettledDate = @SettledDate, StandardAccountNumberForePayment = @StandardAccountNumberForePayment WHERE FixedExpenseId = @FixedExpenseId";
+        
+        return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, fixedExpenseOb) > 0;
     }
 
-    public async Task<bool> FixedExpenseExistsInDatabase(FixedExpenseOb fixedExpenseOb)
+    public async Task<bool> FixedExpenseExistsInDatabase(FixedExpenseOb fixedExpenseOb) 
     {
         var query = "SELECT COUNT(*) FROM FixedExpenseTb WHERE Description = @Description AND MonthlyAmount = @MonthlyAmount AND MonthlyDeadlineDay = @MonthlyDeadlineDay";
 
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, fixedExpenseOb) > 0;
     }
 
+    public async Task<FixedExpenseOb?> GetFixedExpenseFromDatabaseByDescriptionAndSupplierBankAccount(TransactionOb transactionOb)
+    {
+        var query = "SELECT * FROM FixedExpenseTb WHERE Description = @UserDescription AND SupplierBankAccount =  @ToAccount";
+        
+        return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<FixedExpenseOb>(_connectionString, query, transactionOb);
+    }
+    
     public async Task<bool> IsFixedExpense(TransactionOb transactionOb)
     {
-        var query = "SELECT * FROM FixedExpenseTb WHERE Description = @UserDescription";
+        var query = "SELECT * FROM FixedExpenseTb WHERE Description = @UserDescription AND SupplierBankAccount =  @ToAccount";
 
         bool isFixedExpense = false;
         

@@ -48,4 +48,6 @@ var DescriptionTestThree = new DescriptionTestThree();
 
 var FixedExpenseTestOne = new FixedExpenseTestOne();
 
-await TransactionTestOne.Run(config);
+var FixedExpenseTestTwo = new FixedExpenseTestTwo();
+
+await FixedExpenseTestTwo.Run(config);
