@@ -12,12 +12,14 @@ public class TransactionController : ControllerBase
     private readonly TransactionDb _db;
     private DescriptionController _descriptionController;
     private FixedExpenseController _fixedExpenseController;
+    private SupplierController _supplierController;
 
     public TransactionController(IConfiguration config)
     {
         _db = new TransactionDb(config);
         _descriptionController = new DescriptionController(config);
         _fixedExpenseController = new FixedExpenseController(config);
+        _supplierController = new SupplierController(config);
     }
 
     public async Task<TransactionOb> GetSingleTransactionByTransactionId(TransactionOb transaction)
@@ -87,6 +89,24 @@ public class TransactionController : ControllerBase
                 transaction.IsFixedExpense = true;
                 transaction.FixedExpenseId = fixedExpenseOb.FixedExpenseId;
             }
+
+            await CheckIfTransactionHasExistingSupplier(transaction);
+    }
+
+    private async Task CheckIfTransactionHasExistingSupplier(TransactionPostRequest transaction)
+    {
+        List<SupplierOb> supplierObs = await _supplierController.GetAllSuppliersByUserId(await ConvertTransactionObject(transaction));
+
+        if (supplierObs.Count > 0)
+        {
+            foreach (SupplierOb supplierOb in supplierObs)
+            {
+                if (transaction.ExternalDescription != null && supplierOb.CompanyName != null && transaction.ExternalDescription.IndexOf(supplierOb.CompanyName, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    transaction.SupplierId =  supplierOb.SupplierId;
+                }
+            }
+        }
     }
 
     public async Task<List<TransactionPostRequest>?> AddUserDescriptionToTransaction(List<TransactionPostRequest> transactions)

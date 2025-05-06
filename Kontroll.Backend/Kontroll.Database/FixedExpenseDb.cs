@@ -60,17 +60,6 @@ public class FixedExpenseDb
     
     public async Task<bool> IsFixedExpense(TransactionOb transactionOb)
     {
-        var query = "SELECT * FROM FixedExpenseTb WHERE Description = @UserDescription AND SupplierBankAccount =  @ToAccount";
-
-        bool isFixedExpense = false;
-        
-        List<FixedExpenseOb?> fixedExpenseObs = await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<FixedExpenseOb>(_connectionString, query, transactionOb);
-        if (fixedExpenseObs.Count > 0)
-        {
-            FixedExpenseOb fixedExpenseOb = fixedExpenseObs.Find(t => t.SupplierBankAccount == transactionOb.ToAccount);
-            isFixedExpense = fixedExpenseOb != null;
-        }
-        
-        return isFixedExpense;
+        return await GetFixedExpenseFromDatabaseByDescriptionAndSupplierBankAccount(transactionOb) != null;
     }
 }

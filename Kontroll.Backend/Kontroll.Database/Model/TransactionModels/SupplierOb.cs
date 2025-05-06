@@ -2,6 +2,7 @@ namespace Kontroll.Database.Model.TransactionModels;
 
 public class SupplierOb
 {
+    public string? UserId { get; set; }
     public string? SupplierId { get; set; }
     public string? CompanyName { get; set; }
     public string? CompanyAddress { get; set; }
