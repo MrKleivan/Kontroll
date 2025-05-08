@@ -20,9 +20,8 @@ public class FixedExpenseTestOne
             PaymentMethod = null,
             MonthlyAmount = -3481,
             MonthlyDeadlineDay = 20,
-            HasPayments = false,
-            IsFullyPaid = true,
-            SettledDate = null,
+            FixedExpenseStartDate = new DateOnly(),
+            IsActive = true,
             StandardAccountNumberForePayment = "Regningskonto"
         };
         

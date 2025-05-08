@@ -1,3 +1,4 @@
+using System.Transactions;
 using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,14 @@ public class FixedExpenseController : ControllerBase
 {
    
     private FixedExpenseDb _db;
+    private SupplierController _supplierController;
+    private TransactionController _transactionController;
 
     public FixedExpenseController(IConfiguration config)
     {
         _db = new FixedExpenseDb(config);
+        _supplierController = new SupplierController(config);
+        _transactionController = new TransactionController(config);
     }
 
     public async Task<bool> CheckIfIsFixedExpense(TransactionOb transactionOb)
@@ -48,9 +53,22 @@ public class FixedExpenseController : ControllerBase
         var fixedExpenseExists = await CheckIfFixedExpenseExists(fixedExpenseOb);
         if (!fixedExpenseExists)
         {
+            // await CheckIfFixedExpenseHasExistingSupplier(fixedExpenseOb);
             return await _db.AddFixedExpenseToDatabase(fixedExpenseOb);
         }
         return false;
+    }
+
+    public async Task<FixedExpenseOb?> CheckIfFixedExpenseHasExistingSupplier(FixedExpenseOb fixedExpenseOb)
+    {
+        List<TransactionOb> transactionObs = await _transactionController.GetAllTransactionsByFixedExpenseId(fixedExpenseOb, 2024);
+        TransactionOb? transactionOb = transactionObs.FirstOrDefault();
+        if (transactionOb != null && transactionOb.SupplierId != null)
+        {
+            fixedExpenseOb.SupplierId = transactionOb.SupplierId;
+        }
+        
+        return fixedExpenseOb;
     }
 
     public async Task<bool> UpdateFixedExpense(FixedExpenseOb fixedExpenseOb)

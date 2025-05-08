@@ -44,13 +44,17 @@ var DescriptionTestOne = new DescriptionTestOne();
 // sist testet og vellykket 25.04.25
 var DescriptionTestTwo = new DescriptionTestTwo();
 
-
+// 
 var DescriptionTestThree = new DescriptionTestThree();
+
 
 var FixedExpenseTestOne = new FixedExpenseTestOne();
 
+
 var FixedExpenseTestTwo = new FixedExpenseTestTwo();
 
+
 var SupplierTestOne = new SupplierTestOne();
+
 
 await TransactionTestOne.Run(config);

@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Kontroll.Database.Model.TransactionModels;
 
+[Table("SupplierTb")]
 public class TransactionOb
 {
     public string? UserId { get; set; }

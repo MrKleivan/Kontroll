@@ -59,7 +59,7 @@ public class TransactionController : ControllerBase
         var exists = await TransactionExists(transaction);
         if (!exists || transaction.ForceAdd)
         {
-            await FixTransaction(transaction);
+            await UpdateValuesOnTransactionByCriteria(transaction);
             
             var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
             return added ? Ok("Transaction added") : StatusCode(500, "Failed to add transaction");
@@ -67,7 +67,7 @@ public class TransactionController : ControllerBase
         return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
     }
 
-    private async Task FixTransaction(TransactionPostRequest transaction)
+    private async Task UpdateValuesOnTransactionByCriteria(TransactionPostRequest transaction)
     {
             var existingDescription = await CheckIfTransactionHasOtherDescription(transaction);
             
