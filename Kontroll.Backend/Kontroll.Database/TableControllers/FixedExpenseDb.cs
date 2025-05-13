@@ -1,13 +1,13 @@
+using Kontroll.Database.Libary;
 using Kontroll.Database.Model.TransactionModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 
-namespace Kontroll.Database;
+namespace Kontroll.Database.TableControllers;
 
 public class FixedExpenseDb
 {
     private readonly string? _connectionString;
-    private SqlReaderHelperDb _sqlReaderHelperDb = new SqlReaderHelperDb();
+    private SqlReaderHelperDb _sqlReaderHelperDb = new();
 
     public FixedExpenseDb(IConfiguration config)
     {
@@ -31,15 +31,15 @@ public class FixedExpenseDb
 
     public async Task<bool> AddFixedExpenseToDatabase(FixedExpenseOb fixedExpenseOb)
     {
-        var query = "INSERT INTO FixedExpenseTb ( UserId, FixedExpenseId, SupplierId, SupplierBankAccount, Description, PaymentMethod, MonthlyAmount, MonthlyDeadlineDay, HasPayments, IsFullyPaid, SettledDate, StandardAccountNumberForePayment) " +
-                    "VALUES (@UserId, @FixedExpenseId, @SupplierId, @SupplierBankAccount, @Description, @PaymentMethod, @MonthlyAmount, @MonthlyDeadlineDay, @HasPayments, @IsFullyPaid, @SettledDate, @StandardAccountNumberForePayment)";
+        var query = "INSERT INTO FixedExpenseTb ( UserId, FixedExpenseId, SupplierId, SupplierName, SupplierBankAccount, Description, PaymentMethod, MonthlyAmount, MonthlyDeadlineDay, FixedExpenseStartDate, IsActive, StandardAccountNumberForePayment) " +
+                    "VALUES (@UserId, @FixedExpenseId, @SupplierId, @SupplierName, @SupplierBankAccount, @Description, @PaymentMethod, @MonthlyAmount, @MonthlyDeadlineDay, @FixedExpenseStartDate, @IsActive, @StandardAccountNumberForePayment)";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, fixedExpenseOb) > 0;
     }
 
     public async Task<bool> UpdateFixedExpenseInDatabase(FixedExpenseOb fixedExpenseOb)
     {
-        var query = "UPDATE FixedExpenseTb SET UserId = @UserId, FixedExpenseId = @FixedExpenseId, SupplierId = @SupplierId, SupplierBankAccount = @SupplierBankAccount, Description = @Description, PaymentMethod = @PaymentMethod, MonthlyAmount = @MonthlyAmount, MonthlyDeadlineDay = @MonthlyDeadlineDay, HasPayments = @HasPayments, IsFullyPaid = @IsFullyPaid, SettledDate = @SettledDate, StandardAccountNumberForePayment = @StandardAccountNumberForePayment WHERE FixedExpenseId = @FixedExpenseId";
+        var query = "UPDATE FixedExpenseTb SET UserId = @UserId, FixedExpenseId = @FixedExpenseId, SupplierId = @SupplierId, SupplierName = @SupplierName, SupplierBankAccount = @SupplierBankAccount, Description = @Description, PaymentMethod = @PaymentMethod, MonthlyAmount = @MonthlyAmount, MonthlyDeadlineDay = @MonthlyDeadlineDay, FixedExpenseStartDate = @FixedExpenseStartDate, IsActive = @IsActive, StandardAccountNumberForePayment = @StandardAccountNumberForePayment WHERE FixedExpenseId = @FixedExpenseId";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, fixedExpenseOb) > 0;
     }

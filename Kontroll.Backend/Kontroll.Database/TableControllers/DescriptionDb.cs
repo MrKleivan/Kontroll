@@ -1,15 +1,13 @@
-using System.Data.SqlClient;
-using Kontroll.Database;
+using Kontroll.Database.Libary;
 using Kontroll.Database.Model.TransactionModels;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace Kontroll.Model;
+namespace Kontroll.Database.TableControllers;
 
 public class DescriptionDb
 {
     private readonly string? _connectionString;
-    private SqlReaderHelperDb _sqlReaderHelper = new SqlReaderHelperDb();
+    private SqlReaderHelperDb _sqlReaderHelper = new();
     
     public DescriptionDb(IConfiguration config)
     {

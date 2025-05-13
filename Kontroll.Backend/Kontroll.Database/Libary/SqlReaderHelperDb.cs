@@ -2,11 +2,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
 
-namespace Kontroll.Database;
+namespace Kontroll.Database.Libary;
 
 public class SqlReaderHelperDb
 {
-    private SqlParameterHelperDb _sqlParamHelperDb = new SqlParameterHelperDb();
+    private SqlParameterHelperDb _sqlParamHelperDb = new();
     
     public T MapReaderToObject<T>(SqlDataReader reader) where T : new()
     {

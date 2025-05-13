@@ -1,13 +1,13 @@
+using Kontroll.Database.Libary;
 using Kontroll.Database.Model.TransactionModels;
 using Microsoft.Extensions.Configuration;
 
-namespace Kontroll.Database;
+namespace Kontroll.Database.TableControllers;
 
 public class SupplierDb
 {
     private readonly string? _connectionString;
-    private SqlParameterHelperDb _sqlParameterHelperDb = new SqlParameterHelperDb();
-    private SqlReaderHelperDb _sqlReaderHelperDb = new SqlReaderHelperDb();
+    private SqlReaderHelperDb _sqlReaderHelperDb = new();
 
     public SupplierDb(IConfiguration config)
     {
@@ -17,8 +17,8 @@ public class SupplierDb
 
     public async Task<bool> AddSupplierToDatabase(SupplierOb supplierOb)
     {
-        var query = "INSERT INTO SupplierTb (UserId, SupplierId, CompanyName, CompanyAddress, CompanyPhoneNumber, CompanyEmails, TypeOfGoods) " +
-                    "VALUES (@UserId, @SupplierId, @CompanyName,  @CompanyAddress, @CompanyPhoneNumber, @CompanyEmails, @TypeOfGoods)";
+        var query = "INSERT INTO SupplierTb (UserId, SupplierId, SupplierName, SupplierAddress, SupplierPhoneNumber, SupplierEmails, TypeOfGood, WebSites) " +
+                    "VALUES (@UserId, @SupplierId, @SupplierName,  @SupplierAddress, @SupplierPhoneNumber, @SupplierEmails, @TypeOfGoods, @WebSite)";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, supplierOb) > 0;
     }
@@ -36,5 +36,12 @@ public class SupplierDb
         var query = "SELECT * FROM SupplierTb WHERE UserId = @UserId";
         
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<SupplierOb>(_connectionString, query, obj);
+    }
+
+    public async Task<SupplierOb?> GetSupplierFromDatabaseBySupplierName(object obj)
+    {
+        var query = "SELECT * FROM SupplierTb WHERE SupplierName = @SupplierName";
+        
+        return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<SupplierOb>(_connectionString, query, obj);
     }
 }

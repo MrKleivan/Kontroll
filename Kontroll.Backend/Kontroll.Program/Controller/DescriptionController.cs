@@ -1,7 +1,5 @@
-using System.Transactions;
-using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
-using Kontroll.Model;
+using Kontroll.Database.TableControllers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kontroll.Controller;

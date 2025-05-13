@@ -8,11 +8,11 @@ public class FixedExpenseOb
     public string? UserId { get; set; }
     public string? FixedExpenseId  { get; set; }
     public string? SupplierId { get; set; }
+    public string? SupplierName { get; set; }
     public string? SupplierBankAccount { get; set; }
     public string? Description { get; set; }
     public string? PaymentMethod { get; set; }
     public decimal MonthlyAmount { get; set; }
-    public decimal YearlyAmount => MonthlyAmount * 12;
     public int MonthlyDeadlineDay { get; set; }
     public DateOnly FixedExpenseStartDate { get; set; }
     public bool IsActive { get; set; }

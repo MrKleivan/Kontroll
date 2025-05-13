@@ -12,15 +12,16 @@ public class FixedExpenseTestOne
         
         FixedExpenseOb fixedExpenseOb = new FixedExpenseOb
         {
-            FixedExpenseId = Guid.NewGuid().ToString(),
+            FixedExpenseId = "7896f9c6-493e-441e-893c-f89eebc22c25",
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
             SupplierId = null,
+            SupplierName = "Storebrand Forsikkring",
             SupplierBankAccount = "81013009090",
             Description = "Forsikkring",
             PaymentMethod = null,
             MonthlyAmount = -3481,
             MonthlyDeadlineDay = 20,
-            FixedExpenseStartDate = new DateOnly(),
+            FixedExpenseStartDate = DateOnly.FromDateTime(DateTime.Today),
             IsActive = true,
             StandardAccountNumberForePayment = "Regningskonto"
         };

@@ -1,25 +1,18 @@
-using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
+using Kontroll.Database.TableControllers;
 using Kontroll.Library.Exel;
-using Kontroll.Model;
-using Transaction = System.Transactions.Transaction;
 using Microsoft.AspNetCore.Mvc;
-
 namespace Kontroll.Controller;
 
 public class TransactionController : ControllerBase
 {
     private readonly TransactionDb _db;
-    private DescriptionController _descriptionController;
-    private FixedExpenseController _fixedExpenseController;
-    private SupplierController _supplierController;
+    private readonly IConfiguration _configuration;
 
     public TransactionController(IConfiguration config)
     {
         _db = new TransactionDb(config);
-        _descriptionController = new DescriptionController(config);
-        _fixedExpenseController = new FixedExpenseController(config);
-        _supplierController = new SupplierController(config);
+        _configuration = config;
     }
 
     public async Task<TransactionOb> GetSingleTransactionByTransactionId(TransactionOb transaction)
@@ -73,18 +66,20 @@ public class TransactionController : ControllerBase
             
             if (existingDescription)
             {
-                DescriptionOb descriptionOb = await _descriptionController.GetDescriptionByExternalDescription(transaction);
+                DescriptionController descriptionController = new DescriptionController(_configuration);
+                DescriptionOb descriptionOb = await descriptionController.GetDescriptionByExternalDescription(transaction);
                 if (descriptionOb != null)
                 {
                     transaction.UserDescription = descriptionOb.UserDescription;
                 }
             }
-
-            bool isFixedExpense = await _fixedExpenseController.CheckIfIsFixedExpense(await ConvertTransactionObject(transaction));
+            
+            FixedExpenseController fixedExpenseController = new FixedExpenseController(_configuration);
+            bool isFixedExpense = await fixedExpenseController.CheckIfIsFixedExpense(await ConvertTransactionObject(transaction));
 
             if (isFixedExpense)
             {
-                FixedExpenseOb? fixedExpenseOb = await _fixedExpenseController.GetFixedExpenseByDescriptionAndSupplierBankAccount(await ConvertTransactionObject(transaction));
+                FixedExpenseOb? fixedExpenseOb = await fixedExpenseController.GetFixedExpenseByDescriptionAndSupplierBankAccount(await ConvertTransactionObject(transaction));
                 
                 transaction.IsFixedExpense = true;
                 transaction.FixedExpenseId = fixedExpenseOb.FixedExpenseId;
@@ -95,13 +90,14 @@ public class TransactionController : ControllerBase
 
     private async Task CheckIfTransactionHasExistingSupplier(TransactionPostRequest transaction)
     {
-        List<SupplierOb> supplierObs = await _supplierController.GetAllSuppliersByUserId(await ConvertTransactionObject(transaction));
+        SupplierController supplierController = new SupplierController(_configuration);
+        List<SupplierOb> supplierObs = await supplierController.GetAllSuppliersByUserId(await ConvertTransactionObject(transaction));
 
         if (supplierObs.Count > 0)
         {
             foreach (SupplierOb supplierOb in supplierObs)
             {
-                if (transaction.ExternalDescription != null && supplierOb.CompanyName != null && transaction.ExternalDescription.IndexOf(supplierOb.CompanyName, StringComparison.OrdinalIgnoreCase) >= 0)
+                if (transaction.ExternalDescription != null && supplierOb.SupplierName != null && transaction.ExternalDescription.IndexOf(supplierOb.SupplierName, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     transaction.SupplierId =  supplierOb.SupplierId;
                 }
@@ -127,7 +123,8 @@ public class TransactionController : ControllerBase
     
     public async Task<bool> CheckIfTransactionHasOtherDescription(TransactionPostRequest transaction)
     {
-        return await _descriptionController.DescriptionExists(await ConvertTransactionObject(transaction));
+        DescriptionController descriptionController = new DescriptionController(_configuration);
+        return await descriptionController.DescriptionExists(await ConvertTransactionObject(transaction));
     }
 
     public async Task<bool> DeleteTransaction([FromBody] TransactionOb transaction)
@@ -190,7 +187,11 @@ public class TransactionController : ControllerBase
         return transactions;
     }
 
-    private async Task<bool> TransactionExists(dynamic transaction)
+    public async Task<List<TransactionOb>> GetTransactionByInvoiceValues(InvoiceOb invoice)
+    {
+        return await _db.GetTransactionFormDatabaseByInvoiceValues(invoice);
+    }
+    public async Task<bool> TransactionExists(dynamic transaction)
     {
         TransactionOb transactionOb = await ConvertTransactionObject(transaction);
         return await _db.TransactionExistsInDatabase(transactionOb);

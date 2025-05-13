@@ -1,6 +1,5 @@
 using Kontroll.Controller;
 using Kontroll.Database.Model.TransactionModels;
-using Kontroll.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 

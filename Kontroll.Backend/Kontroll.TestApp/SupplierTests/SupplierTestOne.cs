@@ -14,10 +14,10 @@ public class SupplierTestOne
         {
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
             SupplierId = Guid.NewGuid().ToString(),
-            CompanyName = "Storebrand Forsikring",
-            CompanyAddress = null,
-            CompanyPhoneNumber = null,
-            CompanyEmails = null,
+            SupplierName = "Storebrand Forsikring",
+            SupplierAddress = null,
+            SupplierPhoneNumber = null,
+            SupplierEmails = null,
             TypeOfGoods = "Forsikring"
         };
         
@@ -27,7 +27,7 @@ public class SupplierTestOne
 
         foreach (var d in des)
         {
-            Console.WriteLine(d.SupplierId + " " + d.CompanyName + " " + d.TypeOfGoods + " " + d.UserId);
+            Console.WriteLine(d.SupplierId + " " + d.SupplierName + " " + d.TypeOfGoods + " " + d.UserId);
         }
     }
 }

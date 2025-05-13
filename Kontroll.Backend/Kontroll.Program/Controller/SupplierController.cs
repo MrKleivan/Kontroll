@@ -1,15 +1,18 @@
 using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
+using Kontroll.Database.TableControllers;
 
 namespace Kontroll.Controller;
 
 public class SupplierController
 {
     private readonly SupplierDb _db;
-
+    private readonly IConfiguration _configuration;
+    
     public SupplierController(IConfiguration config)
     {
         _db = new SupplierDb(config);
+        _configuration = config;
     }
 
     public async Task<bool> AddSupplier(SupplierOb supplierOb)
@@ -31,5 +34,10 @@ public class SupplierController
     public async Task<List<SupplierOb>> GetAllSuppliersByUserId(Object obj)
     {
         return await _db.GetAllSuppliersByUserIdFromDatabase(obj);
+    }
+
+    public async Task<SupplierOb> GetSupplierBySupplierName(Object obj)
+    {
+        return await _db.GetSupplierFromDatabaseBySupplierName(obj);
     }
 }

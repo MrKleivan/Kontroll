@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kontroll.Database.Model.TransactionModels;
 
-[Table("SupplierTb")]
+[Table("TransactionTb")]
 public class TransactionOb
 {
     public string? UserId { get; set; }

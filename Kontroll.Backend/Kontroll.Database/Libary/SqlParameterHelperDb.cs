@@ -1,9 +1,8 @@
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Kontroll.Database.Model.TransactionModels;
 
-namespace Kontroll.Database;
+namespace Kontroll.Database.Libary;
 
 public class SqlParameterHelperDb
 {

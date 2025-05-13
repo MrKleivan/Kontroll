@@ -15,16 +15,16 @@ public class TransactionTestFive
         // test for å oppdatere en eksisterende transaksjon transactionId: 0fd3a267-e703-49fc-b40a-d01283650460 
         TransactionPostRequest transaction = new TransactionPostRequest()
         {
-            TransactionId = "harehopp-92",
+            TransactionId = "f496e0eb-b40e-457a-be07-1e8de34d1125",
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
-            Date = new DateOnly(2025,03,24),
+            Date = new DateOnly(2025,01,21),
             AccountNumber = "255 666",
-            ExternalDescription = "Banan",
+            ExternalDescription = "STOREBRAND FORSIKRING AS",
             UserDescription = null,
-            Income = 20,
-            Outcome = 0,
-            ToAccount = "100",
-            FromAccount = "200",
+            Income = 0,
+            Outcome = -1891,
+            ToAccount = "81013009090",
+            FromAccount = "26102001612",
             IsFixedExpense = false,
             FixedExpenseId = null,
             ForceAdd = false,
@@ -32,18 +32,8 @@ public class TransactionTestFive
         
         TransactionOb newTransaction = new TransactionOb()
         {
-            TransactionId = "harehopp-92",
-            UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
-            Date = new DateOnly(2025,03,24),
-            AccountNumber = "255 666",
-            ExternalDescription = "Banan",
-            UserDescription = null,
-            Income = 20,
-            Outcome = 0,
-            ToAccount = "100",
-            FromAccount = "200",
-            IsFixedExpense = false,
-            FixedExpenseId = null,
+            TransactionId = "f496e0eb-b40e-457a-be07-1e8de34d1125",
+            
         };
 
         var response = await app.AddTransaction(transaction);

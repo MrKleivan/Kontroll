@@ -1,6 +1,6 @@
-using System.Transactions;
 using Kontroll.Database;
 using Kontroll.Database.Model.TransactionModels;
+using Kontroll.Database.TableControllers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kontroll.Controller;
@@ -9,14 +9,12 @@ public class FixedExpenseController : ControllerBase
 {
    
     private FixedExpenseDb _db;
-    private SupplierController _supplierController;
-    private TransactionController _transactionController;
+    private IConfiguration _configuration;
 
     public FixedExpenseController(IConfiguration config)
     {
         _db = new FixedExpenseDb(config);
-        _supplierController = new SupplierController(config);
-        _transactionController = new TransactionController(config);
+        _configuration = config;
     }
 
     public async Task<bool> CheckIfIsFixedExpense(TransactionOb transactionOb)
@@ -53,22 +51,22 @@ public class FixedExpenseController : ControllerBase
         var fixedExpenseExists = await CheckIfFixedExpenseExists(fixedExpenseOb);
         if (!fixedExpenseExists)
         {
-            // await CheckIfFixedExpenseHasExistingSupplier(fixedExpenseOb);
+            await CheckIfFixedExpenseHasExistingSupplier(fixedExpenseOb);
             return await _db.AddFixedExpenseToDatabase(fixedExpenseOb);
         }
         return false;
     }
 
-    public async Task<FixedExpenseOb?> CheckIfFixedExpenseHasExistingSupplier(FixedExpenseOb fixedExpenseOb)
+    public async Task CheckIfFixedExpenseHasExistingSupplier(FixedExpenseOb fixedExpenseOb)
     {
-        List<TransactionOb> transactionObs = await _transactionController.GetAllTransactionsByFixedExpenseId(fixedExpenseOb, 2024);
-        TransactionOb? transactionOb = transactionObs.FirstOrDefault();
-        if (transactionOb != null && transactionOb.SupplierId != null)
+        SupplierController supplierApp = new SupplierController(_configuration);
+        SupplierOb supplier = await supplierApp.GetSupplierBySupplierName(fixedExpenseOb);
+
+        if (supplier != null)
         {
-            fixedExpenseOb.SupplierId = transactionOb.SupplierId;
+            fixedExpenseOb.SupplierId = supplier.SupplierId;
         }
         
-        return fixedExpenseOb;
     }
 
     public async Task<bool> UpdateFixedExpense(FixedExpenseOb fixedExpenseOb)

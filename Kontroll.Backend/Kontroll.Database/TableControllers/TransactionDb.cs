@@ -1,19 +1,14 @@
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.Transactions;
+using Kontroll.Database.Libary;
 using Kontroll.Database.Model.TransactionModels;
-using Kontroll.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-
-namespace Kontroll.Database;
+namespace Kontroll.Database.TableControllers;
 
 public class TransactionDb
 {
     private readonly string? _connectionString;
-    private SqlParameterHelperDb _sqlParameterHelperDb = new SqlParameterHelperDb();
-    private SqlReaderHelperDb _sqlReaderHelperDb = new SqlReaderHelperDb();
+    private SqlReaderHelperDb _sqlReaderHelperDb = new();
 
     public TransactionDb(IConfiguration config)
     {
@@ -89,18 +84,12 @@ public class TransactionDb
     }
     
     
-    public async Task<bool> TransactionExistsInDatabase(TransactionOb transaction)
+    public async Task<bool> TransactionExistsInDatabase(Object obj)
     {
         SortRequest sortRequest = null;
-        var query = @"SELECT COUNT(*) FROM TransactionTb WHERE Date = @Date AND AccountNumber = @AccountNumber AND ExternalDescription = @ExternalDescription AND Income = @Income AND Outcome = @Outcome";
-
-        using var connection = new SqlConnection(_connectionString);
-        await connection.OpenAsync();
-
-        using var sql = new SqlCommand(query, connection);
-        _sqlParameterHelperDb.AddSqlParameterFromObject(sql, transaction, query);
-
-        var result = (int)await sql.ExecuteScalarAsync();
+        var query = @"SELECT COUNT(*) FROM TransactionTb WHERE Date = @Date AND AccountNumber = @AccountNumber AND ExternalDescription = @ExternalDescription AND Income = @Income AND Outcome = @Outcome AND ToAccount = @ToAccount";
+        
+        var result = await _sqlReaderHelperDb.ExecuteScalarAsync<int>(_connectionString, query, obj);
         return result > 0;
     }
 
@@ -109,5 +98,12 @@ public class TransactionDb
         var query = @"SELECT * FROM TransactionTb WHERE FixedExpenseId = @FixedExpenseId AND YEAR([Date]) = @Year";
         
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, queryObj);
+    }
+
+    public async Task<List<TransactionOb>> GetTransactionFormDatabaseByInvoiceValues(InvoiceOb invoice)
+    {
+        var query = @"SELECT * FROM TransactionTb WHERE MONTH(Date) = MONTH(@PaymentDate) AND YEAR(Date) = YEAR(@PaymentDate) AND AccountNumber = @PayedFromAccountNumber AND ExternalDescription = @ExternalDescription AND Outcome = @PaymentAmount AND ToAccount = @SupplierBankAccountNumber";
+
+        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, invoice);
     }
 }

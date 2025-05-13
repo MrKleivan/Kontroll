@@ -1,6 +1,5 @@
 using Kontroll.Controller;
 using Kontroll.Database.Model.TransactionModels;
-using Kontroll.Model;
 using Microsoft.Extensions.Configuration;
 
 namespace Kontroll.TestApp;

@@ -12,17 +12,17 @@ public class FixedExpenseTestTwo
         
         FixedExpenseOb fixedExpenseOb = new FixedExpenseOb
         {
-            FixedExpenseId = "7896f9c6-493e-441e-893c-f89eebc22c25",
             UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188",
+            FixedExpenseId = "7896f9c6-493e-441e-893c-f89eebc22c25",
             SupplierId = null,
+            SupplierName = null,
             SupplierBankAccount = "81013009090",
             Description = "Forsikkring",
             PaymentMethod = null,
             MonthlyAmount = -3481,
             MonthlyDeadlineDay = 20,
-            HasPayments = false,
-            IsFullyPaid = true,
-            SettledDate = null,
+            FixedExpenseStartDate = new DateOnly(),
+            IsActive = true,
             StandardAccountNumberForePayment = "Regningskonto"
         };
         

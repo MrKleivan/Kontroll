@@ -1,7 +1,7 @@
 ﻿using Kontroll.Database.Model.UserModels;
 using Microsoft.Extensions.Configuration;
 
-namespace Kontroll.Database;
+namespace Kontroll.Database.TableControllers;
 
 public class UserDb
 {
