@@ -1,5 +1,5 @@
 [data-bs-theme="dark"] {
-  --bs-body-bg-rgb: 50, 60, 0;
+  --bs-body-bg-rgb: 0, 0, 0;
   --bs-body-color-rgb: 255, 255, 255;
   --bs-btn-bg-b-rgb: 51, 51, 51;
   --bs-btn-hover-bg-rgb: 85, 85, 85;
@@ -11,7 +11,7 @@
 }
 
 [data-bs-theme="light"] {
-  --bs-body-bg-rgb: 250, 260, 20;
+  --bs-body-bg-rgb: 20, 190, 190;
   --bs-body-color-rgb: 255, 255, 255;
   --bs-btn-bg-b-rgb: 51, 51, 51;
   --bs-btn-hover-bg-rgb: 85, 85, 85;
@@ -24,40 +24,148 @@
 /* @import './base.css'; */
 
 body{
+  margin: 0;
+  background-image: linear-gradient(to right, rgba(var(--bs-body-bg-rgb), 0.9), rgba(var(--bs-body-bg-rgb), 0.5), rgba(var(--bs-body-bg-rgb), 0.7));
+}
+
+header {
+  display: flex;
+  width: 100%;
+  height: 10vh;
+}
+
+footer {
+  width: 100%;
+  height: 10vh;
   background-color: rgba(var(--bs-body-bg-rgb), 0.7);
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-  background-color: rgba(var(--bs-select-bg-rgb), 0.2);
+.headerLeft {
+  width: 50%;
+  height: 100%;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: rgba(var(--bs-body-bg-rgb), 0.7);
-  transition: 0.4s;
+.headerRight {
+  width: 50%;
+  height: 100%;
+  text-align: end;
+  justify-items: end;
+}
+
+.headerLogo {
+  width: 200px;
+  height: 100px;
+  background-image: url(../../public/in.png);
+}
+
+.headerMenu {
+  width: 25%;
+  height: fit-content;
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 5px;
+  color: rgb(var(--bs-body-bg-rgb));
+  background-color: rgba(var(--bs-body-color-rgb), 0.4);
+  text-align: end;
+  border-radius: 70% 5px 5px 70%;
+}
+
+#MenuButton {
+  border: none;
+  color: rgb(var(--bs-body-bg-rgb));
+  background-color: rgba(var(--bs-body-color-rgb), 0.4);
+  border-radius: 5px;
+}
+
+#MenuButton:hover {
+  background-color: rgba(var(--bs-body-color-rgb), 0.7);
+}
+
+.MainNav {
+  display: grid;
+  width: fit-content;
   padding: 3px;
+  text-align: end;
+  background-color: rgba(var(--bs-body-color-rgb), 0.4);
+  border-radius: 0 0 5px 5px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: rgba(var(--bs-body-bg-rgb), 0.7);
-  }
+.mainNavConteiner {
+  width: 9%;
+  height: fit-content;
+  margin-right: 5px;
+  justify-items: end;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: left;
-  }
+.mainNavButton {
+  padding: 4px;
+  background-color: rgba(var(--bs-body-bg-rgb), 0.7);
+  margin-bottom: 1px;
+  color: aliceblue;
+  text-decoration: none;
+  font-size: 0.7em;
+  border: none;
+  border-radius: 5px;
+  z-index: 1;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.mainNavButton:hover {
+  background-color: rgba(var(--bs-body-bg-rgb), 0.2);
+}
+
+main {
+  display: flex;
+  width: 100%;
+  height: 90vh;
+}
+
+.contentWindow{
+  width: 85%;
+  height: 100%;
+  padding: 10px;
+  background-color: rgba(var(--bs-body-color-rgb), 0.7);
+  border-radius: 0 25px 0 0;
+}
+
+.contentWindowHeader {
+  width: 100%;
+  height: 10%;
+  align-content: center;
+}
+.contentWindowNavBar {
+  width: 100%;
+}
+
+.contentWindowNav {
+  margin: 20px;
+  padding: 6px;
+  background-color: rgba(var(--bs-body-bg-rgb), 0.7);
+  color: aliceblue;
+  text-decoration: none;
+  font-size: 0.7em;
+  border: none;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.infoStripe {
+  width: 15%;
+  height: 100%;
+}
+
+.UserInfoConteiner {
+  width: 90%;
+  height: 15vh;
+  margin: auto;
+  text-align: center;
+  background-color: rgba(var(--bs-body-color-rgb), 0.7);
+  border-radius: 25px;
+}
+
+.UserInfoConteinerHeader {
+  width: 90%;
+  margin: auto;
+  padding-top: 5px;
+  color: rgb(var(--bs-body-bg-rgb));
+  border-bottom: 1px solid rgb(var(--bs-body-bg-rgb));
 }
