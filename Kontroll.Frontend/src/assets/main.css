@@ -1,30 +1,58 @@
-@import './base.css';
+[data-bs-theme="dark"] {
+  --bs-body-bg-rgb: 50, 60, 0;
+  --bs-body-color-rgb: 255, 255, 255;
+  --bs-btn-bg-b-rgb: 51, 51, 51;
+  --bs-btn-hover-bg-rgb: 85, 85, 85;
+  --bs-input-bg-rgb: 34, 34, 34;
+  --bs-input-color-rgb: 255, 255, 255;
+  --bs-select-bg-rgb: 34, 34, 34;
+  --bs-select-color-rgb: 255, 255, 255;
+  --bs-placeholder-color-rgb: 255, 255, 255;
+}
+
+[data-bs-theme="light"] {
+  --bs-body-bg-rgb: 250, 260, 20;
+  --bs-body-color-rgb: 255, 255, 255;
+  --bs-btn-bg-b-rgb: 51, 51, 51;
+  --bs-btn-hover-bg-rgb: 85, 85, 85;
+  --bs-input-bg-rgb: 34, 34, 34;
+  --bs-input-color-rgb: 255, 255, 255;
+  --bs-select-bg-rgb: 34, 34, 34;
+  --bs-select-color-rgb: 255, 255, 255;
+  --bs-placeholder-color-rgb: 255, 255, 255;
+}
+/* @import './base.css'; */
+
+body{
+  background-color: rgba(var(--bs-body-bg-rgb), 0.7);
+}
 
 #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  background-color: rgba(var(--bs-select-bg-rgb), 0.2);
 }
 
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: rgba(var(--bs-body-bg-rgb), 0.7);
   transition: 0.4s;
   padding: 3px;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: rgba(var(--bs-body-bg-rgb), 0.7);
   }
 }
 
 @media (min-width: 1024px) {
   body {
     display: flex;
-    place-items: center;
+    place-items: left;
   }
 
   #app {

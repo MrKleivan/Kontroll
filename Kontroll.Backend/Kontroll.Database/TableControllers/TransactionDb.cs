@@ -100,10 +100,10 @@ public class TransactionDb
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, queryObj);
     }
 
-    public async Task<List<TransactionOb>> GetTransactionFormDatabaseByInvoiceValues(InvoiceOb invoice)
+    public async Task<TransactionOb?> GetTransactionFormDatabaseByInvoiceValues(InvoiceOb invoice)
     {
-        var query = @"SELECT * FROM TransactionTb WHERE MONTH(Date) = MONTH(@PaymentDate) AND YEAR(Date) = YEAR(@PaymentDate) AND AccountNumber = @PayedFromAccountNumber AND ExternalDescription = @ExternalDescription AND Outcome = @PaymentAmount AND ToAccount = @SupplierBankAccountNumber";
+        var query = @"SELECT * FROM TransactionTb WHERE MONTH(Date) = MONTH(@PaymentDate) AND YEAR(Date) = YEAR(@PaymentDate) AND AccountNumber = @PayedFromAccountNumber AND Description = @Description AND Outcome = @PaymentAmount AND ToAccount = @SupplierBankAccountNumber";
 
-        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, invoice);
+        return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<TransactionOb>(_connectionString, query, invoice);
     }
 }

@@ -17,19 +17,27 @@ public class InvoiceController : ControllerBase
 
     public async Task<bool> AddInvoice(InvoiceOb invoice)
     {
-        await CheckIfInnTransactions(invoice);
+        await CheckIfInnTransactionsAndUpdateInvoice(invoice);
         return await _db.AddInvoiceToDatabase(invoice);
     }
 
-    private async Task CheckIfInnTransactions(InvoiceOb invoice)
+    public async Task<bool> UpdateInvoice(InvoiceOb invoice)
+    {
+        return await _db.UpdateInvoiceInDatabase(invoice);
+    }
+
+    private async Task CheckIfInnTransactionsAndUpdateInvoice(InvoiceOb invoice)
     {
         TransactionController transactionController = new TransactionController(_configuration);
 
-        List<TransactionOb> transactionObs = await transactionController.GetTransactionByInvoiceValues(invoice); 
-        
-        if (transactionObs.Count > 0)
+        TransactionOb? transactionOb = await transactionController.GetTransactionByInvoiceValues(invoice);
+
+        if (transactionOb != null)
         {
-            await transactionController.AddTransaction()
+            invoice.TransactionId = transactionOb.TransactionId;
         }
+        
     }
+
+    
 }

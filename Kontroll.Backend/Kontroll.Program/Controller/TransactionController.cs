@@ -187,7 +187,7 @@ public class TransactionController : ControllerBase
         return transactions;
     }
 
-    public async Task<List<TransactionOb>> GetTransactionByInvoiceValues(InvoiceOb invoice)
+    public async Task<TransactionOb?> GetTransactionByInvoiceValues(InvoiceOb invoice)
     {
         return await _db.GetTransactionFormDatabaseByInvoiceValues(invoice);
     }
