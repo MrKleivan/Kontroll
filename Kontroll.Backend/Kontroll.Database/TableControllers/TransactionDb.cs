@@ -26,7 +26,7 @@ public class TransactionDb
 
     public async Task<List<TransactionOb>> GetTransactionsSortedByDate([FromBody] SortRequest sortRequest)
     {
-        var query = $"SELECT * FROM TransactionTb WHERE {sortRequest.Request} BETWEEN @StartDate AND @EndDate";
+        var query = $"SELECT * FROM TransactionTb WHERE UserId = @UserId AND Date BETWEEN @StartDate AND @EndDate";
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, sortRequest);
     }
     

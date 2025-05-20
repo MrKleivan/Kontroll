@@ -16,6 +16,17 @@ public class FixedExpenseController : ControllerBase
         _db = new FixedExpenseDb(config);
         _configuration = config;
     }
+    
+    public async Task<bool> AddFixedExpense(FixedExpenseOb fixedExpenseOb)
+    {
+        var fixedExpenseExists = await CheckIfFixedExpenseExists(fixedExpenseOb);
+        if (!fixedExpenseExists)
+        {
+            await CheckIfFixedExpenseHasExistingSupplier(fixedExpenseOb);
+            return await _db.AddFixedExpenseToDatabase(fixedExpenseOb);
+        }
+        return false;
+    }
 
     public async Task<bool> CheckIfIsFixedExpense(TransactionOb transactionOb)
     {
@@ -31,9 +42,9 @@ public class FixedExpenseController : ControllerBase
         return fixedExpenseExists;
     }
 
-    public async Task<List<FixedExpenseOb>> GetFixedExpensesByUserId(FixedExpenseOb fixedExpenseOb)
+    public async Task<List<FixedExpenseOb>> GetFixedExpensesByUserId(string userId)
     {
-        return await _db.GetAllFixedExpensesFromDatabaseByUserId(fixedExpenseOb);
+        return await _db.GetAllFixedExpensesFromDatabaseByUserId(userId);
     }
 
     public async Task<FixedExpenseOb?> GetFixedExpenseByFixedExpenseId(FixedExpenseOb fixedExpenseOb)
@@ -46,16 +57,6 @@ public class FixedExpenseController : ControllerBase
         return await _db.GetFixedExpenseFromDatabaseByDescriptionAndSupplierBankAccount(transactionOb);
     }
 
-    public async Task<bool> AddFixedExpense(FixedExpenseOb fixedExpenseOb)
-    {
-        var fixedExpenseExists = await CheckIfFixedExpenseExists(fixedExpenseOb);
-        if (!fixedExpenseExists)
-        {
-            await CheckIfFixedExpenseHasExistingSupplier(fixedExpenseOb);
-            return await _db.AddFixedExpenseToDatabase(fixedExpenseOb);
-        }
-        return false;
-    }
 
     public async Task CheckIfFixedExpenseHasExistingSupplier(FixedExpenseOb fixedExpenseOb)
     {

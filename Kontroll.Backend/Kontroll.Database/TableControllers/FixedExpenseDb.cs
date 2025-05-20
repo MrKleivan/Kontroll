@@ -15,11 +15,11 @@ public class FixedExpenseDb
             ?? throw new Exception("ConnectionString not found");
     }
 
-    public async Task<List<FixedExpenseOb>> GetAllFixedExpensesFromDatabaseByUserId(object obj)
+    public async Task<List<FixedExpenseOb>> GetAllFixedExpensesFromDatabaseByUserId(string  UserId)
     {
         var query = "SELECT * FROM FixedExpenseTb WHERE UserId = @UserId";
 
-        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<FixedExpenseOb>(_connectionString, query, obj);
+        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<FixedExpenseOb>(_connectionString, query, new { UserId });
     }
     
     public async Task<FixedExpenseOb?> GetFixedExpenseFromDatabaseByFixedExpenseId(FixedExpenseOb fixedExpenseOb)

@@ -28,7 +28,7 @@ public class FixedExpenseTestOne
         
         await app.AddFixedExpense(fixedExpenseOb);
 
-        List<FixedExpenseOb> des = await app.GetFixedExpensesByUserId(fixedExpenseOb);
+        List<FixedExpenseOb> des = await app.GetFixedExpensesByUserId(fixedExpenseOb.UserId);
 
         foreach (var d in des)
         {

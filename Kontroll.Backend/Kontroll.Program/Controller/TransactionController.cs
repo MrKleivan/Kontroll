@@ -15,7 +15,20 @@ public class TransactionController : ControllerBase
         _configuration = config;
     }
 
-    public async Task<TransactionOb> GetSingleTransactionByTransactionId(TransactionOb transaction)
+    public async Task<IActionResult> AddTransaction([FromBody] TransactionPostRequest transaction)
+    {
+        var exists = await TransactionExists(transaction);
+        if (!exists || transaction.ForceAdd)
+        {
+            await UpdateValuesOnTransactionByCriteria(transaction);
+            
+            var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
+            return added ? Ok("Transaction added") : StatusCode(500, "Failed to add transaction");
+        }
+        return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
+    }
+    
+    public async Task<TransactionOb?> GetSingleTransactionByTransactionId(TransactionOb transaction)
     {
         return await _db.GetTransactionFromDatabaseByTransactionId(transaction);
     }
@@ -47,18 +60,6 @@ public class TransactionController : ControllerBase
         else return null;
     }
 
-    public async Task<IActionResult> AddTransaction([FromBody] TransactionPostRequest transaction)
-    {
-        var exists = await TransactionExists(transaction);
-        if (!exists || transaction.ForceAdd)
-        {
-            await UpdateValuesOnTransactionByCriteria(transaction);
-            
-            var added = await _db.AddTransactionToDatabase(await ConvertTransactionObject(transaction));
-            return added ? Ok("Transaction added") : StatusCode(500, "Failed to add transaction");
-        }
-        return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
-    }
 
     private async Task UpdateValuesOnTransactionByCriteria(TransactionPostRequest transaction)
     {
