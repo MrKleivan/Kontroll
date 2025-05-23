@@ -52,6 +52,7 @@ onMounted(() => {
             <div class="FixedExpenseInfoBox">{{ fixedExpense.description }}</div>
             <div class="FixedExpenseInfoBox">{{ fixedExpense.monthlyAmount }}</div>
             <div class="FixedExpenseInfoBox">{{ (fixedExpense.monthlyAmount * 12) }}</div>
+            <div class="FixedExpenseInfoBox">Trekk dato <br/>{{ fixedExpense.monthlyDeadlineDay }}</div>
         </div>
     </div>
     <div class="singleFixedExpenseConteiner" v-if="FixedExpense != null">
@@ -62,4 +63,42 @@ onMounted(() => {
     </div>
 
 </template>
+
+<style scoped>
+/* @import './main.css'; */
+
+.multipleFixedExpenseConteiner {
+  width: 100%;
+}
+
+.singleFixedExpenseConteiner {
+  width: 100%;
+  text-align: left;
+  justify-items: left;
+}
+
+.FixedExpenseConteiner {
+  display: flex;
+  width: 100%;
+  height: 7vh;
+  padding: 5px;
+  background-color: rgba(var(--bs-body-bg-rgb), 0.8);
+  border-radius: 10px 20px;
+}
+
+.FixedExpenseInfoBox {
+  width: 22%;
+  height: 100%;
+  margin: auto;
+  text-align: center;
+  align-content: center;
+  font-size: 150%;
+}
+
+.FixedExpenseInfoBox:first-child {
+  background-color: rgba(var(--bs-body-color-rgb), 0.1);
+  border-radius: 10px 20px;
+}
+
+</style>
 

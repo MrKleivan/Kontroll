@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import UserHomeView from '@/views/UserHomeView.vue'
 import FixedExpensesView from '@/views/FixedExpensesView.vue'
 import TransactionView from '@/views/TransactionView.vue'
+import EconomyView from '@/views/EconomyView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,11 +15,32 @@ const router = createRouter({
     },
     {
       path: '/UserHome',
-      name: 'userhome',
+      name: 'UserHome',
       component: UserHomeView,
       children: [
-        { path: 'fixed', component: FixedExpensesView },
-        { path: 'transaction', component: TransactionView },
+        { 
+          path: 'Economy', 
+          name: 'Economy',
+          component: EconomyView, 
+          children: [
+            {
+              path: 'Transaction', 
+              name: 'Transaction', 
+              component: TransactionView,
+            },
+            {
+              path: 'FixedExpense', 
+              name: 'FixedExpense', 
+              component: FixedExpensesView,
+            },
+          ]
+        },
+        {
+          path: 'Property', 
+          name: 'Property',
+          component: EconomyView,
+          
+        }
       ]
     },
   ],

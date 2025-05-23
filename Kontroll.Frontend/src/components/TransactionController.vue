@@ -34,7 +34,7 @@ const fetchData = async (url, method = "GET", body = null) => {
     
 };
 
-const GetAllTransactionsByFixedExpenseId = async () => {
+const GetAllTransactionsByCriteriar = async () => {
     Transactions.value = await fetchData('https://localhost:7287/TransactionApi/transactionSort', 'POST', {
   "userId": "1e21c816-5591-40ca-b418-fd4c7c8ef188",
   "transactionId": "string",
@@ -55,7 +55,7 @@ const GetSingle = async (transaction) => {
 };
 
 onMounted(() => {
-    GetAllTransactionsByFixedExpenseId();
+    GetAllTransactionsByCriteriar();
 });
 
 </script>
@@ -64,13 +64,20 @@ onMounted(() => {
 
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>
-
     <div class="multipleTransactionsConteiner" v-if="Transaction == null">
-        <div class="TransactionConteiner" v-for="transaction in Transactions" :key="transaction.Id" @click="GetSingle(transaction)">
-            <div class="TransactionInfoBox">{{ transaction.date }}</div>
-            <div class="TransactionInfoBox">{{ (transaction.userDescription != null ? transaction.userDescription : transaction.externalDescription) }}</div>
-            <div class="TransactionInfoBox">{{ transaction.income == 0 ? transaction.outcome : transaction.income }} kr</div>
-            <div class="TransactionInfoBox">{{ transaction.income == 0 ? transaction.toAccount : transaction.fromAccount }}</div>
+        <div class="TransactionConteinerHeader">
+            <div class="TransactionInfoBox">Dato</div>
+            <div class="TransactionInfoBox">Beskrivelse</div>
+            <div class="TransactionInfoBox">Inn/ut</div>
+            <div class="TransactionInfoBox">Motparts kontonummer</div>
+        </div>
+        <div class="transactions">
+            <div class="TransactionConteiner" v-for="transaction in Transactions" :key="transaction.Id" @click="GetSingle(transaction)">
+                <div class="TransactionInfoBox">{{ transaction.date }}</div>
+                <div class="TransactionInfoBox">{{ (transaction.userDescription != null ? transaction.userDescription : transaction.externalDescription) }}</div>
+                <div class="TransactionInfoBox">{{ transaction.income == 0 ? transaction.outcome : transaction.income }} kr</div>
+                <div class="TransactionInfoBox">{{ transaction.income == 0 ? transaction.toAccount : transaction.fromAccount }}</div>
+            </div>
         </div>
     </div>
     <div class="singleFixedExpenseConteiner" v-if="Transaction != null">
@@ -85,7 +92,14 @@ onMounted(() => {
 <style scoped>
 
 .multipleTransactionsConteiner {
+    width: 80%;
+}
+
+.transactions {
     width: 100%;
+    height: 80vh;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 .singleFixedExpenseConteiner {
@@ -94,14 +108,30 @@ onMounted(() => {
   justify-items: left;
 }
 
-.TransactionConteiner {
+.TransactionConteinerHeader {
   display: flex;
   width: 100%;
+  margin-bottom: 5px;
+  padding: 7px;
+  background-color: rgba(var(--bs-body-bg-rgb), 0.7);
+  border-radius: 5px;
+  border-bottom: 2px solid rgba(var(--bs-body-bg-rgb), 0.7);
+}
+
+.TransactionConteiner {
+  display: flex;
+  width: 98%;
+  margin: auto;
   padding: 5px;
 }
 
+.TransactionConteiner:hover {
+    padding: 8px;
+    cursor: pointer;
+}
+
 .TransactionConteiner:nth-child(odd){
-    background-color: rgba(var(--bs-body-bg-rgb), 0.2);
+    background-color: rgba(var(--bs-body-bg-rgb), 0.9);
 }
 
 .TransactionInfoBox {

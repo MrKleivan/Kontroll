@@ -5,8 +5,10 @@ import { colorMode, toggleColorMode } from './ColorMode';
 import LifeControllLogo from './LifeControllLogo.vue';
 
 const isMenuVisible = ref(false);
+const headerMenu = ref('headerMenuActive');
 const toggleMenu  = () => {
   isMenuVisible.value = !isMenuVisible.value;
+  headerMenu.value = 'headerMenuActive';
 };
 
 let hideTimeout = null;
@@ -21,6 +23,7 @@ const cancelHide = () => {
   clearTimeout(hideTimeout);
 };
 
+
 </script>
 
 <template>
@@ -31,9 +34,10 @@ const cancelHide = () => {
         </div>
     </div>
     <div class="headerRight">
-        <div class="headerMenu">
+        <div class="headerMenu" :style="{ width: isMenuVisible ? '20%' : '15%', backgroundColor: isMenuVisible ? 'rgba(var(--bs-body-color-rgb), 1)' : 'rgba(var(--bs-body-color-rgb), 0.4)'}">
             <div class="headerMenuLeft">
-                <span>Meny </span>
+                <span :style="{display: isMenuVisible ? 'none' : 'block'}">Meny </span>
+                <span :style="{display: !isMenuVisible ? 'none' : 'block'}">Valg</span>
             </div>
             <div class="headerMenuRight">
                 <button id="MenuButton" @click="toggleMenu">&#9776;</button>
@@ -61,6 +65,108 @@ const cancelHide = () => {
 </template>
 
 <style scoped>
+
+header {
+  display: flex;
+  width: 100%;
+  height: 10vh;
+}
+
+.WebLogo {
+  width: 50%;
+  height: 100%;
+  align-content: center;
+  text-align: center;
+  color: rgba(var(--bs-body-color-rgb), 0.7);
+}
+
+.headerLeft {
+  width: 50%;
+  height: 100%;
+}
+
+.headerRight {
+  width: 50%;
+  height: 100%;
+  text-align: end;
+  justify-items: end;
+}
+
+.headerLogo {
+  width: 100%;
+  height: 100%;
+}
+
+.headerMenu {
+  display: flex;
+  margin-top: 5px;
+  margin-right: 15px;
+  padding: 5px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background-color: rgba(var(--bs-body-color-rgb), 0.4);
+  color: rgb(var(--bs-body-bg-rgb));
+  border-radius: 10px 20px;
+  overflow: hidden;
+  transition: 3s;
+}
+
+.headerMenuLeft {
+  width: 50%;
+  text-align: start;
+}
+
+.headerMenuRight {
+  width: 50%;
+  text-align: end;
+}
+
+#MenuButton {
+  border: none;
+  color: rgb(var(--bs-body-color-rgb));
+  background-color: rgb(var(--bs-btn-bg-b-rgb));
+  border-radius: 5px;
+  z-index: 1;
+}
+
+#MenuButton:hover {
+  background-color: rgb(var(--bs-btn-hover-bg-rgb));
+}
+
+.MainNav {
+  display: grid;
+  width: 15%;
+  padding: 3px;
+  margin-right: 20px;
+  text-align: end;
+  background-color: rgb(var(--bs-body-color-rgb));
+  border-radius: 0 0 5px 15px;
+  z-index: 1;
+}
+
+.mainNavConteiner {
+  width: 100%;
+  height: fit-content;
+  margin-right: 5px;
+  justify-items: end;
+}
+
+.mainNavButton {
+  padding: 4px;
+  background-color: rgb(var(--bs-btn-bg-b-rgb));
+  color: rgb(var(--bs-body-color-rgb));
+  margin-bottom: 1px;
+  text-decoration: none;
+  text-align: end;
+  font-size: 0.7em;
+  border: none;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.mainNavButton:hover {
+  background-color: rgb(var(--bs-btn-hover-bg-rgb));
+}
 
 .colorModeConteiner {
     display: flex;
