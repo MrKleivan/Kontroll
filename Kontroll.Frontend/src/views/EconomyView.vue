@@ -8,7 +8,6 @@ import { MyLinks } from '@/components/MyLinks';
             <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
         </div>
     </div>
-    <br />
     <router-view/>
 
 </template>

@@ -27,7 +27,7 @@ function goBack() {
             <div></div>
         </div>
         <div class="backToMain" v-if="watching == true">
-            <button class="backToMainButton" @click="goBack">Tilbake</button>
+            <button class="backToMainButton" @click="goBack"> ◄ Tilbake</button>
         </div>
         <div v-if="watching == false" class="MainUserNavConteiner">
             <div v-for="mylink in MyLinks.Main" class="MainUserNav">

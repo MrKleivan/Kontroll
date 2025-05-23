@@ -40,7 +40,7 @@ const router = createRouter({
           name: 'Property',
           component: EconomyView,
           
-        }
+        },
       ]
     },
   ],

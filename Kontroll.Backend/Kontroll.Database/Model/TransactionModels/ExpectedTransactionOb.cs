@@ -7,7 +7,7 @@ public class ExpectedTransactionOb
     public string? UserId { get; set; }
     public string? AccountNumber { get; set; }
     public decimal Amount { get; set; }
-    public DateOnly DueDate { get; set; }  // satt til f.eks. 2025-06-20
+    public DateOnly DueDate { get; set; } 
     public bool IsSettled { get; set; } = false;
     public string? MatchedTransactionId  { get; set; }
 }
