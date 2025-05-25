@@ -3,3 +3,4 @@ Kontroll.Backend/Kontroll.Program/appsettings.json
 Kontroll.Backend/Kontroll.API/appsettings.json
 Kontroll.Backend/Kontroll.Program/appsettings.json
 Kontroll.Backend/Kontroll.TestApp/appsettings.json
+*.json
