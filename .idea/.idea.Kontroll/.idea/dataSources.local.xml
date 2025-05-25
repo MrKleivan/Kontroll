@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="dataSourceStorageLocal" created-in="RD-243.25659.34">
-    <data-source name="KontrollDb@KLEIVAN" uuid="fe8d8cd2-11fa-4bc8-9b19-01de24fbc707">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MSSQL" />
-      <schema-mapping />
-    </data-source>
-  </component>
-</project>
