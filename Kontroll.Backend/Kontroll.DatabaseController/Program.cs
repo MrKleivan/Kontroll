@@ -18,7 +18,7 @@ while (true)
         break;
     }
 
-    var syncService = new SchemaSyncService("Server=KLEIVAN\\SQLEXPRESS;Database=KontrollDb;Trusted_Connection=True;TrustServerCertificate=True;");
+    var syncService = new SchemaSyncService("Server=ENTER;Database=Kontroll;Trusted_Connection=True;TrustServerCertificate=True;");
     List<SchemaChangeLog> changes =  new List<SchemaChangeLog>();
     switch (nummer)
     {

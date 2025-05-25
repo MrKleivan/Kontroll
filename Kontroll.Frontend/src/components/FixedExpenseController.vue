@@ -26,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-
+    <br />
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>
 
