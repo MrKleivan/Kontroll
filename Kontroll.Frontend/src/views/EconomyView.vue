@@ -1,9 +1,13 @@
 <script setup>
 import { MyLinks } from '@/components/MyLinks';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
 </script>
 
 <template>
-    <div class="economyLinksConteiner">
+    <div v-if="!route.path.includes('/UserHome/Economy/SingleTransaction/')" class="economyLinksConteiner">
         <div v-for="link in MyLinks.Economy" :key="index" class="economyLinkDiv">
             <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
         </div>

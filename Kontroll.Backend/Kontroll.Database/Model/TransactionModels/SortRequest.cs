@@ -7,7 +7,8 @@ public class SortRequest
     public string Request { get; set; }
     public string ExternalDescription { get; set; }
     public string UserDescription { get; set; }
-    public string AccountNumber { get; set; }
+    public string? UserAccountNumber { get; set; }
+    public string? SupplierAccountNumber { get; set; }
     public decimal MinAmount { get; set; }
     public decimal MaxAmount { get; set; }
     public string AmountDirection { get; set; }

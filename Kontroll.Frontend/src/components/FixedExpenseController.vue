@@ -65,6 +65,7 @@ onMounted(() => {
   display: flex;
   width: 100%;
   height: 7vh;
+  min-height: 70px;
   padding: 5px;
   background-color: rgba(var(--bs-body-bg-rgb), 0.8);
   border-radius: 10px 20px;

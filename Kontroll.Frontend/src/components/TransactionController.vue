@@ -1,16 +1,19 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
 import { fetchData } from '../composables/useFetch.js'
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const bankAccounts = ref({});
 const Transactions = ref([]);
-const Transaction = ref(null);
 const SortRequest = reactive({
   userId: "1e21c816-5591-40ca-b418-fd4c7c8ef188",
   transactionId: "string",
   request: "Date",
   externalDescription: "string",
   userDescription: "string",
-  accountNumber: "string",
+  userAccountNumber: "",
+  supplierAccountNumber: "",
   minAmount: 0,
   maxAmount: 0,
   amountDirection: "string",
@@ -22,13 +25,13 @@ const error = ref(null);
 
 
 const GetAllTransactionsByCriteria = async () => {
+    
     Transactions.value = await fetchData('https://localhost:7287/TransactionApi/transactionSort', 'POST', SortRequest,
-loading, error);
+    loading, error);
 }
 
-const GetSingle = async (transaction) => {
-    Transaction.value = transaction;
-    Transactions.value.sort((a, b) => new Date(a.date) - new Date(b.date));
+const GoToTransactionSite = async (transactionId) => {
+    router.push({ name: 'SingleTransaction', params: { id: transactionId } });
 };
 
 onMounted(() => {
@@ -72,7 +75,8 @@ function SetFilterSelection(text) {
         <div class="filterOptionsConteiner">
             <div class="filterButton" @click="SetFilterSelection('Dato')">Dato</div>
             <div class="filterButton" @click="SetFilterSelection('Description')">Beskrivelse</div>
-            <div class="filterButton" @click="SetFilterSelection('Amount')">beløp</div>
+            <div class="filterButton" @click="SetFilterSelection('Amount')">Beløp</div>
+            <div class="filterButton" @click="SetFilterSelection('Account')">Konto</div>
         </div>
         <div class="filterDivContainer" v-if="selectedFilter === 'Dato'">
             Start Dato: <input v-model="SortRequest.startDate" type="date" />
@@ -82,6 +86,14 @@ function SetFilterSelection(text) {
         <div class="filterDivContainer" v-if="selectedFilter === 'Amount'">
             Minimum: <input v-model="SortRequest.minAmount" type="number" />
             Maksimum: <input v-model="SortRequest.maxAmount" type="number" />
+            <button @click="GetAllTransactionsByCriteria">Søk</button>
+        </div>
+        <div class="filterDivContainer" v-if="selectedFilter === 'AccountNumber'">
+            <div>
+                <section class="bankAccountFilter">
+                    <option v-for="bankAccount in bankAccounts">{{ bankAccount.accountNumber }}</option>
+                </section>
+            </div>
             <button @click="GetAllTransactionsByCriteria">Søk</button>
         </div>
     </div>
@@ -96,7 +108,7 @@ function SetFilterSelection(text) {
             <div class="TransactionInfoBox">Motparts kontonummer</div>
         </div>
         <div class="transactions">
-            <div class="TransactionConteiner" v-for="transaction in Transactions" :key="transaction.Id" @click="GetSingle(transaction)">
+            <div class="TransactionConteiner" v-for="transaction in Transactions" :key="transaction.Id" @click="GoToTransactionSite(transaction.transactionId)">
                 <div class="TransactionInfoBox">{{ formatDate(transaction.date) }}</div>
                 <div class="TransactionInfoBox">{{ (transaction.userDescription != null ? transaction.userDescription : transaction.externalDescription) }}</div>
                 <div class="TransactionInfoBox">{{ transaction.income == 0 ? transaction.outcome : transaction.income }} kr</div>
@@ -112,16 +124,11 @@ function SetFilterSelection(text) {
             </div>
         </div>
     </div>
-    <div class="singleFixedExpenseConteiner" v-if="Transaction">
-        <button @click="Transaction = null">Tilbake</button>
-        <div>
-            {{ Transaction.date }}
-        </div>
-    </div>
 
 </template>
 
 <style scoped>
+
 
 .filterConteiner {
     width: 80%;

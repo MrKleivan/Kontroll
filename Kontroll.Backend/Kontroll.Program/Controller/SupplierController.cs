@@ -40,4 +40,22 @@ public class SupplierController
     {
         return await _db.GetSupplierFromDatabaseBySupplierName(obj);
     }
+
+    public async Task<decimal> GetUsersBalanceSheetAtSupplier(object obj)
+    {
+        TransactionController transactionController = new TransactionController(_configuration);
+
+        decimal income = 0;
+        decimal outcome = 0;
+        
+        List<TransactionOb> transactionObs = await transactionController.GetTransactionBySupplierIdAndYear(obj);
+        
+        foreach (var transaction in transactionObs)
+        {
+            income += transaction.Income;
+            outcome -= transaction.Outcome;
+        }
+
+        return income - outcome;
+    }
 }

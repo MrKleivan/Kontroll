@@ -27,7 +27,7 @@ function goBack() {
             <div></div>
         </div>
         <div class="backToMain" v-if="watching == true">
-            <button class="backToMainButton" @click="goBack"> ◄ Tilbake</button>
+            <button class="backButton" @click="goBack"> ◄ Hjem</button>
         </div>
         <div v-if="watching == false" class="MainUserNavConteiner">
             <div v-for="mylink in MyLinks.Main" class="MainUserNav">
@@ -39,7 +39,7 @@ function goBack() {
                 </div>
             </div>
         </div>
-        <div v-if="watching == true" class="contentWindowContent">
+        <div class="contentWindowContent">
             <router-view />
         </div>
     </div>
@@ -64,11 +64,102 @@ function goBack() {
 </template>
 
 <style scoped>
+.MainContenWindow {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(var(--bs-header-bg-rgb), 0.8);
+}
 
+.contentWindow {
+  width: 85%;
+  height: 100%;
+  margin: auto;
+  text-align: center;
+  background-color: rgba(var(--bs-content-bg-rgb), 0.5);
+  border-radius: 0 25px 0 0;
+  overflow: scroll;
+  scrollbar-width: none;
+  z-index: 0;
+}
+
+
+.contentWindowHeader {
+  width: 80%;
+  height: 10%;
+  margin: auto;
+  align-content: center;
+}
+
+.contentWindowNavBar {
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  height: fit-content;
+  margin: auto;
+  padding: 5px;
+  border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.3);
+}
+
+.contentWindowNav {
+  width: 19%;
+  /* background-color: rgba(var(--bs-body-bg-rgb), 0.7); */
+  color: rgba(var(--bs-body-color-rgb), 0.8);
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.7em;
+  border-left: 1px solid rgba(var(--bs-body-color-rgb), 0.3);
+  transition: 0.4s;
+  z-index: 1;
+}
+
+.contentWindowNav:first-child {
+  border: none;
+}
+
+.contentWindowNav:hover {
+  width: 20%;
+  background-color: rgba(var(--bs-body-color-rgb), 0.8);
+  color: rgba(var(--bs-body-bg-rgb), 0.7);
+  border: 1px ridge rgba(var(--bs-body-color-rgb), 0.8);
+  border-radius: 3px;
+}
+
+.contentWindowContent {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  justify-items: center;
+}
+
+.infoStripe {
+  width: 15%;
+  height: 100%;
+}
+
+.UserInfoConteiner {
+  width: 90%;
+  height: 15dvh;
+  min-height: 145px;
+  margin: auto;
+  text-align: center;
+  background-color: rgba(var(--bs-body-color-rgb), 0.2);
+  box-shadow: 0px 0px 10px 0px rgba(var(--bs-body-color-rgb), 0.2);
+  border-radius: 25px;
+}
+
+.UserInfoConteinerHeader {
+  width: 90%;
+  margin: auto;
+  padding-top: 5px;
+  color: rgba(var(--bs-body-color-rgb), 0.7);
+  border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.2);
+}
 .MainUserNavConteiner {
     display: flex;
     width: 100%;
-    height: 15vh;
+    min-height: 150px;
+    height: 18vh;
 }
 
 .MainUserNav {
@@ -112,19 +203,6 @@ function goBack() {
     padding: 10px;
 }
 
-.backToMainButton {
-    width: fit-content;
-    height: fit-content;
-    padding: 3px;
-    background-color: rgb(var(--bs-btn-bg-b-rgb));
-    color: rgb(var(--bs-body-color-rgb));
-    border-radius: 5px;
-    border: 1px solid rgba(var(--bs-body-bg-rgb), 0.7);
-}
-
-.backToMainButton:hover {
-    background-color: rgb(var(--bs-btn-hover-bg-rgb));
-}
 
 .droppdownFullMenueConteiner {
     width: 100%;

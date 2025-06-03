@@ -22,9 +22,9 @@ public class TransactionApiController : ControllerBase
 
     
     [HttpGet("{transactionId}")]
-    public async Task<IActionResult> GetTransactionByTransactionId(TransactionOb transaction)
+    public async Task<IActionResult> GetTransactionByTransactionId(string transactionId)
     {
-        TransactionOb transactionOb = await _transactionController.GetSingleTransactionByTransactionId(transaction);
+        TransactionOb? transactionOb = await _transactionController.GetSingleTransactionByTransactionId(new { TransactionId = transactionId });
 
         if (transactionOb == null)
         {

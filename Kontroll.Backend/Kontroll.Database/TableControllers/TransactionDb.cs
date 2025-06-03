@@ -17,7 +17,7 @@ public class TransactionDb
     }
     
     
-    public async Task<TransactionOb?> GetTransactionFromDatabaseByTransactionId(TransactionOb transaction)
+    public async Task<TransactionOb?> GetTransactionFromDatabaseByTransactionId(object transaction)
     {
         string query = "SELECT * FROM TransactionTb WHERE TransactionId = @TransactionId";
         
@@ -105,5 +105,40 @@ public class TransactionDb
         var query = @"SELECT * FROM TransactionTb WHERE MONTH(Date) = MONTH(@PaymentDate) AND YEAR(Date) = YEAR(@PaymentDate) AND AccountNumber = @PayedFromAccountNumber AND Description = @Description AND Outcome = @PaymentAmount AND ToAccount = @SupplierBankAccountNumber";
 
         return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<TransactionOb>(_connectionString, query, invoice);
+    }
+
+    public async Task<List<TransactionOb>> GetTransactionsBySuppliersAccountNumber(SortRequest sortRequest)
+    {
+        var query = @"SELECT * FROM TransactionTb WHERE ToAccount = @SupplierAccountNumber Or FromAccount = @SupplierAccountNumber";
+        
+        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, sortRequest);
+    }
+
+    public async Task<List<TransactionOb>> GetTransactionsByUserAccountNumber(SortRequest sortRequest)
+    {
+        var query = @"SELECT * FROM TransactionTb WHERE AccountNumber = @UserAccountNumber";
+        
+        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, sortRequest);
+    }
+
+    public async Task<List<TransactionOb>> GetTransactionsByUserAccountNumberAndSuppliersAccountNumber(SortRequest sortRequest)
+    {
+        List<TransactionOb> transactionObs = await GetTransactionsByUserAccountNumber(sortRequest);
+        
+        List<TransactionOb> transactions = await GetTransactionsBySuppliersAccountNumber(sortRequest);
+
+        foreach (var transaction in transactions)
+        {
+            transactionObs.Add(transaction);
+        }
+        
+        return transactionObs;
+    }
+
+    public async Task<List<TransactionOb>> GetTransactionFromDatabaseBySupplierIdAndYear(object obj)
+    {
+        var query = @"SELECT * FROM TransactionTb WHERE UserId = @UserId AND SupplierId = @SupplierId AND Year(Date) = @Year";
+        
+        return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, obj);
     }
 }

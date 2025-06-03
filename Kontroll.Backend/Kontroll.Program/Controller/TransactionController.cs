@@ -28,7 +28,7 @@ public class TransactionController : ControllerBase
         return Conflict(new {message = "Transaction already exists. Do you want to continue?"});
     }
     
-    public async Task<TransactionOb?> GetSingleTransactionByTransactionId(TransactionOb transaction)
+    public async Task<TransactionOb?> GetSingleTransactionByTransactionId(object transaction)
     {
         return await _db.GetTransactionFromDatabaseByTransactionId(transaction);
     }
@@ -57,9 +57,27 @@ public class TransactionController : ControllerBase
         {
             return await _db.GetTransactionsSortedByAmount(sortRequest);
         }
+        else if (sortRequest.Request == "AccountNumber")
+        {
+            if (sortRequest.SupplierAccountNumber != "" && sortRequest.UserAccountNumber == "")
+            {
+                return await _db.GetTransactionsBySuppliersAccountNumber(sortRequest);
+            }
+            else if (sortRequest.SupplierAccountNumber == "" && sortRequest.UserAccountNumber != "")
+            {
+                return await _db.GetTransactionsByUserAccountNumber(sortRequest);
+            }
+            return await _db.GetTransactionsByUserAccountNumberAndSuppliersAccountNumber(sortRequest);
+        }
         else return null;
     }
 
+    public async Task<List<TransactionOb>> GetTransactionBySupplierIdAndYear(object obj)
+    {
+        List<TransactionOb> transactions = await _db.GetTransactionFromDatabaseBySupplierIdAndYear(obj);
+        
+        return transactions;
+    }
 
     private async Task UpdateValuesOnTransactionByCriteria(TransactionPostRequest transaction)
     {

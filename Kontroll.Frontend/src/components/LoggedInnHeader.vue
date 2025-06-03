@@ -48,7 +48,7 @@ const cancelHide = () => {
           <RouterLink class="mainNavButton" to="/">Hjem</RouterLink>
           <RouterLink class="mainNavButton" to="/myProfile">Profil</RouterLink>
           <RouterLink class="mainNavButton" to="/mySettings">Innstillinger</RouterLink>
-          <RouterLink class="mainNavButton" to="/loggOut">Logg ut</RouterLink>
+          <RouterLink class="mainNavButton" :to="{name: 'LogOut'}">Logg ut</RouterLink>
           <button class="mainNavButton" @click="toggleColorMode" variant="colorMode"> Color mode</button><br/>
           <div class="colorModeConteiner">
             <div class="colormodeText">
@@ -69,7 +69,9 @@ const cancelHide = () => {
 header {
   display: flex;
   width: 100%;
+  min-height: 100px;
   height: 10vh;
+  background-color: rgba(var(--bs-header-bg-rgb), 0.8);
 }
 
 .WebLogo {
@@ -108,7 +110,7 @@ header {
   color: rgb(var(--bs-body-bg-rgb));
   border-radius: 10px 20px;
   overflow: hidden;
-  transition: 3s;
+  transition: 0.5s;
 }
 
 .headerMenuLeft {
