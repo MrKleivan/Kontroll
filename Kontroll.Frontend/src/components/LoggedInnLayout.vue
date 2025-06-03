@@ -143,7 +143,7 @@ function goBack() {
   min-height: 145px;
   margin: auto;
   text-align: center;
-  background-color: rgba(var(--bs-body-color-rgb), 0.2);
+  background-color: rgba(var(--bs-content-bg-rgb), 0.5);
   box-shadow: 0px 0px 10px 0px rgba(var(--bs-body-color-rgb), 0.2);
   border-radius: 25px;
 }

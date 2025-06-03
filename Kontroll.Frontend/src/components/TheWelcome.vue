@@ -24,15 +24,15 @@ import { MyLinks } from './MyLinks';
           <div v-for="link in MyLinks.HomePageLinks" class="HomeNavigationLinks" :key="link.name">
             <div class="linkConteiner">
               <RouterLink class="links" :to="{name: link.name}">{{link.label}}</RouterLink>
-              <div v-if="link.svg" v-html="link.svg" class="icon">
-              </div>
-  
+              <span v-if="link.svg" v-html="link.svg" class="icon"></span>
             </div>
-            </div>
+          </div>
         </nav>
       </div>
       <div class="headerHomePagerightlower">
-        Fargevelger: <button class="colorMOdeButton" @click="toggleColorMode">{{ colorMode }}</button>
+        <div>
+          Fargevelger: <button class="colorMOdeButton" @click="toggleColorMode">{{ colorMode }}</button>
+        </div>
       </div>
     </div>
   </header>
@@ -47,9 +47,8 @@ import { MyLinks } from './MyLinks';
 }
 
 .headerHomePageLeft {
-  width: 40%;
+  width: 30%;
   height: 100%;
-  background-color: rgb(var(--bs-header-bg-rgb));
 }
 
 .LogoheaderHomePage {
@@ -60,29 +59,27 @@ import { MyLinks } from './MyLinks';
   align-items: center;
 }
 
-
 .headerHomePageCenter {
   width: 20%;
   height: 100%;
 }
 
 .headerHomePageright {
-  display: grid;
-  width: 40%;
+  width: 50%;
   height: 100%;
-  background-color: rgb(var(--bs-header-bg-rgb));
+  background-color: rgba(var(--bs-header-bg-rgb), 0.8);
   border-radius: 0 0 0 10px;
 }
 
 .upper {
   width: 100%;
-  height: 90%;
-  background-color: rgb(var(--bs-header-bg-rgb));
+  height: 80%;
+  background-color: rgba(var(--bs-header-bg-rgb), 0.8);
 }
 
 .lower {
   width: 100%;
-  height: 10%;
+  height: 20%;
   border-radius: 0 10px 0 0;
 }
 
@@ -94,8 +91,9 @@ import { MyLinks } from './MyLinks';
   padding-left: 20px;
   align-items: center;
   justify-content: center;
-  background-image: linear-gradient(to left, rgb(var(--bs-header-bg-rgb)), rgba(var(--bs-body-color-rgb), 0.1), rgb(var(--bs-header-bg-rgb)));
-  border-radius: 5px;
+  /* background-image: linear-gradient(to left, rgb(var(--bs-header-bg-rgb)), rgba(var(--bs-body-color-rgb), 0.1), rgb(var(--bs-header-bg-rgb))); */
+  /* border-radius: 5px; */
+  border-bottom: 1px solid rgb(var(--bs-body-color-rgb));
 }
 
 .linkConteiner {
@@ -112,6 +110,7 @@ import { MyLinks } from './MyLinks';
 .linkConteiner:hover {
   background-image: linear-gradient(to right, rgb(var(--bs-header-bg-rgb)), rgba(var(--bs-body-color-rgb), 0.2));
 }
+
 .HomeNavigationLinks {
   display: flex;
   width: 20%;
@@ -134,7 +133,6 @@ import { MyLinks } from './MyLinks';
   border: none;
 }
 
-
 .links {
   text-decoration: none;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -142,15 +140,15 @@ import { MyLinks } from './MyLinks';
   color: rgb(var(--bs-body-color-rgb));
 }
 
-
 .headerHomePagerightupper {
   width: 100%;
   height: 80%;
   align-content: center;
 }
+
 .headerHomePagerightlower {
   width: 100%;
-  height: fit-content;
+  height: 20%;
   text-align: end;
 }
 

@@ -16,7 +16,8 @@
 [data-bs-theme="light"] {
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-body-color-rgb: 33, 37, 41;
-  --bs-header-bg-rgb: 220, 240, 240;
+  --bs-header-bg-rgb: 210, 210, 210;
+  --bs-content-bg-rgb: 240, 240, 255;
   --bs-btn-bg-b-rgb: 240, 240, 240;
   --bs-btn-hover-bg-rgb: 220, 220, 220;
   --bs-input-bg-rgb: 255, 255, 255;
@@ -31,6 +32,8 @@
 [data-bs-theme="dark-cookie"] {
   --bs-body-bg-rgb: 36, 26, 19;
   --bs-body-color-rgb: 240, 230, 220;
+  --bs-header-bg-rgb: 76, 66, 59;
+  --bs-content-bg-rgb: 36, 26, 19;
   --bs-btn-bg-b-rgb: 56, 40, 30;
   --bs-btn-hover-bg-rgb: 85, 65, 50;
   --bs-input-bg-rgb: 48, 36, 30;
