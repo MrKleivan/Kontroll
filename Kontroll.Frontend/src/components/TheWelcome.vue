@@ -7,9 +7,12 @@ import { MyLinks } from './MyLinks';
 <template>
   <header class="headerHomePage">
     <div class="headerHomePageLeft">
-      <div class="LogoheaderHomePage">
-        <LifeControllLogo /> 
+      <div class="upper">
+        <div class="LogoheaderHomePage">
+          <LifeControllLogo /> 
+        </div>
       </div>
+      <div class="lower"></div>
     </div>
     <div class="headerHomePageCenter">
       <div class="upper"></div>
@@ -40,8 +43,13 @@ import { MyLinks } from './MyLinks';
 .headerHomePage {
   display: flex;
   width: 100%;
-  min-height: 100px;
-  height: 10vh;
+  height: 100px;
+}
+
+.headerHomePageLeft {
+  width: 40%;
+  height: 100%;
+  background-color: rgb(var(--bs-header-bg-rgb));
 }
 
 .LogoheaderHomePage {
@@ -52,19 +60,14 @@ import { MyLinks } from './MyLinks';
   align-items: center;
 }
 
-.headerHomePageLeft {
-  width: 40%;
-  height: 80%;
-  background-color: rgb(var(--bs-header-bg-rgb));
-}
 
 .headerHomePageCenter {
   width: 20%;
   height: 100%;
-  background-color: rgb(var(--bs-header-bg-rgb));
 }
 
 .headerHomePageright {
+  display: grid;
   width: 40%;
   height: 100%;
   background-color: rgb(var(--bs-header-bg-rgb));
@@ -73,7 +76,14 @@ import { MyLinks } from './MyLinks';
 
 .upper {
   width: 100%;
-  height: 80%;
+  height: 90%;
+  background-color: rgb(var(--bs-header-bg-rgb));
+}
+
+.lower {
+  width: 100%;
+  height: 10%;
+  border-radius: 0 10px 0 0;
 }
 
 .homePageNavBar {
@@ -132,12 +142,6 @@ import { MyLinks } from './MyLinks';
   color: rgb(var(--bs-body-color-rgb));
 }
 
-.lower {
-  width: 100%;
-  height: 20%;
-  background-color: rgb(var(--bs-body-bg-rgb));
-  border-radius: 0 10px 0 0;
-}
 
 .headerHomePagerightupper {
   width: 100%;
