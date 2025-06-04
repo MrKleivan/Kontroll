@@ -78,6 +78,7 @@ function goBack() {
   text-align: center;
   background-color: rgba(var(--bs-content-bg-rgb), 0.5);
   border-radius: 0 25px 0 0;
+  box-shadow: 0px 0px 10px 2px rgba(var(--bs-body-color-rgb), 0.2) inset;
   overflow: scroll;
   scrollbar-width: none;
   z-index: 0;
@@ -144,7 +145,7 @@ function goBack() {
   margin: auto;
   text-align: center;
   background-color: rgba(var(--bs-content-bg-rgb), 0.5);
-  box-shadow: 0px 0px 10px 0px rgba(var(--bs-body-color-rgb), 0.2);
+  box-shadow: 0px 0px 10px 2px rgba(var(--bs-body-color-rgb), 0.2) inset;
   border-radius: 25px;
 }
 

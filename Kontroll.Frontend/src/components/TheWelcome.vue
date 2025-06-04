@@ -16,7 +16,13 @@ import { MyLinks } from './MyLinks';
     </div>
     <div class="headerHomePageCenter">
       <div class="upper"></div>
-      <div class="lower"></div>
+      <div class="lower">
+        <svg width="10%" height="100%">
+          <rect width="200" height="200" fill="rgba(var(--bs-header-bg-rgb), 0)" />
+  
+          <polygon points="0,0 100,0 300,200" fill="rgba(var(--bs-header-bg-rgb), 0.8)" />
+        </svg>
+      </div>
     </div>
     <div class="headerHomePageright">
       <div class="headerHomePagerightupper">
@@ -64,36 +70,52 @@ import { MyLinks } from './MyLinks';
   height: 100%;
 }
 
+
 .headerHomePageright {
   width: 50%;
   height: 100%;
   background-color: rgba(var(--bs-header-bg-rgb), 0.8);
-  border-radius: 0 0 0 10px;
+  /* border-radius: 0 0 0 10px; */
 }
 
 .upper {
   width: 100%;
   height: 80%;
   background-color: rgba(var(--bs-header-bg-rgb), 0.8);
+  box-shadow: var(--bs-header-shadow);
 }
 
 .lower {
   width: 100%;
   height: 20%;
-  border-radius: 0 10px 0 0;
+  text-align: end;
+  /* border-radius: 0 10px 0 0; */
 }
 
 .homePageNavBar {
+  position: relative;
   display: flex;
   width: 90%;
   height: 50%;
   margin: auto;
   padding-left: 20px;
+  padding-bottom: 10px;
   align-items: center;
   justify-content: center;
   /* background-image: linear-gradient(to left, rgb(var(--bs-header-bg-rgb)), rgba(var(--bs-body-color-rgb), 0.1), rgb(var(--bs-header-bg-rgb))); */
   /* border-radius: 5px; */
-  border-bottom: 1px solid rgb(var(--bs-body-color-rgb));
+}
+
+.homePageNavBar::after {
+  content: '';
+  display: block;
+  height: 10px;
+  background: linear-gradient(to bottom, rgba(var(--bs-body-color-rgb), 0.2), rgb(var(--bs-header-bg-rgb)));
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0 0 15px 15px;
 }
 
 .linkConteiner {
@@ -150,6 +172,7 @@ import { MyLinks } from './MyLinks';
   width: 100%;
   height: 20%;
   text-align: end;
+  box-shadow: var(--bs-header-shadow);
 }
 
 .colorMOdeButton {
