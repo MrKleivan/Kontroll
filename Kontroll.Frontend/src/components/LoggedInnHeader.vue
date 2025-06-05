@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router';
 import { ref, Transition } from 'vue';
 import { colorMode, toggleColorMode } from './ColorMode';
 import LifeControllLogo from './LifeControllLogo.vue';
+import { Links } from './MyLinks';
 
 const isMenuVisible = ref(false);
 const headerMenu = ref('headerMenuActive');
@@ -45,10 +46,7 @@ const cancelHide = () => {
       </div>
       <div class="mainNavConteiner">
         <nav class="MainNav" v-show="isMenuVisible" @mouseleave="hideMenuWithDelay" @mouseenter="cancelHide">
-          <RouterLink class="mainNavButton" to="/">Hjem</RouterLink>
-          <RouterLink class="mainNavButton" to="/myProfile">Profil</RouterLink>
-          <RouterLink class="mainNavButton" to="/mySettings">Innstillinger</RouterLink>
-          <RouterLink class="mainNavButton" :to="{name: 'LogOut'}">Logg ut</RouterLink>
+          <RouterLink v-for="link in Links.UserHomePageHeader.Links" class="mainNavButton" :to="{name: link.name}">{{ link.label }}</RouterLink>
           <button class="mainNavButton" @click="toggleColorMode" variant="colorMode"> Color mode</button><br/>
           <div class="colorModeConteiner">
             <div class="colormodeText">

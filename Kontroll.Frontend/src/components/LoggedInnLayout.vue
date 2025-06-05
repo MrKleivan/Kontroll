@@ -2,9 +2,10 @@
 import { RouterLink, RouterView } from 'vue-router';
 import LoggedInnHeader from './LoggedInnHeader.vue';
 import { ref } from 'vue';
-import router from '@/router';
 import { MyLinks } from './MyLinks';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const watching = ref(false);
 
 function handleClick() {
@@ -14,6 +15,11 @@ function handleClick() {
 function goBack() {
     watching.value = false;
     router.push({ name: 'UserHome' });
+}
+
+function goToLink(link){
+  handleClick(); 
+  router.push({name: link.name});
 }
 
 </script>
@@ -35,7 +41,10 @@ function goBack() {
                     <RouterLink class="MainUserNavLink" :to="{ name: mylink.name }" @click="handleClick">{{ mylink.label }}</RouterLink>
                 </div>
                 <div class="MainUserNavBottom">
-                    <RouterLink v-for="link in MyLinks.Economy" :to="{ name: link.name }" @click="handleClick" class="MainUserNavLinkLink">{{ link.label }}</RouterLink>
+                    <div v-for="link in MyLinks.Economy" class="MainUserNavLinkConteiner"> 
+                      <div @click="goToLink(link)" class="MainUserNavLinkLink">{{ link.label }}</div>
+                      <div class="MainUserNavLinkInfo">{{ link.info }}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,6 +73,7 @@ function goBack() {
 </template>
 
 <style scoped>
+
 .MainContenWindow {
   display: flex;
   width: 100%;
@@ -78,7 +88,7 @@ function goBack() {
   text-align: center;
   background-color: rgba(var(--bs-content-bg-rgb), 0.5);
   border-radius: 0 25px 0 0;
-  box-shadow: 0px 0px 10px 2px rgba(var(--bs-body-color-rgb), 0.2) inset;
+  box-shadow: 0px 0px 2px 2px rgba(var(--bs-body-color-rgb), 0.2) inset;
   overflow: scroll;
   scrollbar-width: none;
   z-index: 0;
@@ -96,7 +106,6 @@ function goBack() {
   display: flex;
   justify-content: center;
   width: 80%;
-  height: fit-content;
   margin: auto;
   padding: 5px;
   border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.3);
@@ -145,7 +154,7 @@ function goBack() {
   margin: auto;
   text-align: center;
   background-color: rgba(var(--bs-content-bg-rgb), 0.5);
-  box-shadow: 0px 0px 10px 2px rgba(var(--bs-body-color-rgb), 0.2) inset;
+  box-shadow: 0px 0px 2px 2px rgba(var(--bs-body-color-rgb), 0.2) inset;
   border-radius: 25px;
 }
 
@@ -156,26 +165,39 @@ function goBack() {
   color: rgba(var(--bs-body-color-rgb), 0.7);
   border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.2);
 }
+
 .MainUserNavConteiner {
     display: flex;
     width: 100%;
     min-height: 150px;
-    height: 18vh;
+    height: 19vh;
+    min-height: 188px;
 }
 
 .MainUserNav {
-    width: 15%;
+    width: 18%;
     height: 90%;
-    font-size: 200%;
+    font-size: 1.5vw;
     margin: auto;
     background-color: rgba(var(--bs-body-bg-rgb), 0.7);
     border-radius: 10px 35px;
+    box-shadow: 0px 0px 2px 2px rgba(var(--bs-body-color-rgb), 0.2);
 }
+
 
 .MainUserNavTopp {
     width: 80%;
     margin: auto;
-    border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.7);
+}
+
+.MainUserNavBottom {
+  width: 80%;
+  height: 70%;
+  margin: auto;
+  border-top: 1px solid rgba(var(--bs-body-color-rgb), 0.7);
+  border-radius: 5px;
+  overflow: scroll;
+  scrollbar-width: none;
 }
 
 .MainUserNavLink {
@@ -183,19 +205,35 @@ function goBack() {
     color: rgba(var(--bs-body-color-rgb), 0.7);
 }
 
+.MainUserNavLinkConteiner {
+  width: 100%;
+  display: flex;
+  margin: auto;
+}
+
 .MainUserNavLinkLink {
-    font-size: 50%;
-    text-decoration: none;
-    color: rgba(var(--bs-body-bg-rgb), 0.9);
-    margin: 3px;
+    width: fit-content;
+    font-size: 0.7vw;
+    margin-top: 7px;
     padding: 2px;
-    border-radius: 5px;
-    background-color: rgba(var(--bs-body-color-rgb), 0.7);
+    color: rgba(var(--bs-body-color-rgb), 0.9);
+    border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.4);
+    background-color: rgba(var(--bs-body-bg-rgb), 0.7);
 }
 
 .MainUserNavLinkLink:hover {
-    background-color: rgba(var(--bs-body-color-rgb), 0.2);
-    color: rgba(var(--bs-body-color-rgb), 0.9);
+    /* background-color: rgba(var(--bs-body-color-rgb), 0.2);
+    color: rgba(var(--bs-body-color-rgb), 0.9); */
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.MainUserNavLinkInfo {
+  text-align: center;
+  align-content: center;
+  margin-top: 7px;
+  margin-left: 4px;
+  font-size: 0.6vw;
 }
 
 .backToMain {

@@ -38,6 +38,16 @@ const router = createRouter({
       name: 'UserHome',
       component: UserHomeView,
       children: [
+        {
+          path: 'MyProfile',
+          name: 'MyProfile',
+          component: EconomyView, 
+        },
+        {
+          path: 'MySettings',
+          name: 'MySettings',
+          component: EconomyView, 
+        },
         { 
           path: 'Economy', 
           name: 'Economy',

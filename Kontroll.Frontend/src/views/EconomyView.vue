@@ -47,7 +47,7 @@ const route = useRoute();
 .economyLink {
     text-decoration: none;
     text-align: center;
-    font-size: 0.7em;
+    font-size: 0.8em;
     color: rgba(var(--bs-body-color-rgb), 0.8);
     transition: 1s;
 }
