@@ -5,8 +5,13 @@ import FixedExpensesView from '@/views/FixedExpensesView.vue'
 import TransactionView from '@/views/TransactionView.vue'
 import EconomyView from '@/views/EconomyView.vue'
 import SingleTransactionView from '@/views/SingleTransactionView.vue'
-import Logout from '@/components/LogOut.vue';
+import Logout from '@/components/LogOut.vue'
 import Suppliers from '@/components/Suppliers.vue'
+import MyProfile from '@/components/MyProfile.vue'
+import AccountingView from '@/views/AccountingView.vue'
+import Loan from '@/components/Loan.vue'
+import Savings from '@/components/Savings.vue'
+import Subscriptions from '@/components/Subscriptions.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,11 +44,6 @@ const router = createRouter({
       component: UserHomeView,
       children: [
         {
-          path: 'MyProfile',
-          name: 'MyProfile',
-          component: EconomyView, 
-        },
-        {
           path: 'MySettings',
           name: 'MySettings',
           component: EconomyView, 
@@ -54,25 +54,57 @@ const router = createRouter({
           component: EconomyView, 
           children: [
             {
-              path: 'Transaction', 
-              name: 'Transaction', 
+              path: 'Accounting',
+              name: 'Accounting',
+              component: AccountingView,
+              children: [
+                {
+                  path: 'Account', 
+                  name: 'Account', 
+                  component: SingleTransactionView,
+                },
+                {
+                  path: 'Transaction', 
+                  name: 'Transaction', 
+                  component: TransactionView,
+                },
+                {
+                  path: 'SingleTransaction/:id', 
+                  name: 'SingleTransaction', 
+                  component: SingleTransactionView,
+                },
+                {
+                  path: 'Status', 
+                  name: 'Status', 
+                  component: SingleTransactionView,
+                },
+                {
+                  path: 'FixedExpense', 
+                  name: 'FixedExpense', 
+                  component: FixedExpensesView,
+                },
+                {
+                  path: 'Suppliers',
+                  name: 'Suppliers',
+                  component: Suppliers,
+                },
+              ]
+            },
+            {
+              path: 'Loan', 
+              name: 'Loan', 
               component: TransactionView,
             },
             {
-              path: 'SingleTransaction/:id', 
-              name: 'SingleTransaction', 
-              component: SingleTransactionView,
+              path: 'Savings', 
+              name: 'Savings', 
+              component: TransactionView,
             },
             {
-              path: 'FixedExpense', 
-              name: 'FixedExpense', 
-              component: FixedExpensesView,
+              path: 'Subscriptions', 
+              name: 'Subscriptions', 
+              component: TransactionView,
             },
-            {
-              path: 'Suppliers',
-              name: 'Suppliers',
-              component: Suppliers,
-            }
           ]
         },
         {
@@ -80,7 +112,22 @@ const router = createRouter({
           name: 'Property',
           component: EconomyView,
         },
+        {
+          path: 'EducationAndCareer', 
+          name: 'EducationAndCareer',
+          component: EconomyView,
+        },
+        {
+          path: 'FreePlan', 
+          name: 'FreePlan',
+          component: EconomyView,
+        },
       ]
+    },
+    {
+      path: '/myProfile',
+      name: 'MyProfile',
+      component: MyProfile, 
     },
     {
       path: '/logout',

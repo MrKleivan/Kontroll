@@ -1,4 +1,5 @@
 import EconomyView from "@/views/EconomyView.vue";
+import Account from "./Account.vue";
 
 const MyLinks = {
     HomePageLinks: [
@@ -31,31 +32,100 @@ const Links = {
     },
     UserHomePageHeader: {
         Links: [
-            {name: 'UserHome', label: 'Hjem', info: ''},
-            {name: 'MyProfile', label: 'Profil' },
-            {name: 'MySettings', label: 'Innstillinger' },
+            {name: 'UserHome', label: 'Hjem'},
+            {name: 'MyProfile', label: 'Profil'},
+            {name: 'MySettings', label: 'Innstillinger'},
             {name: 'LogOut', label: 'Logg ut'}
         ]
     },
     UserHomePageMain: {
+        MainLinks: {
+            Economy: {
+                name: 'Economy',
+                label: 'Økonomi',
+                links: {
+                    Accounting: { 
+                        name: 'Accounting',
+                        label: 'Regnskap',
+                        links: [
+                            {name: 'Account', label: 'Kontoer', },
+                            {name: 'Transaction', label: 'Transaksjoner', },
+                            {name: 'Status', label: 'Status', },
+                            {name: 'FixedExpense', label: 'Faste utgifter'},
+                            {name: 'Suppliers', label: 'Leverandører'},
+                            ]
+                        },
+                        Loan: {
+                            name: 'Loan',
+                            label: 'Lån',
+                            links: [
+                            {name: 'AllLoan', label: 'Alle', info: 'Alle lån'},
+                            {name: 'HousingLoan', label: 'Boliglån', info: 'Dine boliglån'},
+                            {name: 'CarLoan', label: 'Billån', info: 'Dine billån'},
+                            {name: 'ConsumerLoan', label: 'Forbrukslån', info: 'Dine forbrukslån' },
+                            ]
+                        },
+                        Savings: {
+                            name: 'Savings',
+                            label: 'Sparing',
+                            links: [
+
+                            ]
+                        },
+                        Subscriptions: {
+                            name: 'Subscriptions', 
+                            label: 'Abonnementer',
+                            links: [
+                                
+                            ]
+                        },
+                },
+            },
+            Property: {
+                name: 'Property', 
+                label: 'Eiendom',
+                links: {
+
+                },
+            },
+            EducationAndCareer: {
+                name: 'EducationAndCareer', 
+                label: 'Utdanning/karriere',
+                links: {
+
+                },
+            },
+            FreePlan: {
+                name: 'FreePlan', 
+                label: 'Fritid',
+                links: {
+
+                },
+            },
+        },
         Links: [
             {name: 'Economy', label: 'Økonomi', childrenLinks: [
                 {name: 'Accounting', label: 'Regnskap', info: '- Ditt regnskap', childrenLinks:[
                     {name: 'Account', label: 'Kontoer', },
                     {name: 'Transaction', label: 'Transaksjoner', },
                     {name: 'Status', label: 'Status', },
+                    {name: 'FixedExpense', label: 'Faste utgifter'},
+                    {name: 'Suppliers', label: 'Leverandører'},
                 ]},
-                {name: 'Loan', label: 'Lån', childrenLinks:[
-                    {name: 'AllLoan', label: 'Alle', info: 'Alle lån'},
-                    {name: 'HousingLoan', label: 'Boliglån', info: 'Dine boliglån'},
-                    {name: 'CarLoan', label: 'Billån', info: 'Dine billån'},
-                    {name: 'ConsumerLoan', label: 'Forbrukslån', info: 'Dine forbrukslån' },
-                ]},
+                {name: 'Loan', label: 'Lån', 
+                //     childrenLinks:[
+                //     {name: 'AllLoan', label: 'Alle', info: 'Alle lån'},
+                //     {name: 'HousingLoan', label: 'Boliglån', info: 'Dine boliglån'},
+                //     {name: 'CarLoan', label: 'Billån', info: 'Dine billån'},
+                //     {name: 'ConsumerLoan', label: 'Forbrukslån', info: 'Dine forbrukslån' },
+                // ]
+                },
                 {name: 'Savings', label: 'Sparing'},
+                {name: 'Subscriptions', label: 'Abonnementer'}
             ]},
             {name: 'Property', label: 'Eiendom'},
             {name: 'EducationAndCareer', label: 'Utdanning og Karriere'},
-            {name: 'FreePlan', label: ''},
+            {name: 'FreePlan', label: 'Fritid/planlegger'},
         ]
     }
 

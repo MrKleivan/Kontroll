@@ -134,6 +134,7 @@ header {
 }
 
 .MainNav {
+  position: relative;
   display: grid;
   width: 15%;
   padding: 3px;
@@ -142,6 +143,7 @@ header {
   background-color: rgb(var(--bs-body-color-rgb));
   border-radius: 0 0 5px 15px;
   z-index: 1;
+  overflow: visible;
 }
 
 .mainNavConteiner {

@@ -6,7 +6,7 @@ const route = useRoute();
 const router = useRouter();
 
 function goBack(){
-    router.push({name: 'Economy'})
+    router.push({name: 'Accounting'})
 }
 
 </script>
@@ -15,8 +15,8 @@ function goBack(){
     <div class="backButtonConteiner" v-if="route.name != 'Accounting'">
         <button class="backButton" @click="goBack"> ◄ Tilbake</button>
     </div>
-    <div v-if="route.name === 'Economy'" class="economyLinksConteiner">
-        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links" :key="index" class="economyLinkDiv">
+    <div v-if="!route.path.includes('/UserHome/Economy/SingleTransaction/')" class="economyLinksConteiner">
+        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links" :key="index" class="economyLinkDiv">
             <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
         </div>
     </div>
@@ -25,6 +25,8 @@ function goBack(){
 </template>
 
 <style scoped>
+
+
 
 .economyLinksConteiner {
     display: flex;

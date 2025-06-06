@@ -40,7 +40,7 @@ onMounted(() => {
         </div>
     </div>
     <div class="singleFixedExpenseConteiner" v-if="FixedExpense != null">
-        <button @click="FixedExpense = null">Tilbake</button>
+        <button class="backButton" @click="FixedExpense = null">◄ Tilbake</button>
         <div>
             {{ FixedExpense.supplierName }}
         </div>

@@ -49,6 +49,22 @@
 }
 
 [data-bs-theme="blue"] {
+  --bs-body-bg-rgb: 27, 77, 233;
+  --bs-body-color-rgb: 250, 250, 250;
+  --bs-header-bg-rgb: 17, 37, 233;
+  --bs-content-bg-rgb: 150, 240, 255;
+  --bs-btn-bg-b-rgb: 50, 75, 255;
+  --bs-btn-hover-bg-rgb: 190, 210, 255;
+  --bs-input-bg-rgb: 245, 250, 255;
+  --bs-input-color-rgb: 20, 30, 50;
+  --bs-select-bg-rgb: 240, 245, 255;
+  --bs-select-color-rgb: 20, 30, 50;
+  --bs-placeholder-color-rgb: 100, 120, 140;
+  --bs-primary-rgb: 0, 102, 204;
+  --bs-secondary-rgb: 80, 110, 160;
+}
+
+[data-bs-theme="frosted"] {
   --bs-body-bg-rgb: 240, 240, 255;
   --bs-body-color-rgb: 20, 30, 50;
   --bs-header-bg-rgb: 150, 200, 255;
@@ -62,20 +78,6 @@
   --bs-placeholder-color-rgb: 100, 120, 140;
   --bs-primary-rgb: 0, 102, 204;
   --bs-secondary-rgb: 80, 110, 160;
-}
-
-[data-bs-theme="frosted"] {
-  --bs-body-bg-rgb: 255, 255, 255;
-  --bs-body-color-rgb: 30, 30, 30;
-  --bs-btn-bg-b-rgb: 255, 255, 255;
-  --bs-btn-hover-bg-rgb: 240, 240, 240;
-  --bs-input-bg-rgb: 255, 255, 255;
-  --bs-input-color-rgb: 30, 30, 30;
-  --bs-select-bg-rgb: 255, 255, 255;
-  --bs-select-color-rgb: 30, 30, 30;
-  --bs-placeholder-color-rgb: 140, 140, 140;
-  --bs-primary-rgb: 100, 100, 255;
-  --bs-secondary-rgb: 200, 200, 200;
 }
 /* @import './base.css'; */
 
@@ -101,7 +103,10 @@ body::before {
   border-radius: 0 25px 0 0;
 }
 
-
+.backButtonConteiner {
+    width: 100%;
+    text-align: start;
+}
 
 .backButton {
     width: fit-content;
@@ -116,3 +121,5 @@ body::before {
 .backButton:hover {
     background-color: rgb(var(--bs-btn-hover-bg-rgb));
 }
+
+

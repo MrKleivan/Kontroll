@@ -2,23 +2,18 @@
 import { RouterLink, RouterView } from 'vue-router';
 import LoggedInnHeader from './LoggedInnHeader.vue';
 import { ref } from 'vue';
-import { MyLinks } from './MyLinks';
-import { useRouter } from 'vue-router';
+import { MyLinks, Links } from './MyLinks';
+import { useRouter, useRoute } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
-const watching = ref(false);
 
-function handleClick() {
-  watching.value = !watching.value;
-}
 
 function goBack() {
-    watching.value = false;
     router.push({ name: 'UserHome' });
 }
 
 function goToLink(link){
-  handleClick(); 
   router.push({name: link.name});
 }
 
@@ -32,16 +27,16 @@ function goToLink(link){
             <div class="droppdownFullMenue" @click="showFullMenu">&#9660;</div>
             <div></div>
         </div>
-        <div class="backToMain" v-if="watching == true">
+        <div class="backToMain" v-if="route.name != 'UserHome'">
             <button class="backButton" @click="goBack"> ◄ Hjem</button>
         </div>
-        <div v-if="watching == false" class="MainUserNavConteiner">
-            <div v-for="mylink in MyLinks.Main" class="MainUserNav">
+        <div v-if="route.name === 'UserHome'" class="MainUserNavConteiner">
+            <div v-for="mylink in Links.UserHomePageMain.MainLinks" class="MainUserNav">
                 <div class="MainUserNavTopp">
-                    <RouterLink class="MainUserNavLink" :to="{ name: mylink.name }" @click="handleClick">{{ mylink.label }}</RouterLink>
+                    <RouterLink class="MainUserNavLink" :to="{ name: mylink.name }">{{ mylink.label }}</RouterLink>
                 </div>
-                <div class="MainUserNavBottom">
-                    <div v-for="link in MyLinks.Economy" class="MainUserNavLinkConteiner"> 
+                <div class="MainUserNavBottom" v-if="mylink.links">
+                    <div v-for="link in mylink.links" class="MainUserNavLinkConteiner"> 
                       <div @click="goToLink(link)" class="MainUserNavLinkLink">{{ link.label }}</div>
                       <div class="MainUserNavLinkInfo">{{ link.info }}</div>
                     </div>
@@ -191,7 +186,7 @@ function goToLink(link){
 }
 
 .MainUserNavBottom {
-  width: 80%;
+  width: 78%;
   height: 70%;
   margin: auto;
   border-top: 1px solid rgba(var(--bs-body-color-rgb), 0.7);
@@ -208,7 +203,7 @@ function goToLink(link){
 .MainUserNavLinkConteiner {
   width: 100%;
   display: flex;
-  margin: auto;
+  justify-content: center;
 }
 
 .MainUserNavLinkLink {
