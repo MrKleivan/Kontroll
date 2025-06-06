@@ -10,8 +10,25 @@ const router = useRouter();
 
 
 function goBack() {
-    router.push({ name: 'UserHome' });
+  const currentPath = route.path;
+  const trimmedPath = currentPath.endsWith('/') && currentPath.length > 1
+    ? currentPath.slice(0, -1)
+    : currentPath;
+  const segments = trimmedPath.split('/');
+
+  // Fjern det siste segmentet
+  if (segments.length > 1) {
+    segments.pop();
+  }
+
+  // Lag ny path
+  const newPath = segments.join('/') || '/';
+
+  // Naviger til ny path
+  router.push(newPath);
 }
+
+
 
 function goToLink(link){
   router.push({name: link.name});
@@ -28,7 +45,7 @@ function goToLink(link){
             <div></div>
         </div>
         <div class="backToMain" v-if="route.name != 'UserHome'">
-            <button class="backButton" @click="goBack"> ◄ Hjem</button>
+            <button class="backButton" @click="goBack"> ◄ Tilbake</button>
         </div>
         <div v-if="route.name === 'UserHome'" class="MainUserNavConteiner">
             <div v-for="mylink in Links.UserHomePageMain.MainLinks" class="MainUserNav">
