@@ -12,6 +12,7 @@ import AccountingView from '@/views/AccountingView.vue'
 import Loan from '@/components/Loan.vue'
 import Savings from '@/components/Savings.vue'
 import Subscriptions from '@/components/Subscriptions.vue'
+import Account from '@/components/Account.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,7 +62,7 @@ const router = createRouter({
                 {
                   path: 'Account', 
                   name: 'Account', 
-                  component: SingleTransactionView,
+                  component: Account,
                 },
                 {
                   path: 'Transaction', 
