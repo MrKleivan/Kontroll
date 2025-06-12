@@ -1,5 +1,4 @@
-import EconomyView from "@/views/EconomyView.vue";
-import Account from "./Account.vue";
+
 
 const MyLinks = {
     HomePageLinks: [
@@ -47,11 +46,12 @@ const Links = {
                     Accounting: { 
                         name: 'Accounting',
                         label: 'Regnskap',
+                        info: '',
                         links: [
                             {name: 'Account', label: 'Kontoer', },
                             {name: 'Transaction', label: 'Transaksjoner', },
                             {name: 'Status', label: 'Status', },
-                            {name: 'FixedExpense', label: 'Faste utgifter'},
+                            {name: 'FixedExpense', label: 'Faste transaksjoner'},
                             {name: 'Suppliers', label: 'Leverandører'},
                             ]
                         },
@@ -76,7 +76,7 @@ const Links = {
                             name: 'Subscriptions', 
                             label: 'Abonnementer',
                             links: [
-                                
+
                             ]
                         },
                 },

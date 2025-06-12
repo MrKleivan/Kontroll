@@ -13,6 +13,7 @@ import Loan from '@/components/Loan.vue'
 import Savings from '@/components/Savings.vue'
 import Subscriptions from '@/components/Subscriptions.vue'
 import Account from '@/components/Account.vue'
+import hello from '@/components/hello.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +64,18 @@ const router = createRouter({
                   path: 'Account', 
                   name: 'Account', 
                   component: Account,
+                  children: [
+                    {
+                      path: '',
+                      name: 'Hello',
+                      component: hello,
+                    },
+                    {
+                      path: 'SingleAccount',
+                      name: 'SingleAccount',
+                      component: TransactionView,
+                    },
+                  ]
                 },
                 {
                   path: 'Transaction', 

@@ -42,6 +42,9 @@ import { MyLinks } from './MyLinks';
       </div>
     </div>
   </header>
+  <body>
+    <router-view />
+  </body>
 </template>
 
 <style scoped>

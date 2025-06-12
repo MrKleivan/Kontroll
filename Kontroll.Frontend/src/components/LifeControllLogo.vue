@@ -2,7 +2,7 @@
 </script>
 <template>
     <div class="WebLogo">
-        <svg width="200" height="60" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg" fill="currentColor" role="img" aria-label="LifeControll logo">
+        <svg width="100%" height="100%" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg" fill="currentColor" role="img" aria-label="LifeControll logo">
             <!-- Skjold med graf -->
             <g transform="translate(0, 10)">
                 <path d="M50,10 L90,30 V60 Q90,80 70,90 Q50,100 30,90 Q10,80 10,60 V30 Z" stroke="currentColor" stroke-width="4" fill="none"/>
@@ -15,3 +15,8 @@
         </svg>
     </div>
 </template>
+
+<style scoped>
+
+
+</style>

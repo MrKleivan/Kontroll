@@ -2,20 +2,37 @@
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { fetchData } from '../composables/useFetch.js'
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
+const router = useRouter();
 const loading = ref(false);
 const error = ref(null);
 const BankAccounts = ref([]);
 const BankAccount = ref();
 const UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188";
+const status = ref();
 
 const GetBankAccounts = async () => {
     const url = `https://localhost:7287/BankAccountApi?UserId=${UserId}`;
     BankAccounts.value = await fetchData(url, 'GET', null, loading, error);
 };
 
+const GetStatus = async () => {
+    if(BankAccount){
+
+    }
+};
+
+function SelectAccount(account) {
+    BankAccount.value = BankAccount.value != account ? account : null;
+}
+
 onMounted(() => {
     GetBankAccounts();
+    if (route.name === 'Account'){
+        router.replace({name: 'Hello'})
+    }
 })
 
 </script>
@@ -24,25 +41,46 @@ onMounted(() => {
     <br/>
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>
-    <div class="AccountContainer">
-        <div class="AccountContainerContentLeft">
-            <div v-if="BankAccounts && BankAccounts.length" v-for="account in BankAccounts" :key="account.id" class="bankAccount">
-                <div class="left">
-                    {{ account.accountNumber }}
+    <div v-else class="AccountContainer">
+        <div class="topp">
+            <div class="AccountContainerContentLeft">
+                <div class="bankAccountContainerTopp">
+                    <div v-if="BankAccounts && BankAccounts.length" v-for="account in BankAccounts" :key="account.id" class="bankAccount">
+                        <div class="left">
+                            {{ account.accountNumber }}
+                        </div>
+                        <div class="center">
+                            {{ account.name }}
+                        </div>
+                        <div class="right" @click="SelectAccount(account)">
+                            ↔
+                        </div>
+                    </div>
+                    <div v-else>
+                        Ingen kontoer funnet.
+                    </div>
                 </div>
-                <div class="center">
-                    {{ account.name }}
-                </div>
-                <div class="right" @click="GoToSingleAccount(account)">
-                    ↔
+                <div class="bankAccountContainerBottom">
+                    {{ BankAccount ? BankAccount.name : 'jnkj' }}
                 </div>
             </div>
-            <div v-else>
-                Ingen kontoer funnet.
+            <div class="AccountContainerContentRight">
+                <div class="accountStatus">
+                    <div class="accountStatusTopp">Saldo</div>
+                    <div class="accountStatusBottom"></div>
+                </div>
+                <div class="accountStatus">
+                    <div class="accountStatusTopp">Balanse</div>
+                    <div class="accountStatusBottom"></div>
+                </div>
+                <div class="accountStatus">
+                    <div class="accountStatusTopp">Forventet resultat</div>
+                    <div class="accountStatusBottom"></div>
+                </div>
             </div>
         </div>
-        <div class="AccountContainerContentRight">
-
+        <div class="bottom">
+            <router-view/>
         </div>
     </div>
 </template>
@@ -50,19 +88,51 @@ onMounted(() => {
 <style scoped>
 
 .AccountContainer {
-    display: flex;
     width: 100%;
     margin: auto;
     height: fit-content;
 }
 
+.topp {
+    display: flex;
+}
+
 .AccountContainerContentLeft {
     width: 30%;
-    height: 30vh;
+    height: 20vh;
+    min-height: 180px;
     margin: auto;
     border-radius: 15px;
     background-color: rgba(var(--bs-content-bg-rgb), 0.8);
     box-shadow: 0px 0px 2px 2px rgba(var(--bs-header-bg-rgb), 0.3);
+}
+
+.bankAccountContainerTopp {
+    width: 100%;
+    height: 20%;
+    padding-top: 15px;
+    box-sizing: border-box;
+}
+
+.bankAccountContainerBottom {
+    width: 50%;
+    height: 80%;
+    margin: auto;
+    padding-top: 10px;
+    box-sizing: border-box;
+}
+
+.newAccountButton {
+    width: 80%;
+    border-radius: 5px;
+    border: none;
+    color: rgba(var(--bs-body-color-rgb));
+    background-color: rgba(var(--bs-header-bg-rgb), 0.8);
+}
+
+.newAccountButton:hover {
+    cursor: pointer;
+    border: 1px ridge rgba(var(--bs-header-bg-rgb), 0.8);
 }
 
 .bankAccount {
@@ -70,7 +140,6 @@ onMounted(() => {
     width: 80%;
     height: 20px;
     margin: auto;
-    margin-top: 10px;
     border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
     border-radius: 5px;
 }
@@ -98,10 +167,50 @@ onMounted(() => {
     background-color: rgba(var(--bs-header-bg-rgb), 1);
 }
 
+
 .AccountContainerContentRight {
-    width: 60%;
-    height: 30vh;
+    display: flex;
+    width: 65%;
+    height: 20vh;
+    min-height: 180px;
     margin: auto;
+    border-radius: 15px;
+    background-color: rgba(var(--bs-content-bg-rgb), 0.8);
+    box-shadow: 0px 0px 2px 2px rgba(var(--bs-header-bg-rgb), 0.3);
+}
+
+.accountStatus {
+    width: 30%;
+    height: 90%;
+    margin: auto;
+}
+
+.accountStatusTopp {
+    width: 80%;
+    height: 31px;
+    margin: auto;
+    text-align: center;
+    align-content: center;
+    font-size: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    border-bottom: 1px solid rgba(var(--bs-header-bg-rgb), 0.7);
+}
+
+.accountStatusBottom {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 50%;
+    background-color: aliceblue;
+}
+
+.bottom {
+    width: 98%;
+    height: fit-content;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
     border-radius: 15px;
     background-color: rgba(var(--bs-content-bg-rgb), 0.8);
     box-shadow: 0px 0px 2px 2px rgba(var(--bs-header-bg-rgb), 0.3);

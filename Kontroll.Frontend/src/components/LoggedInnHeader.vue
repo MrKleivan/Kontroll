@@ -74,7 +74,8 @@ header {
 
 .WebLogo {
   width: 50%;
-  height: 100%;
+  height: 70%;
+  margin-top: 10px;
   align-content: center;
   text-align: center;
   color: rgba(var(--bs-body-color-rgb), 0.7);

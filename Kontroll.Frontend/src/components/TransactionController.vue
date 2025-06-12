@@ -175,6 +175,7 @@ function SetFilterSelection(text) {
 
 .multipleTransactionsConteiner {
     width: 80%;
+    margin: auto;
 }
 
 .transactions {
