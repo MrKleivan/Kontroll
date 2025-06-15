@@ -14,6 +14,7 @@ import Savings from '@/components/Savings.vue'
 import Subscriptions from '@/components/Subscriptions.vue'
 import Account from '@/components/Account.vue'
 import hello from '@/components/hello.vue'
+import newAccount from '@/components/newAccount.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,9 +72,9 @@ const router = createRouter({
                       component: hello,
                     },
                     {
-                      path: 'SingleAccount',
-                      name: 'SingleAccount',
-                      component: TransactionView,
+                      path: 'newAccount',
+                      name: 'newAccount',
+                      component: newAccount,
                     },
                   ]
                 },
@@ -93,8 +94,8 @@ const router = createRouter({
                   component: SingleTransactionView,
                 },
                 {
-                  path: 'FixedExpense', 
-                  name: 'FixedExpense', 
+                  path: 'FixedTransaction', 
+                  name: 'FixedTransaction', 
                   component: FixedExpensesView,
                 },
                 {

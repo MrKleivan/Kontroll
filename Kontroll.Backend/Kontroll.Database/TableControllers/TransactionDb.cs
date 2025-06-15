@@ -79,7 +79,7 @@ public class TransactionDb
 
     public async Task<bool> UpdateTransactionInDatabase(TransactionOb transaction)
     {
-        var query = @"UPDATE TransactionTb SET Date = @Date, AccountNumber = @AccountNumber, ExternalDescription = @ExternalDescription, UserDescription = @UserDescription, Income = @Income, Outcome = @Outcome, ToAccount = @ToAccount, FromAccount = @FromAccount, SupplierId = @SupplierId, IsFixedExpense = @IsFixedExpense, FixedExpenseId = @FixedExpenseId, HasReceipt = @HasReceipt, ReceiptId = @ReceiptId, HasInvoice = @HasInvoice, InvoiceId = @InvoiceId WHERE TransactionId = @TransactionId"; 
+        var query = @"UPDATE TransactionTb SET Date = @Date, AccountNumber = @AccountNumber, ExternalDescription = @ExternalDescription, UserDescription = @UserDescription, Income = @Income, Outcome = @Outcome, ToAccount = @ToAccount, FromAccount = @FromAccount, SupplierId = @SupplierId, IsFixedExpense = @IsFixedExpense, FixedTransactionId = @FixedTransactionId, HasReceipt = @HasReceipt, ReceiptId = @ReceiptId, HasInvoice = @HasInvoice, InvoiceId = @InvoiceId WHERE TransactionId = @TransactionId"; 
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, transaction) > 0;
     }
     
@@ -95,7 +95,7 @@ public class TransactionDb
 
     public async Task<List<TransactionOb>> GetAllTransactionsFromDatabaseByFixedExpenseId(object queryObj)
     {
-        var query = @"SELECT * FROM TransactionTb WHERE FixedExpenseId = @FixedExpenseId AND YEAR([Date]) = @Year";
+        var query = @"SELECT * FROM TransactionTb WHERE FixedTransactionId = @FixedTransactionId AND YEAR([Date]) = @Year";
         
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<TransactionOb>(_connectionString, query, queryObj);
     }

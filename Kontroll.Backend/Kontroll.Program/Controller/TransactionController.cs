@@ -93,15 +93,15 @@ public class TransactionController : ControllerBase
                 }
             }
             
-            FixedExpenseController fixedExpenseController = new FixedExpenseController(_configuration);
-            bool isFixedExpense = await fixedExpenseController.CheckIfIsFixedExpense(await ConvertTransactionObject(transaction));
+            FixedTransactionController fixedTransactionController = new FixedTransactionController(_configuration);
+            bool isFixedExpense = await fixedTransactionController.CheckIfIsFixedExpense(await ConvertTransactionObject(transaction));
 
             if (isFixedExpense)
             {
-                FixedExpenseOb? fixedExpenseOb = await fixedExpenseController.GetFixedExpenseByDescriptionAndSupplierBankAccount(await ConvertTransactionObject(transaction));
+                FixedTransactionsOb? fixedTransactionsOb = await fixedTransactionController.GetFixedExpenseByDescriptionAndSupplierBankAccount(await ConvertTransactionObject(transaction));
                 
                 transaction.IsFixedExpense = true;
-                transaction.FixedExpenseId = fixedExpenseOb.FixedExpenseId;
+                transaction.FixedTransactionId = fixedTransactionsOb.FixedTransactionId;
             }
 
             await CheckIfTransactionHasExistingSupplier(transaction);
@@ -194,7 +194,7 @@ public class TransactionController : ControllerBase
                 FromAccount = obj.Frakonto,
                 SupplierId = null,
                 IsFixedExpense = false,
-                FixedExpenseId = null,
+                FixedTransactionId = null,
                 HasReceipt = false,
                 ReceiptId = null,
                 HasInvoice = false, 
@@ -235,7 +235,7 @@ public class TransactionController : ControllerBase
             FromAccount = transaction.FromAccount,
             SupplierId = transaction.SupplierId,
             IsFixedExpense = transaction.IsFixedExpense,
-            FixedExpenseId = transaction.FixedExpenseId,
+            FixedTransactionId = transaction.FixedExpenseId,
             HasReceipt = transaction.HasReceipt,
             ReceiptId = transaction.ReceiptId,
             HasInvoice = transaction.HasInvoice,

@@ -8,7 +8,7 @@ public class FixedExpenseTestOne
 {
     public async Task Run(IConfiguration config)
     {
-        FixedExpenseController app = new FixedExpenseController(config);
+        FixedTransactionController app = new FixedTransactionController(config);
         
         FixedExpenseOb fixedExpenseOb = new FixedExpenseOb
         {

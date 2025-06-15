@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { fetchData } from '../composables/useFetch.js'
 import { useRoute, useRouter } from 'vue-router';
+import { Links } from './MyLinks.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -30,18 +31,29 @@ function SelectAccount(account) {
 
 onMounted(() => {
     GetBankAccounts();
-    if (route.name === 'Account'){
-        router.replace({name: 'Hello'})
-    }
 })
+
+watch(
+  () => route.name,
+  (newName) => {
+    if (newName === 'Account') {
+      GetBankAccounts();
+    }
+  }
+);
 
 </script>
 
 <template>
+    <div class="economyLinksConteiner">
+        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links.Account.links" :key="index" class="economyLinkDiv">
+            <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
+        </div>
+    </div>
     <br/>
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>
-    <div v-else class="AccountContainer">
+    <div class="AccountContainer">
         <div class="topp">
             <div class="AccountContainerContentLeft">
                 <div class="bankAccountContainerTopp">
@@ -80,12 +92,49 @@ onMounted(() => {
             </div>
         </div>
         <div class="bottom">
-            <router-view/>
+            <router-view />
         </div>
     </div>
 </template>
 
 <style scoped>
+
+.economyLinksConteiner {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.economyLinkDiv {
+    width: 12%;
+    margin: 3px;
+    border-left: 1px solid rgba(var(--bs-body-bg-rgb), 0.8);
+}
+
+.economyLinkDiv:first-child {
+    border: none;
+}
+
+/* .economyLinkDiv:hover {
+    width: 16%;
+    background-color: rgba(var(--bs-btn-hover-bg-rgb), 0.8);
+    border-radius: 5px;
+}  */
+
+.economyLink {
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.7em;
+    color: rgba(var(--bs-body-color-rgb), 0.8);
+    box-sizing: border-box;
+}
+
+.economyLink:hover {
+    font-weight: bolder;
+    font-size: 0.75em;
+}
 
 .AccountContainer {
     width: 100%;
@@ -109,14 +158,14 @@ onMounted(() => {
 
 .bankAccountContainerTopp {
     width: 100%;
-    height: 20%;
+    height: 30%;
     padding-top: 15px;
     box-sizing: border-box;
 }
 
 .bankAccountContainerBottom {
     width: 50%;
-    height: 80%;
+    height: 70%;
     margin: auto;
     padding-top: 10px;
     box-sizing: border-box;

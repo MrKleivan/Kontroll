@@ -1,3 +1,4 @@
+import Account from "./Account.vue";
 
 
 const MyLinks = {
@@ -47,38 +48,69 @@ const Links = {
                         name: 'Accounting',
                         label: 'Regnskap',
                         info: '',
+                        links: {
+                            Account: {
+                                name: 'Account', 
+                                label: 'Kontoer',
+                                info: '',
+                                links: [
+                                    {name: 'newAccount', label: 'Legg til ny konto', info: ''},
+                                    {name: 'Account', label: 'Konto instillinger', info: ''}
+                                ]
+                            }, 
+                            Transaction: {
+                                name: 'Transaction', 
+                                label: 'Transaksjoner',
+                                info: '',
+                                links: [
+                                    {name: 'Account', label: 'Transaksjon instillinger', info: ''}
+                                ]
+                            }, 
+                            Status: {
+                                name: 'Status', 
+                                label: 'Status',
+                                info: '',
+                                links: [
+                                    {name: 'Account', label: 'Transaksjon instillinger', info: ''}
+                                ]
+                            }, 
+                            FixedTransactions: {
+                                name: 'FixedTransaction', 
+                                label: 'Faste transaksjoner',
+                                info: '',
+                                links: [
+                                    {name: 'Account', label: 'Transaksjon instillinger', info: ''}
+                                ]
+                            }, 
+                            // {name: 'Status', label: 'Status', },
+                            // {name: 'FixedExpense', label: 'Faste transaksjoner'},
+                            // {name: 'Suppliers', label: 'Leverandører'},
+                        }
+                    },
+                    Loan: {
+                        name: 'Loan',
+                        label: 'Lån',
                         links: [
-                            {name: 'Account', label: 'Kontoer', },
-                            {name: 'Transaction', label: 'Transaksjoner', },
-                            {name: 'Status', label: 'Status', },
-                            {name: 'FixedExpense', label: 'Faste transaksjoner'},
-                            {name: 'Suppliers', label: 'Leverandører'},
-                            ]
-                        },
-                        Loan: {
-                            name: 'Loan',
-                            label: 'Lån',
-                            links: [
-                            {name: 'AllLoan', label: 'Alle', info: 'Alle lån'},
-                            {name: 'HousingLoan', label: 'Boliglån', info: 'Dine boliglån'},
-                            {name: 'CarLoan', label: 'Billån', info: 'Dine billån'},
-                            {name: 'ConsumerLoan', label: 'Forbrukslån', info: 'Dine forbrukslån' },
-                            ]
-                        },
-                        Savings: {
-                            name: 'Savings',
-                            label: 'Sparing',
-                            links: [
+                        {name: 'AllLoan', label: 'Alle', info: 'Alle lån'},
+                        {name: 'HousingLoan', label: 'Boliglån', info: 'Dine boliglån'},
+                        {name: 'CarLoan', label: 'Billån', info: 'Dine billån'},
+                        {name: 'ConsumerLoan', label: 'Forbrukslån', info: 'Dine forbrukslån' },
+                        ]
+                    },
+                    Savings: {
+                        name: 'Savings',
+                        label: 'Sparing',
+                        links: [
 
-                            ]
-                        },
-                        Subscriptions: {
-                            name: 'Subscriptions', 
-                            label: 'Abonnementer',
-                            links: [
+                        ]
+                    },
+                    Subscriptions: {
+                        name: 'Subscriptions', 
+                        label: 'Abonnementer',
+                        links: [
 
-                            ]
-                        },
+                        ]
+                    },
                 },
             },
             Property: {

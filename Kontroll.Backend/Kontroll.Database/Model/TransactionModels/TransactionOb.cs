@@ -17,7 +17,7 @@ public class TransactionOb
     public string? FromAccount { get; set; }
     public string? SupplierId { get; set; }
     public bool IsFixedExpense { get; set; } = false;
-    public string? FixedExpenseId { get; set; }
+    public string? FixedTransactionId { get; set; }
     public bool HasReceipt {get; set; } = false;
     public string? ReceiptId { get; set; }
     public bool HasInvoice { get; set; } = false;
