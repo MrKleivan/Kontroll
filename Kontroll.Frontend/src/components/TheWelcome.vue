@@ -105,6 +105,7 @@ import { MyLinks } from './MyLinks';
   padding-bottom: 10px;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   /* background-image: linear-gradient(to left, rgb(var(--bs-header-bg-rgb)), rgba(var(--bs-body-color-rgb), 0.1), rgb(var(--bs-header-bg-rgb))); */
   /* border-radius: 5px; */
 }
@@ -148,8 +149,8 @@ import { MyLinks } from './MyLinks';
 }
 
 .icon {
-  width: 15%;
-  height: 100%;
+  width: 1vw;
+  min-width: 3vh;
   align-content: center;
   text-align: center;
 }
