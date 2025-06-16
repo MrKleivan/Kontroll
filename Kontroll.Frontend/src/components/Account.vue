@@ -3,8 +3,10 @@ import { ref } from 'vue';
 import { onMounted, watch } from 'vue';
 import { fetchData } from '../composables/useFetch.js'
 import { useRoute, useRouter } from 'vue-router';
+import UnderMeny from './UnderMeny.vue';
 import { Links } from './MyLinks.js';
 
+const MyLinks = Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links.Account.links;
 const route = useRoute();
 const router = useRouter();
 const loading = ref(false);
@@ -45,11 +47,7 @@ watch(
 </script>
 
 <template>
-    <div class="economyLinksConteiner">
-        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links.Account.links" :key="index" class="economyLinkDiv">
-            <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
-        </div>
-    </div>
+    <UnderMeny :links="MyLinks" />
     <br/>
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>

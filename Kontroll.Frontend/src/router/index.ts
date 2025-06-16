@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import UserHomeView from '@/views/UserHomeView.vue'
 import FixedExpensesView from '@/views/FixedExpensesView.vue'
 import TransactionView from '@/views/TransactionView.vue'
+import TransactionController from '@/components/TransactionController.vue'
 import EconomyView from '@/views/EconomyView.vue'
 import SingleTransactionView from '@/views/SingleTransactionView.vue'
 import Logout from '@/components/LogOut.vue'
@@ -15,6 +16,7 @@ import Subscriptions from '@/components/Subscriptions.vue'
 import Account from '@/components/Account.vue'
 import hello from '@/components/hello.vue'
 import newAccount from '@/components/newAccount.vue'
+import newTransaction from '@/components/newTransaction.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,7 +83,19 @@ const router = createRouter({
                 {
                   path: 'Transaction', 
                   name: 'Transaction', 
-                  component: TransactionView,
+                  component: TransactionController,
+                  children: [
+                    {
+                      path: 'TransactionFilter',
+                      name: 'TransactionFilter',
+                      component: TransactionView
+                    },
+                    {
+                      path: 'TransactionAdd',
+                      name: 'TransactionAdd',
+                      component: newTransaction
+                    },
+                  ]
                 },
                 {
                   path: 'SingleTransaction/:id', 

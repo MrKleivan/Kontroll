@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { fetchData } from '../composables/useFetch.js';
+import { Links } from './MyLinks.js';
+import UnderMeny from './UnderMeny.vue';
 
+const MyLinks = Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links.FixedTransactions.links;
 const FixedTransactions = ref([]);
 const FixedTransaction = ref(null);
 const loading = ref(false);
@@ -40,10 +43,11 @@ onMounted(() => {
 </script>
 
 <template>
+    <UnderMeny :links="MyLinks" />
     <br />
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>
-    <div v-else class="FixedExpenses">
+    <div class="FixedExpenses">
       <div class="multipleFixedExpenseConteiner" v-if="FixedTransaction == null">
         <div class="FixedTransactionMeny">
           <div class="FixedTransactionSortHeading">Filtrering</div>

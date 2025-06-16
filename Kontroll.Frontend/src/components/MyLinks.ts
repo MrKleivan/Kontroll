@@ -63,7 +63,9 @@ const Links = {
                                 label: 'Transaksjoner',
                                 info: '',
                                 links: [
-                                    {name: 'Account', label: 'Transaksjon instillinger', info: ''}
+                                    {name: 'TransactionFilter', label: 'Filter'},
+                                    {name: 'Account', label: 'Instillinger', info: ''},
+                                    {name: 'TransactionAdd', label: 'Legg til'}
                                 ]
                             }, 
                             Status: {
@@ -79,7 +81,8 @@ const Links = {
                                 label: 'Faste transaksjoner',
                                 info: '',
                                 links: [
-                                    {name: 'Account', label: 'Transaksjon instillinger', info: ''}
+                                    {name: 'Account', label: 'Instillinger', info: ''},
+                                    {name: 'Account', label: 'Legg til'}
                                 ]
                             }, 
                             // {name: 'Status', label: 'Status', },
