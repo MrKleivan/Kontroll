@@ -17,14 +17,14 @@ public class FixedTransactionDb
 
     public async Task<List<FixedTransactionsOb>> GetAllFixedExpensesFromDatabaseByUserId(string  UserId)
     {
-        var query = "SELECT * FROM FixedTransactionsTb WHERE UserId = @UserId";
+        var query = "SELECT * FROM FixedTransactionTb WHERE UserId = @UserId";
 
         return await _sqlReaderHelperDb.ExecuteReaderAndMapAsync<FixedTransactionsOb>(_connectionString, query, new { UserId });
     }
     
     public async Task<FixedTransactionsOb?> GetFixedExpenseFromDatabaseByFixedExpenseId(FixedTransactionsOb fixedTransactionsOb)
     {
-        var query = "SELECT * FROM FixedTransactionsTb WHERE FixedTransactionId = @FixedTransactionId";
+        var query = "SELECT * FROM FixedTransactionTb WHERE FixedTransactionId = @FixedTransactionId";
 
         return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<FixedTransactionsOb>(_connectionString, query, fixedTransactionsOb);
     }
@@ -39,21 +39,21 @@ public class FixedTransactionDb
 
     public async Task<bool> UpdateFixedExpenseInDatabase(FixedTransactionsOb fixedTransactionsOb)
     {
-        var query = "UPDATE FixedTransactionsTb SET UserId = @UserId, FixedTransactionId = @FixedTransactionId, SupplierId = @SupplierId, SupplierName = @SupplierName, SupplierBankAccount = @SupplierBankAccount, Type = @Type, Description = @Description, PaymentMethod = @PaymentMethod, MonthlyAmount = @MonthlyAmount, MonthlyDeadlineDay = @MonthlyDeadlineDay, FixedTransactionStartDate = @FixedTransactionStartDate, IsActive = @IsActive, StandardAccountNumberForePayment = @StandardAccountNumberForePayment WHERE FixedTransactionId = @FixedTransactionId";
+        var query = "UPDATE FixedTransactionTb SET UserId = @UserId, FixedTransactionId = @FixedTransactionId, SupplierId = @SupplierId, SupplierName = @SupplierName, SupplierBankAccount = @SupplierBankAccount, Type = @Type, Description = @Description, PaymentMethod = @PaymentMethod, MonthlyAmount = @MonthlyAmount, MonthlyDeadlineDay = @MonthlyDeadlineDay, FixedTransactionStartDate = @FixedTransactionStartDate, IsActive = @IsActive, StandardAccountNumberForePayment = @StandardAccountNumberForePayment WHERE FixedTransactionId = @FixedTransactionId";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, fixedTransactionsOb) > 0;
     }
 
     public async Task<bool> FixedExpenseExistsInDatabase(FixedTransactionsOb fixedTransactionsOb) 
     {
-        var query = "SELECT COUNT(*) FROM FixedTransactionsTb WHERE Description = @Description AND MonthlyAmount = @MonthlyAmount AND MonthlyDeadlineDay = @MonthlyDeadlineDay";
+        var query = "SELECT COUNT(*) FROM FixedTransactionTb WHERE Description = @Description AND MonthlyAmount = @MonthlyAmount AND MonthlyDeadlineDay = @MonthlyDeadlineDay";
 
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, fixedTransactionsOb) > 0;
     }
 
     public async Task<FixedTransactionsOb?> GetFixedExpenseFromDatabaseByDescriptionAndSupplierBankAccount(TransactionOb transactionOb)
     {
-        var query = "SELECT * FROM FixedTransactionsTb WHERE Description = @UserDescription AND SupplierBankAccount =  @ToAccount";
+        var query = "SELECT * FROM FixedTransactionTb WHERE Description = @UserDescription AND SupplierBankAccount =  @ToAccount";
         
         return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<FixedTransactionsOb>(_connectionString, query, transactionOb);
     }

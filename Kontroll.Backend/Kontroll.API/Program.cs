@@ -31,7 +31,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AllowVueDev");
-
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Kontroll.Database.Model.TransactionModels;
 using Kontroll.Database.TableControllers;
 using Kontroll.Library.Exel;
@@ -170,37 +171,47 @@ public class TransactionController : ControllerBase
         return false;
     }
 
-    public async Task<List<TransactionPostRequest>> ConvertExelToObjectList(string file, string userId, string AccountNumber)
+    public async Task<List<TransactionPostRequest>> ConvertExelToObjectList(IFormFile file, [FromForm] string userId, [FromForm] string AccountNumber)
     {
         List<TransactionPostRequest> transactions = new List<TransactionPostRequest>();
         var fileObject = await Task.Run(() => Exel.ExelToObjects(file));
 
         foreach (dynamic obj in fileObject)
         {
-            decimal.TryParse((string)obj.Inn, out var income);
-            decimal.TryParse((string)obj.Ut, out var outcom);
-            DateOnly.TryParse((string)obj.Dato, out var date);
-            var transaction = new TransactionPostRequest()
+            string CleanStr(string? s) => s?.Trim().Trim('"') ?? "";
+            string NormalizeNumber(string? s) => CleanStr(s).Replace(" ", "").Replace(",", ".");
+
+            var incomeStr = NormalizeNumber(obj.Inn);
+            var outcomeStr = NormalizeNumber(obj.Ut);
+            var datoStr = CleanStr(obj.Dato);
+
+            decimal.TryParse(incomeStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal income);
+            decimal.TryParse(outcomeStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal outcome);
+            DateTime.TryParse(datoStr, out DateTime dt);
+            var date = DateOnly.FromDateTime(dt);
+
+            var transaction = new TransactionPostRequest
             {
                 TransactionId = Guid.NewGuid().ToString(),
                 UserId = userId,
                 Date = date,
                 AccountNumber = AccountNumber,
-                ExternalDescription = obj.Beskrivelse,
+                ExternalDescription = CleanStr(obj.Beskrivelse),
                 UserDescription = null,
                 Income = income,
-                Outcome = outcom,
-                ToAccount = obj.Tilkonto,
-                FromAccount = obj.Frakonto,
+                Outcome = outcome,
+                ToAccount = CleanStr(obj.Tilkonto),
+                FromAccount = CleanStr(obj.Frakonto),
                 SupplierId = null,
                 IsFixedExpense = false,
                 FixedTransactionId = null,
                 HasReceipt = false,
                 ReceiptId = null,
-                HasInvoice = false, 
+                HasInvoice = false,
                 InvoiceId = null,
                 ForceAdd = false,
             };
+            await UpdateValuesOnTransactionByCriteria(transaction);
             transactions.Add(transaction);
         }
         return transactions;
@@ -216,7 +227,7 @@ public class TransactionController : ControllerBase
         return await _db.TransactionExistsInDatabase(transactionOb);
     }
 
-    private async Task<TransactionOb> ConvertTransactionObject(dynamic transaction)
+    public async Task<TransactionOb> ConvertTransactionObject(dynamic transaction)
     {
         if (transaction == null)
             throw new ArgumentNullException(nameof(transaction));
@@ -235,7 +246,7 @@ public class TransactionController : ControllerBase
             FromAccount = transaction.FromAccount,
             SupplierId = transaction.SupplierId,
             IsFixedExpense = transaction.IsFixedExpense,
-            FixedTransactionId = transaction.FixedExpenseId,
+            FixedTransactionId = transaction.FixedTransactionId,
             HasReceipt = transaction.HasReceipt,
             ReceiptId = transaction.ReceiptId,
             HasInvoice = transaction.HasInvoice,

@@ -44,6 +44,35 @@ public class TransactionApiController : ControllerBase
         }
         return Ok(transactionObs);
     }
+
+    [HttpPost("convert-csv")]
+    public async Task<IActionResult> ConvertCsvToListOfTransactions(IFormFile file, [FromForm] string userId, [FromForm] string AccountNumber)
+    {
+        List<TransactionPostRequest> transactionPostRequests =  await _transactionController.ConvertExelToObjectList(file,  userId, AccountNumber);
+        
+        if (transactionPostRequests != null && transactionPostRequests.Count > 0)
+        {
+            foreach (var transaction in transactionPostRequests)
+            {
+                if (transaction.Income > 0)
+                {
+                    if (transaction.ToAccount != AccountNumber)
+                    {
+                        return Unauthorized();
+                    }
+                }
+                if (transaction.Outcome < 0)
+                {
+                    if (transaction.FromAccount != AccountNumber)
+                    {
+                        return Unauthorized();
+                    }
+                }
+            }
+            return Ok(transactionPostRequests);
+        }
+        return NotFound("Fant ikke transaks'er");
+    }
     
     
     
