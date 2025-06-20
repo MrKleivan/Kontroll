@@ -63,8 +63,8 @@ public class TransactionDb
 
     public async Task<bool> AddTransactionToDatabase(TransactionOb transaction)
     {
-        var query = "INSERT INTO TransactionTb (TransactionId, UserId, Date, AccountNumber, ExternalDescription, UserDescription, Income, Outcome, ToAccount, FromAccount, SupplierId, IsFixedExpense, FixedExpenseId, HasReceipt, ReceiptId, HasInvoice, InvoiceId)" 
-                    + "VALUES (@TransactionId, @UserId, @Date, @AccountNumber, @ExternalDescription, @UserDescription, @Income, @Outcome, @ToAccount, @FromAccount, @SupplierId ,@IsFixedExpense ,@FixedExpenseId, @HasReceipt, @ReceiptId, @HasInvoice, @InvoiceId)";
+        var query = "INSERT INTO TransactionTb (TransactionId, UserId, Date, AccountNumber, ExternalDescription, UserDescription, Income, Outcome, ToAccount, FromAccount, SupplierId, IsFixedExpense, FixedTransactionId, HasReceipt, ReceiptId, HasInvoice, InvoiceId)" 
+                    + "VALUES (@TransactionId, @UserId, @Date, @AccountNumber, @ExternalDescription, @UserDescription, @Income, @Outcome, @ToAccount, @FromAccount, @SupplierId ,@IsFixedExpense ,@FixedTransactionId, @HasReceipt, @ReceiptId, @HasInvoice, @InvoiceId)";
         
         return await _sqlReaderHelperDb.ExecuteNonQueryAsync(_connectionString, query, transaction) > 0;
     }

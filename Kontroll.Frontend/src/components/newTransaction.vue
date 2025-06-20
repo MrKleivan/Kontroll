@@ -7,6 +7,7 @@ const uploadedFile = ref(null);
 const Transactions = ref([]);
 const BankAccounts = ref([]);
 const AccountNumber = ref('');
+const FixedTransaction = ref(null);
 const loading = ref(false);
 const error = ref(null);
 const UserId = "1e21c816-5591-40ca-b418-fd4c7c8ef188";
@@ -26,7 +27,14 @@ async function GetTransactions(file) {
     formData.append('userId', UserId);
     formData.append('accountNumber', AccountNumber.value); // 🔁 husk .value
     Transactions.value = await fetchData(url, 'POST', formData, loading, error);
-    console.log(Transactions.value[1]);
+    
+    for (const transaction of Transactions.value) {
+        if (transaction.fixedTransactionId) {
+            const fixedInfo = await GetFixedTransactionInfoById(transaction.fixedTransactionId);
+            transaction.fixedInfo = fixedInfo;
+            console.log(fixedInfo);
+        }
+    }
 }
 
 const formatDate = (dateString) => {
@@ -41,6 +49,11 @@ const GetBankAccounts = async () => {
     BankAccounts.value = await fetchData(url, 'GET', null, loading, error);
 };
 
+const GetFixedTransactionInfoById = async (transactionId) => {
+    const url = `https://localhost:7287/FixedTransactionApi/${transactionId}`;
+    return await fetchData(url, 'GET', null, loading, error);
+};
+
 onMounted(() => {
     GetBankAccounts();
 });
@@ -53,12 +66,56 @@ function toggleAll() {
   }
 }
 
-function RemoveTransaction(transaction) {
-  const index = Transactions.value.indexOf(transaction);
-  if (index !== -1) {
-    Transactions.value.splice(index, 1); // ✅ Vue ser endringen
-  }
+async function UploadTransaction(transaction) {
+  const url = 'https://localhost:7287/TransactionApi';
+  const result = await fetchData(url, 'POST', transaction, loading, error);
+  return result == null; // returner true hvis det faktisk gikk bra
 }
+
+async function uploadAll(transactions) {
+    error.value = null;
+    for (const transaction of transactions.slice()) {
+        if (transaction.fixedInfo) {
+            const fixedInfo = transaction.fixedInfo;
+            delete transaction.fixedInfo;
+            let isUploaded = await UploadTransaction(transaction);
+            console.log(isUploaded);
+            if(isUploaded){
+                RemoveTransaction(transaction);
+            }
+            else {
+                transaction.fixedInfo = fixedInfo;
+            }
+        }
+        else {
+            let isUploaded = await UploadTransaction(transaction);
+            if(isUploaded){
+                RemoveTransaction(transaction);
+            }
+            else {
+                error.value = "feil";
+            }
+        }
+    }
+}
+
+async function uploadByCriteria() {
+    const transactions = Transactions.value.filter(t => t.forceAdd);
+    if (transactions.length > 0) {
+        await uploadAll(transactions);
+    }
+}
+
+function RemoveTransaction(transaction) {
+  Transactions.value = Transactions.value.filter(t => t.transactionId !== transaction.transactionId);
+
+}
+
+const getDayAsInt = (dateString) => {
+  if (!dateString) return null; // eller 0, avhengig av hva du vil gjøre ved tom verdi
+  const date = new Date(dateString);
+  return date.getDate(); // returnerer dag som tall (eks: 22)
+};
 
 </script>
 
@@ -87,33 +144,59 @@ function RemoveTransaction(transaction) {
                         kontoutskrift i csv fil
                     </div>
                     <div>
-                        Velg et kontonummer i venstre meny
+                        Velg hvilket kontonummer 
+                        <br/>kontoutskriften gjelder
                     </div>
                 </div>
             </div>
         </div>
-        <div class="lower">
-            <div v-if="Transactions.length > 0" class="TransactionsContainer">
-                <div class="TransactionHeader">
-                    <div class="col-10 TransactionInfoBox">Kryss av<br/><span style="font-weight: normal;">Alle</span> <input type="checkbox" v-model="selectAll" @change="toggleAll" /></div>
-                    <div class="col-15 TransactionInfoBox">Dato for transaksjon</div>
-                    <div class="col-30 TransactionInfoBox">Fordringshaver</div>
-                    <div class="col-15 TransactionInfoBox">Beløp</div>
-                    <div class="col-20 TransactionInfoBox">Utenforstående sit kontonr</div>
-                    <div class="col-10 TransactionInfoBox"></div>
-                </div>
-                <div v-for="transaction in Transactions" class="Transaction">
-                    <div class="col-10 TransactionInfoBox"><input type="checkbox" v-model="transaction.forceAdd"></div>
-                    <div class="col-15 TransactionInfoBox">{{ formatDate(transaction.date) }}</div>
-                    <div class="col-30 TransactionInfoBox">{{ (transaction.userDescription != null ? transaction.userDescription : transaction.externalDescription) }}</div>
-                    <div class="col-15 TransactionInfoBox">{{ transaction.income == 0 ? transaction.outcome : transaction.income }} kr</div>
-                    <div class="col-20 TransactionInfoBox">{{ transaction.income == 0 ? transaction.toAccount : transaction.fromAccount }}</div>
-                    <div class="col-10 TransactionInfoBox"><button class="RemoveTransactionButton" @click="RemoveTransaction(transaction)">Fjern</button></div>
+        <div v-if="Transactions.length > 0" class="lower">
+            <div class="col-88 lower-left">
+                <div class="TransactionsContainer">
+                    <div class="TransactionHeader">
+                        <div class="col-10 TransactionInfoBox">Kryss av<br/><span style="font-weight: normal;">Alle</span> <input type="checkbox" v-model="selectAll" @change="toggleAll" /></div>
+                        <div class="col-16 TransactionInfoBox">Dato for transaksjon</div>
+                        <div class="col-30 TransactionInfoBox">Fordringshaver</div>
+                        <div class="col-16 TransactionInfoBox">Beløp</div>
+                        <div class="col-20 TransactionInfoBox">Utenforstående sit kontonr</div>
+                        <div class="col-8 TransactionInfoBox"></div>
+                    </div>
+                    <div v-for="transaction in Transactions" class="transaction-container">
+                        <div :class="transaction.fixedInfo ?  'transaction-ekstra' : 'transaction'" >
+                            <div class="col-10 TransactionInfoBox"><input type="checkbox" v-model="transaction.forceAdd"></div>
+                            <div class="col-16 TransactionInfoBox">{{ formatDate(transaction.date) }}</div>
+                            <div class="col-30 TransactionInfoBox">{{ (transaction.userDescription != null ? transaction.userDescription : transaction.externalDescription) }}</div>
+                            <div class="col-16 TransactionInfoBox">{{ transaction.income == 0 ? transaction.outcome : transaction.income }} kr</div>
+                            <div class="col-20 TransactionInfoBox">{{ transaction.income == 0 ? transaction.toAccount : transaction.fromAccount }}</div>
+                            <div class="col-8 TransactionInfoBox"><button class="RemoveTransactionButton" @click="RemoveTransaction(transaction)">Fjern</button></div>
+                        </div>
+                        <div v-if="transaction.fixedInfo" class="transaktinon-info">
+                            <div class="transaktinon-info-upper">
+                                Funnet match i system<br/>
+                                {{ transaction.fixedInfo.description }}
+                            </div>
+                            <div class="transaktinon-info-lower">
+                                <div class="col-50 transaktinon-info-lower-left">
+                                    <div v-if="getDayAsInt(transaction.date) != transaction.fixedInfo.monthlyDeadlineDay">
+                                        Betalt dato: {{ formatDate(transaction.date) }} / 
+                                        Forfallsdato: {{ transaction.fixedInfo.monthlyDeadlineDay }}
+                                    </div>
+                                </div>
+                                <div class="col-50 transaktinon-info-lower-right">
+                                    Vil du koble disse sammen
+                                    <button class="transaktinon-info-lower-right-button">Ja</button>
+                                    <button class="transaktinon-info-lower-right-button">Nei</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="UpploadMeny">
-                <button></button>
-                <button></button>
+            <div class="col-10 lower-right">
+                <div class="UpploadMeny">
+                    <button class="col-80 upload-meny-button" @click="uploadAll(Transactions)">Legg til alle</button>
+                    <button class="col-80 upload-meny-button" @click="uploadByCriteria()">Leg til merkede</button>
+                </div>
             </div>
         </div>
     </div>
@@ -133,6 +216,7 @@ function RemoveTransaction(transaction) {
 }
 
 .lower {
+    display: flex;
     width: 100%;
     height: 70vh;
     margin-top: 15px;
@@ -162,6 +246,11 @@ function RemoveTransaction(transaction) {
     align-content: center;
 }
 
+.lower-right {
+    height: fit-content;
+    margin-left: 2%;
+}
+
 .TransactionsContainer {
     width: 100%;
     height: 60vh;
@@ -176,7 +265,7 @@ function RemoveTransaction(transaction) {
 
 .TransactionHeader {
     display: flex;
-    width: 80%;
+    width: 95%;
     margin: auto;
     margin-top: 2px;
     padding: 2px;
@@ -186,34 +275,124 @@ function RemoveTransaction(transaction) {
     font-weight: bold;
 }
 
-.Transaction {
+.transaction {
     display: flex;
-    width: 80%;
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+    padding: 2px;
+    background-color: rgba(var(--bs-header-bg-rgb), 0.3);
+    border: 1px solid rgba(var(--bs-header-bg-rgb), 0.3);
+    box-sizing: border-box;
+}
+
+.transaction-ekstra {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    margin: auto;
+    padding: 2px;
+    background-color: rgba(var(--bs-secondary-rgb), 0.8);
+    border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
+    box-sizing: border-box;
+}
+
+
+.transaction-container {
+    width: 95%;
+    height: fit-content;
     margin: auto;
     margin-top: 2px;
+    box-sizing: border-box;
+}
+
+.transaktinon-info {
+    width: 100%;
+    height: fit-content;
+    border: 2px solid rgba(var(--bs-secondary-rgb), 0.8);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
     padding: 2px;
     box-sizing: border-box;
-    background-color: rgba(var(--bs-header-bg-rgb), 0.3);
+    background-color: rgb(var(--bs-content-bg-rgb));
 }
 
-
-.Transaction:nth-child(odd) {
-    background-color: rgba(var(--bs-header-bg-rgb), 0.1);
+ .transaktinon-info-lower-right-button {
+    border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
+    border-radius: 5px;
+    margin-left: 10px;
+    background-color: rgba(var(--bs-btn-bg-b-rgb), 0.3);
+}
+ .transaktinon-info-lower-right-button:hover {
+    cursor: pointer;
+    background-color: rgba(var(--bs-btn-hover-bg-rgb), 0.8);
 }
 
-.Transaction:last-child {
+.transaction-container:last-child {
     border-radius: 0 0 5px 5px;
+}
+
+.TransactionInfoBox {
+    height: fit-content;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .RemoveTransactionButton {
     width: 80%;
     margin: auto;
     border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
-    background-color: rgba(var(--bs-header-bg-rgb), 0.3);
+    color: rgb(var(--bs-body-color-rgb));
+    background-color: rgba(var(--bs-btn-bg-b-rgb), 0.3);
     border-radius: 5px;
 }
 
+.UpploadMeny {
+    width: 100%;
+    height: 10vh;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    align-content: center;
+    background-color: rgb(var(--bs-content-bg-rgb));
+    box-shadow: 0px 0px 2px 2px rgba(var(--bs-header-bg-rgb), 0.3);
+    box-sizing: border-box;
+}
 
+.upload-meny-button {
+    width: 80%;
+    height: 40%;
+    margin-bottom: 2px;
+    color: rgb(var(--bs-body-color-rgb));
+    border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
+    background-color: rgba(var(--bs-btn-bg-b-rgb), 0.3);
+    border-radius: 15px;
+}
+
+.upload-meny-button:hover, .RemoveTransactionButton:hover {
+    cursor: pointer;
+    background-color: rgba(var(--bs-btn-hover-bg-rgb), 0.8);
+}
+
+.transaktinon-info-upper {
+    width: 95%;
+    margin: auto;
+    text-align: start;
+    border-bottom: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
+}
+
+.transaktinon-info-lower {
+    display: flex;
+    width: 95%;
+    margin: auto;
+}
+
+.transaktinon-info-lower-left {
+    text-align: start;
+}
+.transaktinon-info-lower-right {
+    text-align: end;
+}
 
 
 

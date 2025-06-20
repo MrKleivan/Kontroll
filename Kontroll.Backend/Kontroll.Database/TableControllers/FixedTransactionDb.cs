@@ -53,7 +53,7 @@ public class FixedTransactionDb
 
     public async Task<FixedTransactionsOb?> GetFixedExpenseFromDatabaseByDescriptionAndSupplierBankAccount(TransactionOb transactionOb)
     {
-        var query = "SELECT * FROM FixedTransactionTb WHERE Description = @UserDescription AND SupplierBankAccount =  @ToAccount";
+        var query = "SELECT * FROM FixedTransactionTb WHERE Description = @ExternalDescription AND SupplierBankAccount =  @ToAccount";
         
         return await _sqlReaderHelperDb.ExecuteReaderSingleAsync<FixedTransactionsOb>(_connectionString, query, transactionOb);
     }

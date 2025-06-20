@@ -28,6 +28,18 @@ public class FixedTransactionApiController : ControllerBase
         return Ok(fixedTransactionsOb);
         
     }
+
+    [HttpGet("{id}", Name = "GetById")]
+    public async Task<IActionResult> GetFixedTransactionById(string id)
+    {
+        FixedTransactionsOb? fixedTransactionsOb =
+            await _fixedTransactionController.GetFixedExpenseByFixedExpenseId(new FixedTransactionsOb { FixedTransactionId = id });
+        if (fixedTransactionsOb == null)
+        {
+            return NotFound("Fant inngen registrerte utgifter");
+        }
+        return Ok(fixedTransactionsOb);
+    }
     
     
 }
