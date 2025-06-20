@@ -5,7 +5,8 @@ import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
-const bankAccounts = ref({});
+const bankAccounts = ref([]);
+const AccountNumber = ref();
 const Transactions = ref([]);
 const SortRequest = reactive({
   userId: "1e21c816-5591-40ca-b418-fd4c7c8ef188",
@@ -18,8 +19,8 @@ const SortRequest = reactive({
   minAmount: 0,
   maxAmount: 0,
   amountDirection: "string",
-  startDate: "2025-01-01",
-  endDate: "2025-01-20"
+  startDate: "2025-03-01",
+  endDate: "2025-03-20"
 });
 const loading = ref(false);
 const error = ref(null);
@@ -31,12 +32,18 @@ const GetAllTransactionsByCriteria = async () => {
     loading, error);
 }
 
+const GetBankAccounts = async () => {
+    const url = `https://localhost:7287/BankAccountApi?UserId=${SortRequest.userId}`;
+    bankAccounts.value = await fetchData(url, 'GET', null, loading, error);
+};
+
 const GoToTransactionSite = async (transactionId) => {
     router.push({ name: 'SingleTransaction', params: { id: transactionId } });
 };
 
 onMounted(() => {
     GetAllTransactionsByCriteria();
+    GetBankAccounts();
 });
 
 const formatDate = (dateString) => {
@@ -88,11 +95,11 @@ function SetFilterSelection(text) {
             Maksimum: <input v-model="SortRequest.maxAmount" type="number" />
             <button @click="GetAllTransactionsByCriteria">Søk</button>
         </div>
-        <div class="filterDivContainer" v-if="selectedFilter === 'AccountNumber'">
+        <div class="filterDivContainer" v-if="selectedFilter === 'Account'">
             <div>
-                <section class="bankAccountFilter">
-                    <option v-for="bankAccount in bankAccounts">{{ bankAccount.accountNumber }}</option>
-                </section>
+                <select v-model="AccountNumber" class="inputField">
+                    <option v-for="option in bankAccounts" :value="option.accountNumber" :key="option.id">{{ option.accountNumber }}</option>
+                </select>
             </div>
             <button @click="GetAllTransactionsByCriteria">Søk</button>
         </div>
@@ -100,7 +107,7 @@ function SetFilterSelection(text) {
     <br />
     <div v-if="loading">Laster...</div>
     <div v-if="error">Feil: {{ error }}</div>
-    <div class="multipleTransactionsConteiner" v-if="!Transaction">
+    <div class="multipleTransactionsConteiner">
         <div class="TransactionConteinerHeader">
             <div class="TransactionInfoBox">Dato</div>
             <div class="TransactionInfoBox">Beskrivelse</div>

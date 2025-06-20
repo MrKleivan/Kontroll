@@ -6,6 +6,7 @@ import { fetchData } from '../composables/useFetch.js'
 const uploadedFile = ref(null);
 const Transactions = ref([]);
 const BankAccounts = ref([]);
+const bankAccount = ref(null);
 const AccountNumber = ref('');
 const FixedTransaction = ref(null);
 const loading = ref(false);
@@ -111,6 +112,14 @@ function RemoveTransaction(transaction) {
 
 }
 
+function removeAll() {
+    Transactions.value = [];
+};
+
+function removeCriteria() {
+    Transactions.value = Transactions.value.filter(t => t.forceAdd !== true);
+}
+
 const getDayAsInt = (dateString) => {
   if (!dateString) return null; // eller 0, avhengig av hva du vil gjøre ved tom verdi
   const date = new Date(dateString);
@@ -123,15 +132,38 @@ const getDayAsInt = (dateString) => {
     <div class="newTransactionContainer">
         <div class="upper">
             <div class="leftSide">
-                <div>
-                    <div v-if="BankAccounts && BankAccounts.length" class="bankAccount">
-                        <select v-model="AccountNumber" class="inputField">
-                            <option v-for="option in BankAccounts" :value="option.accountNumber">{{ option.accountNumber }}</option>
-                        </select>
+                <div v-if="BankAccounts && BankAccounts.length" class="bankAccount">
+                    <div v-if="!bankAccount">
+                        <select v-model="bankAccount" class="inputField">
+                            <option v-for="option in BankAccounts" :value="option">{{ option.accountNumber }}</option>
+                        </select>← Velg Konto<br/>
                     </div>
-                    <div v-else>
-                        Ingen kontoer funnet.
+                    <div v-if="bankAccount" class="account-number">
+                        <button class="backButton" @click="bankAccount = null">◄</button><br/>
+                        {{ bankAccount.name}}
                     </div>
+                </div>
+                <div v-else>
+                    Ingen kontoer funnet.
+                </div>
+                <div v-if="bankAccount" class="bankAccount-info">
+                    <div class="col-16 bankAccount-info-field-left">
+                        Konto nr:<br/>
+                        Konto navn: 
+                    </div>
+                    <div class="col-18 bankAccount-info-field-center">
+                        {{ bankAccount.accountNumber }}<br/>
+                        {{ bankAccount.name }}
+                    </div>
+                    <div class="col-62 bankAccount-info-field-right">
+                        <button class="AddButton">Legg til</button>
+                        <button class="AddButton" @click="AccountNumber = bankAccount.accountNumber">Last opp</button>
+                    </div>
+                </div>
+                <div v-else class="Insert-info">
+                    Legg til transaksjoner i regnskapet ditt<br/>
+                    via manuell utfylling av enkeltvis transaksjoner <br/>
+                    eller last opp kontoutskrift fra banken (.csv fil)
                 </div>
             </div>
             <div class="rightSide">
@@ -144,8 +176,9 @@ const getDayAsInt = (dateString) => {
                         kontoutskrift i csv fil
                     </div>
                     <div>
-                        Velg hvilket kontonummer 
-                        <br/>kontoutskriften gjelder
+                        Velg først hvilket kontonummer <br/>
+                        kontoutskriften gjelder <br/>
+                        og trykk last opp
                     </div>
                 </div>
             </div>
@@ -168,7 +201,7 @@ const getDayAsInt = (dateString) => {
                             <div class="col-30 TransactionInfoBox">{{ (transaction.userDescription != null ? transaction.userDescription : transaction.externalDescription) }}</div>
                             <div class="col-16 TransactionInfoBox">{{ transaction.income == 0 ? transaction.outcome : transaction.income }} kr</div>
                             <div class="col-20 TransactionInfoBox">{{ transaction.income == 0 ? transaction.toAccount : transaction.fromAccount }}</div>
-                            <div class="col-8 TransactionInfoBox"><button class="RemoveTransactionButton" @click="RemoveTransaction(transaction)">Fjern</button></div>
+                            <div class="col-8 TransactionInfoBox"><button class="col-80 RemoveTransactionButton" @click="RemoveTransaction(transaction)">Fjern</button></div>
                         </div>
                         <div v-if="transaction.fixedInfo" class="transaktinon-info">
                             <div class="transaktinon-info-upper">
@@ -190,12 +223,24 @@ const getDayAsInt = (dateString) => {
                             </div>
                         </div>
                     </div>
+                    <div class="TransactionFooter">
+                        <div class="col-10 TransactionInfoBox"></div>
+                        <div class="col-16 TransactionInfoBox"></div>
+                        <div class="col-30 TransactionInfoBox"></div>
+                        <div class="col-16 TransactionInfoBox"></div>
+                        <div class="col-20 TransactionInfoBox"></div>
+                        <div class="col-8 TransactionInfoBox"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-10 lower-right">
                 <div class="UpploadMeny">
                     <button class="col-80 upload-meny-button" @click="uploadAll(Transactions)">Legg til alle</button>
-                    <button class="col-80 upload-meny-button" @click="uploadByCriteria()">Leg til merkede</button>
+                    <button class="col-80 upload-meny-button" @click="uploadByCriteria()">Legg til merkede</button>
+                </div>
+                <div class="UpploadMeny">
+                    <button class="col-80 upload-meny-button" @click="removeAll()">Fjern til alle</button>
+                    <button class="col-80 upload-meny-button" @click="removeCriteria()">Fjern merkede</button>
                 </div>
             </div>
         </div>
@@ -240,6 +285,69 @@ const getDayAsInt = (dateString) => {
     box-shadow: 0px 0px 2px 2px rgba(var(--bs-header-bg-rgb), 0.3);
 }
 
+.bankAccount {
+    width: 95%;
+    height: 30%;
+    text-align: start;
+    align-content: end;
+    box-sizing: border-box;
+    margin: auto;
+    padding-top: 5px;
+    border-bottom: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
+}
+
+.inputField {
+    width: 20%;
+    height: 20px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    background-color: rgb(var(--bs-content-bg-rgb));
+    color: rgb(var(--bs-body-color-rgb));
+}
+
+.account-number {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.bankAccount-info {
+    display: flex;
+    width: 95%;
+    height: 60%;
+    margin: auto;
+    box-sizing: border-box;
+    padding-top: 10px;
+}
+
+.bankAccount-info-field-left {
+    text-align: start;
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+
+.bankAccount-info-field-center {
+    text-align: start;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.bankAccount-info-field-right {
+    margin-top: auto;
+    text-align: end;
+    align-content: end;
+}
+
+.AddButton {
+    border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
+    border-radius: 5px;
+    margin-left: 10px;
+    background-color: rgba(var(--bs-btn-bg-b-rgb), 0.3);
+}
+
+.AddButton:hover {
+    cursor: pointer;
+    background-color: rgba(var(--bs-btn-hover-bg-rgb), 0.8);
+}
+
 .dragDropContainer {
     width: 100%;
     height: 100%;
@@ -272,6 +380,18 @@ const getDayAsInt = (dateString) => {
     box-sizing: border-box;
     background-color: rgba(var(--bs-header-bg-rgb), 0.8);
     border-radius: 5px 5px 0 0;
+    font-weight: bold;
+}
+
+.TransactionFooter {
+    display: flex;
+    width: 95%;
+    margin: auto;
+    margin-top: 2px;
+    padding: 2px;
+    box-sizing: border-box;
+    background-color: rgba(var(--bs-header-bg-rgb), 0.8);
+    border-radius: 0 0 5px 5px;
     font-weight: bold;
 }
 
@@ -340,7 +460,6 @@ const getDayAsInt = (dateString) => {
 }
 
 .RemoveTransactionButton {
-    width: 80%;
     margin: auto;
     border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
     color: rgb(var(--bs-body-color-rgb));

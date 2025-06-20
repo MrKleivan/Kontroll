@@ -14,7 +14,7 @@ function goBack(){
 <template>
     
     <div v-if="!route.path.includes('/UserHome/Economy/SingleTransaction/')" class="economyLinksConteiner">
-        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links" :key="index" class="economyLinkDiv">
+        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links.Accounting.links" class="economyLinkDiv">
             <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
         </div>
     </div>

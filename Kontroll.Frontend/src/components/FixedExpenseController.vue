@@ -9,7 +9,7 @@ const FixedTransactions = ref([]);
 const FixedTransaction = ref(null);
 const loading = ref(false);
 const error = ref(null);
-const FixedTransactionsSorted = ref();
+const FixedTransactionsSorted = ref([]);
 
 const userId = '1e21c816-5591-40ca-b418-fd4c7c8ef188';
 
@@ -17,15 +17,15 @@ const GetAll = async () => {
     const url = `https://localhost:7287/FixedTransactionApi?userId=${userId}`;
     FixedTransactions.value = await fetchData(url, 'GET', null, loading, error);
     FixedTransactionsSorted.value = FixedTransactions.value;
+    console.log(FixedTransactions.value[0])
 }
 
 const SortExpenses = async (text) => {
   if (text === 'inn'){
-    FixedTransactionsSorted.value = FixedTransactions.value.filter(s = s.type === 'Inncome');
-    SortHeader.value = 'Inntekter'
+    FixedTransactionsSorted.value = FixedTransactions.value.filter(s => s.type === 'Inncome');
   }
-  if (text === 'out'){
-    FixedTransactionsSorted.value = FixedTransactions.value.filter(s = s.type === 'Expense');
+  else if (text === 'out'){
+    FixedTransactionsSorted.value = FixedTransactions.value.filter(s => s.type === 'Expense');
   }
   else {
     FixedTransactionsSorted.value = FixedTransactions.value;
@@ -56,12 +56,12 @@ onMounted(() => {
           <button class="FixedTransactionSortButton" @click="SortExpenses('all')">Alle</button>
         </div>  
         <div class="FixedTransactionList">
-          <div class="FixedTransactionConteiner" v-for="fixedExpense in FixedTransactionsSorted" :key="fixedExpense.Id" @click="GetSingle(fixedExpense)">
-              <div class="FixedTransactionInfoBox">{{ fixedExpense.supplierName }}</div>
-              <div class="FixedTransactionInfoBox">{{ fixedExpense.description }}</div>
-              <div class="FixedTransactionInfoBox">{{ fixedExpense.monthlyAmount }}</div>
-              <div class="FixedTransactionInfoBox">{{ (fixedExpense.monthlyAmount * 12) }}</div>
-              <div class="FixedTransactionInfoBox">Trekk dato <br/>{{ fixedExpense.monthlyDeadlineDay }}</div>
+          <div class="FixedTransactionConteiner" v-for="fixedTransaction in FixedTransactionsSorted" :key="fixedTransaction.Id" @click="GetSingle(fixedTransaction)">
+              <div class="FixedTransactionInfoBox">{{ fixedTransaction.supplierName }}</div>
+              <div class="FixedTransactionInfoBox">{{ fixedTransaction.description }}</div>
+              <div class="FixedTransactionInfoBox">{{ fixedTransaction.monthlyAmount }}</div>
+              <div class="FixedTransactionInfoBox">{{ (fixedTransaction.monthlyAmount * 12) }}</div>
+              <div class="FixedTransactionInfoBox">Trekk dato <br/>{{ fixedTransaction.monthlyDeadlineDay }}</div>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ defineProps({
 
 <template>
 <div class="underMenyContainer">
-    <div v-for="(link, index) in links" :key="index" class="underMenyLinkContainer">
+    <div v-for="link in links" class="underMenyLinkContainer">
         <RouterLink  class="underMenyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
     </div>
 </div>

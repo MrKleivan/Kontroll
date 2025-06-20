@@ -14,7 +14,7 @@ function goBack(){
 <template>
     
     <div v-if="route.name === 'Economy'" class="economyLinksConteiner">
-        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links" :key="index" class="economyLinkDiv">
+        <div v-for="link in Links.UserHomePageMain.MainLinks.Economy.links" class="economyLinkDiv">
             <RouterLink  class="economyLink" :to="{ name: link.name}">{{ link.label }}</RouterLink>
         </div>
     </div>
