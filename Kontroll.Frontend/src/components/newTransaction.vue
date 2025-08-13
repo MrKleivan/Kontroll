@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import dragDrop from './dragDrop.vue';
 import { fetchData } from '../composables/useFetch.js'
+import newTransactinList from './newTransactinList.vue';
 
 const uploadedFile = ref(null);
 const Transactions = ref([]);
@@ -29,11 +30,13 @@ async function GetTransactions(file) {
     formData.append('accountNumber', AccountNumber.value); // 🔁 husk .value
     Transactions.value = await fetchData(url, 'POST', formData, loading, error);
     
-    for (const transaction of Transactions.value) {
-        if (transaction.fixedTransactionId) {
-            const fixedInfo = await GetFixedTransactionInfoById(transaction.fixedTransactionId);
-            transaction.fixedInfo = fixedInfo;
-            console.log(fixedInfo);
+    if (Transactions.value.length > 0) {
+        for (const transaction of Transactions.value) {
+            if (transaction.fixedTransactionId) {
+                const fixedInfo = await GetFixedTransactionInfoById(transaction.fixedTransactionId);
+                transaction.fixedInfo = fixedInfo;
+                console.log(fixedInfo);
+            }
         }
     }
 }
@@ -126,6 +129,16 @@ const getDayAsInt = (dateString) => {
   return date.getDate(); // returnerer dag som tall (eks: 22)
 };
 
+function updateAccountNumber() {
+  AccountNumber.value = bankAccount.value?.accountNumber ?? '';
+}
+
+function resetAccount() {
+  bankAccount.value = null;
+  Transactions.value = [];
+  AccountNumber.value = '';
+}
+
 </script>
 
 <template>
@@ -134,12 +147,12 @@ const getDayAsInt = (dateString) => {
             <div class="leftSide">
                 <div v-if="BankAccounts && BankAccounts.length" class="bankAccount">
                     <div v-if="!bankAccount">
-                        <select v-model="bankAccount" class="inputField">
+                        <select v-model="bankAccount" @change="updateAccountNumber" class="inputField">
                             <option v-for="option in BankAccounts" :value="option">{{ option.accountNumber }}</option>
                         </select>← Velg Konto<br/>
                     </div>
                     <div v-if="bankAccount" class="account-number">
-                        <button class="backButton" @click="bankAccount = null">◄</button><br/>
+                        <button class="backButton" @click="resetAccount">◄</button><br/>
                         {{ bankAccount.name}}
                     </div>
                 </div>
@@ -156,8 +169,7 @@ const getDayAsInt = (dateString) => {
                         {{ bankAccount.name }}
                     </div>
                     <div class="col-62 bankAccount-info-field-right">
-                        <button class="AddButton">Legg til</button>
-                        <button class="AddButton" @click="AccountNumber = bankAccount.accountNumber">Last opp</button>
+                        <button class="AddButton">Fyll inn en enkelt transaksjon</button>
                     </div>
                 </div>
                 <div v-else class="Insert-info">
@@ -167,13 +179,13 @@ const getDayAsInt = (dateString) => {
                 </div>
             </div>
             <div class="rightSide">
-                <div class="dragDropContainer" v-if="AccountNumber">
+                <div class="dragDropContainer" v-if="bankAccount">
                     <dragDrop @file-confirmed="handleConfirmedFile" />
                 </div>
                 <div v-else>
                     <div style="width: 70%;margin: auto;border-bottom: 1px solid rgba(var(--bs-header-bg-rgb), 0.7);">
                         Her kan du laste opp <br/> 
-                        kontoutskrift i csv fil
+                        kontoutskrift (filtype:  .csv)
                     </div>
                     <div>
                         Velg først hvilket kontonummer <br/>
@@ -183,6 +195,8 @@ const getDayAsInt = (dateString) => {
                 </div>
             </div>
         </div>
+        <br/>
+        <newTransactinList />
         <div v-if="Transactions.length > 0" class="lower">
             <div class="col-88 lower-left">
                 <div class="TransactionsContainer">
@@ -340,6 +354,7 @@ const getDayAsInt = (dateString) => {
     border: 1px solid rgba(var(--bs-header-bg-rgb), 0.8);
     border-radius: 5px;
     margin-left: 10px;
+    color: rgb(var(--bs-body-color-rgb));
     background-color: rgba(var(--bs-btn-bg-b-rgb), 0.3);
 }
 

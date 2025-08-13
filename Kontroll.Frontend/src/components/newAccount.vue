@@ -106,9 +106,6 @@ async function getMyData() {
     width: 40%;
     margin: auto;
     margin-top: 10px;
-    border: 2px solid rgba(var(--bs-header-bg-rgb), 0.9);
-    border-radius: 5px;
-    background-color: rgba(var(--bs-header-bg-rgb), 0.7);
     overflow: hidden;
 }
 
@@ -117,13 +114,13 @@ async function getMyData() {
     margin: auto;
     border: none;
     border-radius: 5px;
-    background-color: rgba(var(--bs-content-bg-rgb), 0.6);
+    color: rgba(var(--bs-body-color-rgb));
+    background-color: rgb(var(--bs-header-bg-rgb));
 }
 
 .newAccountButton:hover {
     cursor: pointer;
-    background-color: rgba(var(--bs-content-bg-rgb), 0.9);
-    font-size: 0.85em;
+    background-color: rgb(var(--bs-btn-hover-bg-rgb));
 }
 
 .inputInfo {
