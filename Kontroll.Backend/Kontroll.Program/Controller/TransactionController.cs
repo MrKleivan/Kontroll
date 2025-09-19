@@ -44,7 +44,7 @@ public class TransactionController : ControllerBase
         return await _db.GetAllTransactionsFromDatabaseByFixedExpenseId(queryObj);
     }
     
-    public async Task<List<TransactionOb>> GetUserTransactionsByCriteria([FromBody] SortRequest sortRequest)
+    public async Task<List<TransactionOb>> GetUserTransactionsByCriteria( SortRequest sortRequest)
     {
         if (sortRequest.Request == "Date")
         {
